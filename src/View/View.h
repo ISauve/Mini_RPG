@@ -2,34 +2,70 @@
 #define MINI_RPG_VIEW_H
 
 #include "../Observer/Observer.h"
-#include "Animation.h"
+#include "../Model/Model.h"
+#include "../Controller/Controller.h"
+#include "Channel.h"
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include <algorithm>
+#include <thread>
+#include <future>
 
-// View: how the game interacts with the user
-//	-> observes the model
-//  -> sends messages to controller
+// View: displays the game to the user
+//	-> observes the mode
+//  -> can query the model for information (ie character positions)
 
 class Model;
 class Controller;
 class Character;
 
-enum SpecialScreen {SELECT_PLAYER, QUIT};
+enum SpecialScreen {NONE, SELECT_PLAYER, QUIT};
 
 class View : public Observer {
     Model* model_;
     Controller* controller_;
+
     sf::RenderWindow* window_;
+    Channel<Notification> eventsChannel_;
+    sf::Font font_;
+    const int frameRate_ = 10; //fps
 
-    bool specialScreenShow_;
+    bool gameOver_;
     SpecialScreen specialScreen_;
-    std::vector< Sprite > buttons_;
+    std::list<std::pair<Notification, int>> temporaryEvents_;
 
-    virtual void update(Notification) override;
-    void runControlLoop();
-    void draw();
+    // Observer pattern: concrete callback for when subject (model) sends a notification
+    void update(Notification) override;
+
+    // Interprets notifications the view receives when the model sends an update
+    void handleUpdate(Notification);
+
+    // Draws the current state on the window
+    void drawFrame();
+
+    // Helper drawing functions
+    sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color);
+    sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f);
+    sf::Text generateText(int, sf::Color, std::string, bool);
+    void drawText(int, sf::Color, std::string, bool, sf::Vector2f);
+    sf::FloatRect drawSprite(float, float, std::string);
+    sf::FloatRect drawSprite(float, float, std::string, sf::IntRect);
+    sf::IntRect getPlayerImage(Sprite&);
+    void drawStatusBar();
+    void drawButtons();
+    void drawPlayerSelection();
+    void drawQuitScreen();
+    void playerAttack(bool, int);
+    void enemyAttack(Character*, int);
+    void playerCollision();
+    void playerDied();
 
 public:
     View(Model*, Controller*);
+    ~View() = default;
+
+    // Main game loop for rendering the window
+    void render();
 };
 
 

@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 
+// TODO: keep this somewhere better (also, make screen proportions not modifyable)
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 1024
 #define PLAYER_WIDTH 80
@@ -39,7 +40,7 @@ public:
     void regularScreenShow() { notify(EXIT_SPECIAL_SCREEN); };
     void reset();
 
-    // Accessors for the view
+    // Accessors for the view TODO: make thread-safe
     bool gameOver() { return gameOver_; };
     Character* player() { return &chars_[0]; };
     Character* enemy() { return &chars_[1]; };

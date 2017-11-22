@@ -6,9 +6,9 @@
 static std::mutex ATTACK_THREAD_MUTEX;
 
 Model::Model() : gameOver_(false) {
-    attackThread_ = std::thread(&Model::enemyAttack, this);
+    //attackThread_ = std::thread(&Model::enemyAttack, this);
 
-    reset();
+    //reset();
 };
 
 void Model::reset() {           // todo: need lockguard?
@@ -30,8 +30,8 @@ void Model::reset() {           // todo: need lockguard?
 // Handles player quitting (via escape or clicking X)
 void Model::endGame() {
     notify(QUIT_GAME);
-    gameOver_ = true;
-    attackThread_.join();           // synchronize the threads
+    //gameOver_ = true;
+    //attackThread_.join();           // synchronize the threads
 
     // probably want to save game data to some external file
 }
@@ -69,6 +69,8 @@ void Model::attack() {
     std::lock_guard<std::mutex> lock(ATTACK_THREAD_MUTEX);
 
     Notification attack(PLAYER_ATTACK);
+    // idea: only show sword swinging if weapon is wielded, otherwise show a slap  todo
+    // idea: show sword on L/R depending on which side enemy is standing           todo
     attack.damage = 0;
     attack.hit = false;
 
@@ -99,6 +101,9 @@ void Model::attack() {
         if ( !chars_[i].isAlive() ) {
             chars_[i].setImage("View/Textures/Dead.png");
             chars_[i].removeWeapon();
+            //Notification death(ENEMY_DIED);
+            //death.enemy = &chars_[i];
+            //notify( death );
 
             //return reset();
         }

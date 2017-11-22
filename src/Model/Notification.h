@@ -7,6 +7,7 @@ enum Code {PLAYER_ATTACK, PLAYER_COLLISION, ENEMY_DIED, PLAYER_DIED, PLAYER_CHAN
     EXIT_SPECIAL_SCREEN, QUIT_GAME};
 
 struct Notification {
+    Notification(){};
     Notification(Code n) : type(n) {};
 
     // Code for which animation is required

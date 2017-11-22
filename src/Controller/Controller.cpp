@@ -5,16 +5,52 @@
 #include <iostream>
 using namespace std;
 
-Controller::Controller( Model* m ) : model_(m) {};
+Controller::Controller( Model* m ) : model_(m) {
+    ignoreEvents_ = true;   // for testing
+};
 
+void Controller::setWindow(sf::RenderWindow* window) { window_ = window; }
+void Controller::clearActiveButtons() { activeButtons_.clear(); };                        // TODO make thread-safe
+void Controller::addActiveButton(Button b, sf::FloatRect f) { activeButtons_[b] = f; }    // TODO make thread-safe
+
+void Controller::handleEvents() {
+    while (!gameOver_) {
+        // Pop any events that have occurred off the top of the event queue
+        sf::Event windowEvent;
+        while ( window_->pollEvent(windowEvent) ) { // returns false when queue is empty
+            handleEvent(windowEvent);
+        }
+
+        /*
+        // Poll for information from the attack thread
+        // do in model??? this doesn't seem like the place for it...
+        while ( !model_->enemyAttacks_.empty() ) {      // todo: need lockguard?
+            Attack newAttack = model_->enemyAttacks_.front();
+            model_->enemyAttacks_.pop();
+
+            enemyAttack(newAttack.enemy, newAttack.damage);
+        }
+
+        // Check if player was killed
+        if ( !model_->player()->isAlive() ) {
+
+        }
+         */
+    }
+}
+
+// Handles events that come from the window
 void Controller::handleEvent(sf::Event& event) {
-    using namespace std;
+    // Always handle "exit" events
+    if (event.type == sf::Event::Closed ||
+        (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
+        gameOver_ = true;   // ends this loop
+        model_->endGame();  // triggers the model to clean up, which notifies the view to close as well
+    }
+
+    if (ignoreEvents_) return;
 
     switch (event.type) {
-        case sf::Event::Closed:
-            model_->endGame();
-            break;
-
         case sf::Event::KeyPressed:
             handleKeyPress(event);
             break;
@@ -26,12 +62,8 @@ void Controller::handleEvent(sf::Event& event) {
     }
 }
 
-
 void Controller::handleKeyPress(sf::Event& e) {
     switch (e.key.code) {
-        case sf::Keyboard::Escape:
-            model_->endGame();
-            break;
         case sf::Keyboard::Left:
             model_->movePlayer(-10, 0);
             break;
@@ -46,6 +78,7 @@ void Controller::handleKeyPress(sf::Event& e) {
             break;
         case sf::Keyboard::Space:
             model_->attack();
+            // ignore events for 1.5s?
             break;
         default:
             break;
