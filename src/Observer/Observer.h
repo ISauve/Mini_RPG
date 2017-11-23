@@ -1,7 +1,7 @@
 #ifndef MINI_RPG_OBSERVER_H
 #define MINI_RPG_OBSERVER_H
 
-#include "Model/Notification.h"
+#include "../Model/Notification.h"
 
 class Subject;
 

@@ -99,11 +99,6 @@ void Model::attack() {
         if ( !chars_[i].isAlive() ) {
             chars_[i].setImage("View/Textures/Dead.png");
             chars_[i].removeWeapon();
-            chars_[i].
-
-            Notification death(ENEMY_DIED);
-            death.enemy = &chars_[i];
-            notify( death );
 
             //return reset();
         }

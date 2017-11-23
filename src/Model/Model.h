@@ -1,7 +1,7 @@
 #ifndef MINI_RPG_MODEL_H
 #define MINI_RPG_MODEL_H
 
-#include "../Subject.h"
+#include "../Observer/Subject.h"
 #include "Character.h"
 #include <queue>
 #include <vector>

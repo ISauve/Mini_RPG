@@ -1,7 +1,7 @@
 #ifndef MINI_RPG_VIEW_H
 #define MINI_RPG_VIEW_H
 
-#include "../Observer.h"
+#include "../Observer/Observer.h"
 #include "Animation.h"
 #include <algorithm>
 

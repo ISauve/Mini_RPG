@@ -12,7 +12,7 @@ Design patterns used:
     - `brew update`
     - `brew install sfml`
 2. Compile the game with `make`
-3. Run with `./game`
+3. Run with `./bin/game`
 
 #### Current issues
 - [ ] Fix major multithreading issue (poorly designed -> deadlocks/crashes)

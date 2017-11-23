@@ -1,7 +1,7 @@
 #ifndef MINI_RPG_SUBJECT_H
 #define MINI_RPG_SUBJECT_H
 
-#include "Model/Notification.h"
+#include "../Model/Notification.h"
 #include <set>
 class Observer;
 
