@@ -1,7 +1,7 @@
 #include "View.h"
 
 void View::drawPlayerSelection() {
-    std::string sheet_path = "View/Textures/Character_set_2.png";
+    std::string sheet_path = "src/View/Textures/Character_set_2.png";
     sf::IntRect selection = sf::IntRect(1*80, 0*80, 80, 80);
     sf::FloatRect rectangle_1 = drawSprite(100, SCREEN_HEIGHT/2, sheet_path, selection);
 
@@ -75,7 +75,7 @@ void View::drawEvent(Notification event) {
             break;
 
         //case ENEMY_ATTACK:
-        //   drawSprite(event.enemy->x() - event.enemy->width()/2, event.enemy->y(), "View/Textures/Enemy_Sword_1.png");
+        //   drawSprite(event.enemy->x() - event.enemy->width()/2, event.enemy->y(), "src/View/Textures/Enemy_Sword_1.png");
         //   drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(event.enemy->x() + 50, event.enemy->y() - 100));
         //   break;
 
@@ -193,7 +193,7 @@ sf::IntRect View::getPlayerImage(Sprite& s) {
 void View::drawPlayerAttack(bool hit, int damage) {
     // Draw the sword
     float x = model_->player()->x() + model_->player()->width() / 2;
-    drawSprite(x, model_->player()->y(), "View/Textures/Sword_1.png");
+    drawSprite(x, model_->player()->y(), "src/View/Textures/Sword_1.png");
 
     // Draw the hit or miss
     sf::Vector2f position(model_->player()->x() + 50, model_->player()->y() - 100);

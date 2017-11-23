@@ -13,7 +13,7 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
     model_->subscribe( this );
 
     // Initialize the view data
-    font_.loadFromFile("View/Old_School_Adventures.ttf");
+    font_.loadFromFile("src/View/Old_School_Adventures.ttf");
     /*   TODO
     sf::Music music;
     music.openFromFile("nice_music.ogg");

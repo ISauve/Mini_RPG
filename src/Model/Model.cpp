@@ -18,13 +18,13 @@ void Model::resetState() {
     //                          640px x 8 sprites    -> 80px height
 
     // Set default char (moustached man)
-    Character player(10, 10, x, y, true, "View/Textures/Character_set_2.png", 80, 80);
+    Character player(10, 10, x, y, true, "src/View/Textures/Character_set_2.png", 80, 80);
     player.setCharacter(4, 1);
     chars_.push_back(player);
 
     // Set 1st enemy
     x = SCREEN_WIDTH/2 + PLAYER_WIDTH;
-    chars_.push_back( Character(10, 10, x, y, false, "View/Textures/Enemy_1.png", 100, 110) );
+    chars_.push_back( Character(10, 10, x, y, false, "src/View/Textures/Enemy_1.png", 100, 110) );
 }
 
 
@@ -59,7 +59,7 @@ void Model::attack() {
             // If this is the first hit, make enemy draw weapon & start fighting
             if ( !chars_[i].hasWeapon() ) {
                 Weapon* enemy_sword = new Weapon(10, 10, chars_[i].x() + chars_[i].width()/2,  chars_[i].y(), false,
-                                                 "View/Textures/Enemy_Sword_2.png", 50, 54);
+                                                 "src/View/Textures/Enemy_Sword_2.png", 50, 54);
                 chars_[i].equipWeapon(enemy_sword);
                 chars_[i].setActiveEnemy(true);
             }
@@ -71,7 +71,7 @@ void Model::attack() {
     // Check if any enemies died
     for (int i = 1; i < chars_.size(); i++ ) {
         if (!chars_[i].isAlive()) {
-            chars_[i].setImage("View/Textures/Dead.png");
+            chars_[i].setImage("src/View/Textures/Dead.png");
             chars_[i].removeWeapon();
 
             Notification death(ENEMY_DIED);
