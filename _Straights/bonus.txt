@@ -1,0 +1,4 @@
+Bonus features implemented:
+- When it is a human player's turn, the only cards they can select to play are the legal ones. The others
+can be seen, but not clicked. When they have no legal plays, all cards are available
+- Computer player discards lowest and plays highest

@@ -1,0 +1,55 @@
+// FOR USING GLEW
+
+at top of main:
+    #define GLEW_STATIC
+    #include <GL/glew.h>
+
+after initializing window (in main):
+/* GLEW checks which fcns are available at runtime & links with them dynamically
+ *  - allows OpenGL functionality with various drivers
+ *  - Reference: https://open.gl/context#Onemorething
+ */
+     glewExperimental = GL_TRUE;
+     glewInit();
+
+ in the makefile:
+    -lglew
+
+
+
+
+
+// FOR USING OPENGL DRAWING
+
+initialize window with:
+    sf::ContextSettings settings;
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.antialiasingLevel = 2;
+    settings.majorVersion = 3;
+    settings.minorVersion = 2;
+    settings.attributeFlags = sf::ContextSettings::Core;
+
+to draw:
+// Step 1: Define the primitive
+    float vertices[] = {
+            0.0f,  0.5f, // Vertex 1 (X, Y)
+            0.5f, -0.5f, // Vertex 2 (X, Y)
+            -0.5f, -0.5f  // Vertex 3 (X, Y)
+    };
+
+// Upload this vertex data to the graphics card
+    GLuint vbo;                             // Create a Vertex Buffer Object
+    glGenBuffers(1, &vbo);                  // Generate 1 buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);     // Make it the active object by calling glBindBuffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);  // Copy vtx data
+/*
+ * GL_ARRAY_BUFFER is just an enum for the type of buffer (there are many)
+ * 3rd parameter depends on the usage of the vertex data
+ *      -> GL_STATIC_DRAW: The vertex data will be uploaded once and drawn many times (e.g. the world)
+ *      -> GL_DYNAMIC_DRAW: The vertex data will be created once, changed from time to time, but drawn
+ *         many times more than that
+ *      -> GL_STREAM_DRAW: The vertex data will be uploaded once and drawn once
+ */
+
+ // Step 2: Pass vtx data through the 1st shader stage

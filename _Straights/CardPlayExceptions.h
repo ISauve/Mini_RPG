@@ -1,0 +1,2 @@
+class IllegalPlayException {};
+class IllegalDiscardException {};
