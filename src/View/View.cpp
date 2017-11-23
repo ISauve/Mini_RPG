@@ -1,7 +1,7 @@
 #include "View.h"
 #include <iostream>
 
-View::View(Model* m, Controller* c) : model_(m), controller_(c) {
+View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false) {
     // Initialize the window (can be a local var because game ends when this returns)
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Izzy's OpenGL Adventure", sf::Style::Default);
 
@@ -14,7 +14,7 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c) {
 
     // Initialize the view data
     font_.loadFromFile("View/Old_School_Adventures.ttf");
-    /*
+    /*   TODO
     sf::Music music;
     music.openFromFile("nice_music.ogg");
     music.play();

@@ -1,10 +1,10 @@
 #include "View.h"
 
 void View::render() {
-    // break View/DrawingThread.cpp:4
-    window_->setActive(true);       // todo is this right??
-    while (!gameOver_) {
+    window_->setActive(true);
+    while (true) {
         // Check for updates from the model
+        // deal with multiple updates at once? or is 1/100ms fast enough?  TODO
         Notification update;
         bool updateOccurred = eventsChannel_.receive(update);
         if (updateOccurred) {
@@ -13,10 +13,16 @@ void View::render() {
 
         // Draw the next frame
         window_->clear(sf::Color::Black);
-        //drawFrame();
+        drawFrame();
         window_->display();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000/frameRate_));
+
+        if (gameOver_) {
+            // sleep briefly to allow for quitting screen to display
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            break;
+        }
     }
 }
 
@@ -34,7 +40,7 @@ void View::handleUpdate(Notification event) {
             specialScreen_ = NONE;
             break;
         case PLAYER_DIED:
-            // TODO: Blocking? special screen? What do we want to happen?
+            // Blocking? special screen? What do we want to happen?  TODO
             break;
         case PLAYER_COLLISION:
         case PLAYER_ATTACK:
@@ -76,8 +82,8 @@ void View::drawFrame() {
             temporaryEvents_.erase(it++);
             continue;
         }
-        // TODO get the event sprite(s)
-        // sprites.push_back();
+
+        sprites.push_back(getSprite(it->first));
         it->second--;
     }
 
@@ -107,3 +113,9 @@ void View::drawFrame() {
     }
 }
 
+Sprite View::getSprite(Notification event) {
+
+    // TODO
+
+    return Sprite(50, 50, false,"View/Textures/Dead.png", 20, 20);;
+}

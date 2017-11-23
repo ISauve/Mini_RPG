@@ -5,13 +5,19 @@
 #include <iostream>
 using namespace std;
 
-Controller::Controller( Model* m ) : model_(m) {
-    ignoreEvents_ = true;   // for testing
-};
+Controller::Controller( Model* m ) : model_(m), gameOver_(false), ignoreEvents_(false) {};
 
 void Controller::setWindow(sf::RenderWindow* window) { window_ = window; }
-void Controller::clearActiveButtons() { activeButtons_.clear(); };                        // TODO make thread-safe
-void Controller::addActiveButton(Button b, sf::FloatRect f) { activeButtons_[b] = f; }    // TODO make thread-safe
+
+void Controller::clearActiveButtons() {
+    std::lock_guard<std::mutex> lock(buttonsLock_);
+    activeButtons_.clear();
+};
+
+void Controller::addActiveButton(Button b, sf::FloatRect f) {
+    std::lock_guard<std::mutex> lock(buttonsLock_);
+    activeButtons_[b] = f;
+}
 
 void Controller::handleEvents() {
     while (!gameOver_) {
@@ -20,6 +26,15 @@ void Controller::handleEvents() {
         while ( window_->pollEvent(windowEvent) ) { // returns false when queue is empty
             handleEvent(windowEvent);
         }
+
+        // Alternative: (this is blocking, ideal for if we don't have to process anything
+        // else in this loop)
+        /*
+        sf::Event windowEvent;
+        if (window.waitEvent(windowEvent)) {
+           handleEvent(windowEvent);
+        }
+         */
 
         /*
         // Poll for information from the attack thread
@@ -36,6 +51,7 @@ void Controller::handleEvents() {
 
         }
          */
+
     }
 }
 
@@ -80,12 +96,16 @@ void Controller::handleKeyPress(sf::Event& e) {
             model_->attack();
             // ignore events for 1.5s?
             break;
+        case sf::Keyboard::R:
+            model_->resetState();
+            break;
         default:
             break;
     }
 }
 
 void Controller::handleMouseClick(sf::Event& e) {
+    std::lock_guard<std::mutex> lock(buttonsLock_);
     int x = e.mouseButton.x;
     int y = e.mouseButton.y;
 

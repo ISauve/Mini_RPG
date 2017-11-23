@@ -137,7 +137,6 @@ void View::drawButtons() {
 
 void View::drawQuitScreen() {
     drawText(50, sf::Color::Cyan, "Quitting...", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
-    window_->display();
 };
 
 void View::drawPlayerSelection() {
@@ -165,9 +164,13 @@ void View::drawPlayerSelection() {
     controller_->addActiveButton(SELECT_PLAYER_5, rectangle_5);
 }
 
+void View::drawPlayerDied() {
+    drawText(50, sf::Color::Red, "You are dead!", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+};
+
 /***************************** Events *****************************/
 
-void View::playerAttack(bool hit, int damage) {
+void View::drawPlayerAttack(bool hit, int damage) {
     // Draw the sword
     float x = model_->player()->x() + model_->player()->width()/2;
     drawSprite(x, model_->player()->y(), "View/Textures/Sword_1.png");
@@ -176,30 +179,13 @@ void View::playerAttack(bool hit, int damage) {
     sf::Vector2f position(model_->player()->x() + 50, model_->player()->y() - 100);
     if (hit)    drawText(25, sf::Color::Red, std::to_string(damage), false,  position);
     else        drawText(25, sf::Color::White, "Miss", false, position);
-
-    // Pause for 0.5s to view
-    window_->display();
-    sf::sleep(sf::seconds(0.5f));
 }
 
-void View::enemyAttack(Character* c, int d) {
+void View::drawEnemyAttack(Character* c, int d) {
     drawSprite(c->x() - c->width()/2, c->y(), "View/Textures/Enemy_Sword_1.png");
     drawText(25, sf::Color::Red, std::to_string(d), false, sf::Vector2f(c->x() + 50, c->y() - 100));
-
-    window_->display();
-    sf::sleep(sf::seconds(0.5f));
 }
 
-void View::playerCollision() {
+void View::drawPlayerCollision() {
     drawText(25, sf::Color::White, "OPE", false, sf::Vector2f(model_->player()->x()+50, model_->player()->y()-50));
-
-    window_->display();
-    sf::sleep(sf::seconds(0.5f));
 }
-
-void View::playerDied() {
-    drawText(50, sf::Color::Red, "You are dead!", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
-
-    window_->display();
-    sf::sleep(sf::seconds(1.f));
-};

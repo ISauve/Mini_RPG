@@ -15,6 +15,7 @@ class Controller {
     Model* model_;
 
     sf::RenderWindow* window_;
+    std::mutex buttonsLock_;
     std::unordered_map <Button, sf::FloatRect> activeButtons_;
     bool ignoreEvents_;
     bool gameOver_;

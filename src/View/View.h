@@ -11,6 +11,8 @@
 #include <thread>
 #include <future>
 
+#include <iostream>
+
 // View: displays the game to the user
 //	-> observes the mode
 //  -> can query the model for information (ie character positions)
@@ -44,6 +46,7 @@ class View : public Observer {
     void drawFrame();
 
     // Helper drawing functions
+    Sprite getSprite(Notification);
     sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color);
     sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f);
     sf::Text generateText(int, sf::Color, std::string, bool);
@@ -55,10 +58,10 @@ class View : public Observer {
     void drawButtons();
     void drawPlayerSelection();
     void drawQuitScreen();
-    void playerAttack(bool, int);
-    void enemyAttack(Character*, int);
-    void playerCollision();
-    void playerDied();
+    void drawPlayerAttack(bool, int);
+    void drawEnemyAttack(Character*, int);
+    void drawPlayerCollision();
+    void drawPlayerDied();
 
 public:
     View(Model*, Controller*);

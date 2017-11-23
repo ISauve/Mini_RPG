@@ -22,29 +22,29 @@ struct Attack {
 };
 
 class Model : public Subject {
+    std::mutex charsLock_;
     std::vector< Character > chars_;
-    bool gameOver_;
-    void enemyAttack();
+
+    //void enemyAttack();
+    //std::queue< Attack > enemyAttacks_;     // Public queue of messages for the view
+    //std::thread attackThread_;
 
 public:
     Model();
+    ~Model() = default;
 
-    std::queue< Attack > enemyAttacks_;     // Public queue of messages for the view
-    std::thread attackThread_;
-
-    // Functions for the controller
+    // Modifiers for the controller to call
+    void resetState();
     void endGame();
-    void attack();
-    void movePlayer(int, int);
     void changePlayer() { notify(PLAYER_CHANGE); };
     void regularScreenShow() { notify(EXIT_SPECIAL_SCREEN); };
-    void reset();
+    void attack();
+    void movePlayer(int, int);
 
-    // Accessors for the view TODO: make thread-safe
-    bool gameOver() { return gameOver_; };
-    Character* player() { return &chars_[0]; };
-    Character* enemy() { return &chars_[1]; };
-    std::vector< Character > getChars() { return chars_; };     // Doesn't return a reference
+    // Accessors for the view (all thread-safe)
+    Character* player();
+    Character* enemy();
+    std::vector< Character > getChars();     // Doesn't return a reference
 };
 
 
