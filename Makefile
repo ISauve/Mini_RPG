@@ -11,13 +11,13 @@ GTKFLAGS = `pkg-config --cflags --libs` -std=c++14
 LIBFLAGS = -framework OpenGL
 SFMLFLAGS = -lsfml-system -lsfml-window -lsfml-graphics
 
-# compile all .cpp files in source directory & it's subdirectories
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp)
+# compile all .cc files in source directory & it's subdirectories
+SOURCES = $(wildcard $(SRC_DIR)/*.cc) $(wildcard $(SRC_DIR)/*/*.cc)
 
-# .o files depend upon .cpp files with same names
-OBJECTS = $(patsubst $(SRC_DIR)/%, $(BUILD_DIR)/%, $(SOURCES:.cpp=.o))
+# .o files depend upon .cc files with same names
+OBJECTS = $(patsubst $(SRC_DIR)/%, $(BUILD_DIR)/%, $(SOURCES:.cc=.o))
 
-# .d file is list of dependencies for corresponding .cpp file
+# .d file is list of dependencies for corresponding .cc file
 DEPENDS = ${OBJECTS:.o=.d}
 
 TARGET = $(BIN_DIR)/game
@@ -35,7 +35,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(TARGET) $(GTKFLAGS) $(LIBFLAGS) $(SFMLFLAGS)
 
 ### Compile
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
 	$(CXX)  -c -o $@ $< $(CXXFLAGS) $(GTKFLAGS)
 

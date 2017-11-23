@@ -16,7 +16,7 @@ void Controller::clearActiveButtons() {
 
 void Controller::addActiveButton(Button b, sf::FloatRect f) {
     std::lock_guard<std::mutex> lock(buttonsLock_);
-    activeButtons_[b] = f;
+    activeButtons_.push_back(std::make_pair(b, f));
 }
 
 void Controller::handleEvents() {
