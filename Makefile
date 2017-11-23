@@ -54,7 +54,7 @@ clean:
 ## ISSUE: "No rule to make target `obj/test_sample.o', needed by `bin/gtest'.  Stop."
 
 TEST_DIR = test
-GTEST_DIR = ext_src/gtest-1.7.0/googletest
+GTEST_DIR = googletest/googletest
 
 TEST_SRCS = $(TEST_DIR)/test_sample.cpp
 TEST_OBJS = $(patsubst $(TEST_DIR)/%, $(BUILD_DIR)/%, $(TEST_SRCS:.cpp=.o))

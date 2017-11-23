@@ -1,0 +1,13 @@
+# Running googletest on Circle CI: https://github.com/tjun/googletest-circleci
+dependencies:
+  pre:
+    - cd extsrc/gtest-1.7.0/googletest/; mkdir build; cd build; cmake ..; make
+  override:
+    - make; make test
+test:
+  override:
+    - cd bin; ./gtest
+checkout:
+  post:
+    - git submodule init
+    - git submodule update
