@@ -46,7 +46,7 @@ class View : public Observer {
     void drawFrame();
 
     // Helper drawing functions
-    Sprite getSprite(Notification);
+    void drawEvent(Notification);
     sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color);
     sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f);
     sf::Text generateText(int, sf::Color, std::string, bool);
@@ -54,8 +54,7 @@ class View : public Observer {
     sf::FloatRect drawSprite(float, float, std::string);
     sf::FloatRect drawSprite(float, float, std::string, sf::IntRect);
     sf::IntRect getPlayerImage(Sprite&);
-    void drawStatusBar();
-    void drawButtons();
+    void drawBackground();
     void drawPlayerSelection();
     void drawQuitScreen();
     void drawPlayerAttack(bool, int);

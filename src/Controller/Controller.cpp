@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-Controller::Controller( Model* m ) : model_(m), gameOver_(false), ignoreEvents_(false) {};
+Controller::Controller( Model* m ) : model_(m), ignoreEvents_(false), gameOver_(false) {};
 
 void Controller::setWindow(sf::RenderWindow* window) { window_ = window; }
 

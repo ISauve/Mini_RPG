@@ -1,8 +1,94 @@
 #include "View.h"
 
-#include <iostream>
+void View::drawPlayerSelection() {
+    std::string sheet_path = "View/Textures/Character_set_2.png";
+    sf::IntRect selection = sf::IntRect(1*80, 0*80, 80, 80);
+    sf::FloatRect rectangle_1 = drawSprite(100, SCREEN_HEIGHT/2, sheet_path, selection);
 
-/***************************** Helper functions *****************************/
+    selection = sf::IntRect(4*80, 0*80, 80, 80);
+    sf::FloatRect rectangle_2 = drawSprite(300, SCREEN_HEIGHT/2, sheet_path, selection);
+
+    selection = sf::IntRect(1*80, 4*80, 80, 80);
+    sf::FloatRect rectangle_3 = drawSprite(500, SCREEN_HEIGHT/2, sheet_path, selection);
+
+    selection = sf::IntRect(4*80, 4*80, 80, 80);
+    sf::FloatRect rectangle_4 = drawSprite(700, SCREEN_HEIGHT/2, sheet_path, selection);
+
+    selection = sf::IntRect(7*80, 4*80, 80, 80);
+    sf::FloatRect rectangle_5 = drawSprite(900, SCREEN_HEIGHT/2, sheet_path, selection);
+
+    controller_->clearActiveButtons();
+    controller_->addActiveButton(SELECT_PLAYER_1, rectangle_1);
+    controller_->addActiveButton(SELECT_PLAYER_2, rectangle_2);
+    controller_->addActiveButton(SELECT_PLAYER_3, rectangle_3);
+    controller_->addActiveButton(SELECT_PLAYER_4, rectangle_4);
+    controller_->addActiveButton(SELECT_PLAYER_5, rectangle_5);
+}
+
+void View::drawQuitScreen() {
+    drawText(50, sf::Color::Cyan, "Quitting...", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+};
+
+void View::drawPlayerDied() {
+    drawText(50, sf::Color::Red, "You are dead!", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+};
+
+void View::drawBackground() {
+    // Draw the status bar
+    sf::Text text = generateText(25, sf::Color::White, "Monsieur Moustache", false);
+    text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 100));
+    window_->draw(text);
+
+    text.setString( std::to_string(model_->player()->health() ) );
+    text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 150));
+    window_->draw(text);
+
+    drawText(25, sf::Color::White, "The Big Evil", false, sf::Vector2f(SCREEN_WIDTH/2 + 100, 100));
+
+    sf::Vector2f position(SCREEN_WIDTH/2 + 100, 150);
+    drawText(25, sf::Color::White, std::to_string(model_->enemy()->health()), false, position);
+
+    // Draw buttons (for now, we only have the "change character" button - later we might have more)
+    sf::Vector2f pos(175, SCREEN_HEIGHT - 75);
+    sf::RectangleShape r = drawRectangle(250, 50, sf::Color(52, 152, 219), pos, 10, sf::Color(41, 128, 185));
+
+    drawText(17, sf::Color::White, "Change character", true, sf::Vector2f(175, SCREEN_HEIGHT - 75));
+
+    controller_->clearActiveButtons();
+    controller_->addActiveButton(CHANGE_PLAYER, r.getGlobalBounds());
+}
+
+
+void View::drawEvent(Notification event) {
+    switch (event.type) {
+        case PLAYER_COLLISION:
+            drawText(25, sf::Color::White, "OPE", false, sf::Vector2f(model_->player()->x()+50, model_->player()->y()-50));
+            break;
+
+        case PLAYER_ATTACK:
+            drawPlayerAttack(event.hit, event.damage);
+            break;
+
+        case ENEMY_DIED:
+            // probably want to change this to something better todo
+            drawText(32, sf::Color::Blue, "Congrats, you win! Press r to restart", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200));
+            break;
+
+        //case ENEMY_ATTACK:
+        //   drawSprite(event.enemy->x() - event.enemy->width()/2, event.enemy->y(), "View/Textures/Enemy_Sword_1.png");
+        //   drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(event.enemy->x() + 50, event.enemy->y() - 100));
+        //   break;
+
+        default:
+            break;
+    }
+}
+
+
+
+/*************************************************************************
+                            Helper functions
+ *************************************************************************/
 
 sf::RectangleShape View::drawRectangle(int w, int h, sf::Color c1, sf::Vector2f pos, int th, sf::Color c2) {
     sf::RectangleShape rectangle(sf::Vector2f(w, h));
@@ -104,88 +190,13 @@ sf::IntRect View::getPlayerImage(Sprite& s) {
     return player_img;
 }
 
-
-/***************************** Background *****************************/
-
-void View::drawStatusBar() {
-    sf::Text text = generateText(25, sf::Color::White, "Monsieur Moustache", false);
-    text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 100));
-    window_->draw(text);
-
-    text.setString( std::to_string(model_->player()->health() ) );
-    text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 150));
-    window_->draw(text);
-
-    drawText(25, sf::Color::White, "The Big Evil", false, sf::Vector2f(SCREEN_WIDTH/2 + 100, 100));
-
-    sf::Vector2f position(SCREEN_WIDTH/2 + 100, 150);
-    drawText(25, sf::Color::White, std::to_string(model_->enemy()->health()), false, position);
-}
-
-void View::drawButtons() {
-    sf::Vector2f pos(175, SCREEN_HEIGHT - 75);
-    sf::RectangleShape r = drawRectangle(250, 50, sf::Color(52, 152, 219), pos, 10, sf::Color(41, 128, 185));
-
-    // for now, we only have the "change character" button (later might have more)
-    drawText(17, sf::Color::White, "Change character", true, sf::Vector2f(175, SCREEN_HEIGHT - 75));
-
-    controller_->clearActiveButtons();
-    controller_->addActiveButton(CHANGE_PLAYER, r.getGlobalBounds());
-}
-
-/***************************** Special screens *****************************/
-
-void View::drawQuitScreen() {
-    drawText(50, sf::Color::Cyan, "Quitting...", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
-};
-
-void View::drawPlayerSelection() {
-    std::string sheet_path = "View/Textures/Character_set_2.png";
-    sf::IntRect selection = sf::IntRect(1*80, 0*80, 80, 80);
-    sf::FloatRect rectangle_1 = drawSprite(100, SCREEN_HEIGHT/2, sheet_path, selection);
-
-    selection = sf::IntRect(4*80, 0*80, 80, 80);
-    sf::FloatRect rectangle_2 = drawSprite(300, SCREEN_HEIGHT/2, sheet_path, selection);
-
-    selection = sf::IntRect(1*80, 4*80, 80, 80);
-    sf::FloatRect rectangle_3 = drawSprite(500, SCREEN_HEIGHT/2, sheet_path, selection);
-
-    selection = sf::IntRect(4*80, 4*80, 80, 80);
-    sf::FloatRect rectangle_4 = drawSprite(700, SCREEN_HEIGHT/2, sheet_path, selection);
-
-    selection = sf::IntRect(7*80, 4*80, 80, 80);
-    sf::FloatRect rectangle_5 = drawSprite(900, SCREEN_HEIGHT/2, sheet_path, selection);
-
-    controller_->clearActiveButtons();
-    controller_->addActiveButton(SELECT_PLAYER_1, rectangle_1);
-    controller_->addActiveButton(SELECT_PLAYER_2, rectangle_2);
-    controller_->addActiveButton(SELECT_PLAYER_3, rectangle_3);
-    controller_->addActiveButton(SELECT_PLAYER_4, rectangle_4);
-    controller_->addActiveButton(SELECT_PLAYER_5, rectangle_5);
-}
-
-void View::drawPlayerDied() {
-    drawText(50, sf::Color::Red, "You are dead!", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
-};
-
-/***************************** Events *****************************/
-
 void View::drawPlayerAttack(bool hit, int damage) {
     // Draw the sword
-    float x = model_->player()->x() + model_->player()->width()/2;
+    float x = model_->player()->x() + model_->player()->width() / 2;
     drawSprite(x, model_->player()->y(), "View/Textures/Sword_1.png");
 
     // Draw the hit or miss
     sf::Vector2f position(model_->player()->x() + 50, model_->player()->y() - 100);
-    if (hit)    drawText(25, sf::Color::Red, std::to_string(damage), false,  position);
-    else        drawText(25, sf::Color::White, "Miss", false, position);
-}
-
-void View::drawEnemyAttack(Character* c, int d) {
-    drawSprite(c->x() - c->width()/2, c->y(), "View/Textures/Enemy_Sword_1.png");
-    drawText(25, sf::Color::Red, std::to_string(d), false, sf::Vector2f(c->x() + 50, c->y() - 100));
-}
-
-void View::drawPlayerCollision() {
-    drawText(25, sf::Color::White, "OPE", false, sf::Vector2f(model_->player()->x()+50, model_->player()->y()-50));
+    if (hit) drawText(25, sf::Color::Red, std::to_string(damage), false, position);
+    else drawText(25, sf::Color::White, "Miss", false, position);
 }

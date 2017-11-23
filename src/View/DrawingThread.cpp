@@ -45,8 +45,7 @@ void View::handleUpdate(Notification event) {
         case PLAYER_COLLISION:
         case PLAYER_ATTACK:
         case ENEMY_DIED:
-            // Counter gets decreased every 30ms & we want the total animation to last 1.5s -> need 50
-            temporaryEvents_.emplace_back(std::make_pair (event, 50));
+            temporaryEvents_.emplace_back(std::make_pair (event, 25));
             break;
         default:
             break;
@@ -67,25 +66,12 @@ void View::drawFrame() {
             break;
     }
 
-    // Draw the background
-    drawStatusBar();
-    drawButtons();
+    drawBackground();
 
     // Grab all the sprites we have to draw
     std::vector< Sprite > sprites;
-
     std::vector< Character > chars = model_->getChars();
     for (auto it : chars) sprites.push_back(it);
-
-    for (auto it = temporaryEvents_.begin(); it != temporaryEvents_.end(); it++){
-        if (it->second == 0) {
-            temporaryEvents_.erase(it++);
-            continue;
-        }
-
-        sprites.push_back(getSprite(it->first));
-        it->second--;
-    }
 
     // Order gets determined by y coordinates of the bottom of the sprite & by z-index
     std::sort (sprites.begin(), sprites.end(), [] (Sprite& a, Sprite& b) -> bool {
@@ -111,11 +97,15 @@ void View::drawFrame() {
             drawSprite(it.x() - it.width() / 2, it.y(), it.weaponPath());
         }
     }
-}
 
-Sprite View::getSprite(Notification event) {
+    // Draw any temporary events
+    for (auto it = temporaryEvents_.begin(); it != temporaryEvents_.end(); it++){
+        if (it->second == 0) {
+            temporaryEvents_.erase(it++);
+            continue;
+        }
 
-    // TODO
-
-    return Sprite(50, 50, false,"View/Textures/Dead.png", 20, 20);;
+        drawEvent(it->first);
+        it->second--;
+    }
 }
