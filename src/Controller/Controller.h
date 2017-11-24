@@ -8,6 +8,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <list>
+#include <thread>
+#include <mutex>
 
 // Controller: mediates between model & view
 //  -> translates UI events into call to model

@@ -2,36 +2,21 @@ version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: circleci/node:latest
+
     steps:
-      - checkout
+      - checkout  # check out src code into working directory
+
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: Set up
+          command: |
+            git submodule sync; git submodule update --init
+            sudo apt-get update; sudo apt-get install libsfml-dev
+
       - run:
-          name: Print the Current Time
-          command: date
+          name: Compile
+          command: make test
 
-
-# The following was for Circle CI 1.0
-# Based on https://github.com/tjun/googletest-circleci
-#dependencies:
-#  pre:
-#    - cd googletest/googletest; mkdir build; cd build; cmake ..; make
-#    - sudo apt-get update; sudo apt-get install gcc-5; sudo apt-get install g++-5
-#    - sudo apt-get install libsfml-dev
-
-#compile:
-#  pre:
-#    override:
-#      - make
-#     - make test
-
-#test:
-#  override:
-#    - ./bin/gtest
-
-#checkout:
-#  post:
-#    - git submodule init
-#    - git submodule update
+      - run:
+          name: Test
+          command: ./bin/gtest

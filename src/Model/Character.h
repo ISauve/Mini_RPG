@@ -3,7 +3,6 @@
 
 #include "Sprite.h"
 #include "Weapon.h"
-#include <random>
 
 class Character : public Sprite {
     bool activeEnemy_;

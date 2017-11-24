@@ -3,6 +3,8 @@
 
 #include <list>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 
 // A safe queue for communicating events between the threads
 // Inspired by https://st.xorian.net/blog/2012/08/go-style-channel-in-c/

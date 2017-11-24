@@ -10,6 +10,8 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <chrono>
+
 
 // TODO: keep this somewhere better (also, make screen proportions not modifyable)
 #define SCREEN_WIDTH 1024

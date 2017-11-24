@@ -5,13 +5,12 @@
 #include "../Model/Model.h"
 #include "../Controller/Controller.h"
 #include "../Channel.h"
+
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <thread>
-#include <future>
-
-#include <iostream>
+#include <mutex>
 
 // View: displays the game to the user
 //	-> observes the mode

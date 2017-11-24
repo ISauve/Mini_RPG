@@ -15,11 +15,17 @@ Design patterns used:
 2. Compile the game with `make`
 3. Run with `./bin/game`
 
+#### Running tests
+1. `git submodule init`
+2. `git submodule update`
+3. `make test`
+4. `./bin/gtest`
+
 #### Current issues
 - [ ] Install/test on Linux/Win
 
 #### Next steps
-1. Add a test framework ([googletest](https://github.com/google/googletest)) and integrate with Circle CI
+1. ~~Add a test framework ([googletest](https://github.com/google/googletest))~~ and integrate with Circle CI
 2. Add character & weapon stats
 3. Add items that can be interacted with
 4. Add a way to generate playable areas (**factory**)

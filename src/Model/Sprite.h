@@ -2,7 +2,9 @@
 #define MINI_RPG_SPRITE_H
 
 #include <string>
-
+#include <random>
+#include <chrono>
+#include <functional>
 
 class Sprite {
 protected:

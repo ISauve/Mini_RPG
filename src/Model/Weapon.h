@@ -1,7 +1,6 @@
 #ifndef MINI_RPG_WEAPON_H
 #define MINI_RPG_WEAPON_H
 
-#include <string>
 #include "Sprite.h"
 
 class Weapon: public Sprite {
