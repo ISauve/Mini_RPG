@@ -5,9 +5,11 @@
 #include "../Model/Model.h"
 #include "../Controller/Controller.h"
 #include "../Channel.h"
+#include "../Config.h"
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <algorithm>
 #include <thread>
 #include <mutex>
@@ -56,7 +58,6 @@ class View : public Observer {
     void drawPlayerSelection();
     void drawQuitScreen();
     void drawPlayerAttack(bool, int);
-    void drawEnemyAttack(Character*, int);
     void drawPlayerDied();
 
 public:

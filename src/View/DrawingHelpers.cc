@@ -1,7 +1,7 @@
 #include "View.h"
 
 void View::drawPlayerSelection() {
-    std::string sheet_path = "src/View/Textures/Character_set_2.png";
+    std::string sheet_path = "resources/Textures/Character_set_2.png";
     sf::IntRect selection = sf::IntRect(1*80, 0*80, 80, 80);
     sf::FloatRect rectangle_1 = drawSprite(100, SCREEN_HEIGHT/2, sheet_path, selection);
 
@@ -30,7 +30,7 @@ void View::drawQuitScreen() {
 };
 
 void View::drawPlayerDied() {
-    drawText(50, sf::Color::Red, "You are dead!", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+    drawText(25, sf::Color::Red, "You are dead! Press R to reset.", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
 };
 
 void View::drawBackground() {
@@ -38,13 +38,10 @@ void View::drawBackground() {
     sf::Text text = generateText(25, sf::Color::White, "Monsieur Moustache", false);
     text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 100));
     window_->draw(text);
-
     text.setString( std::to_string(model_->player().health() ) );
     text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 150));
     window_->draw(text);
-
     drawText(25, sf::Color::White, "The Big Evil", false, sf::Vector2f(SCREEN_WIDTH/2 + 100, 100));
-
     sf::Vector2f position(SCREEN_WIDTH/2 + 100, 150);
     drawText(25, sf::Color::White, std::to_string(model_->enemy().health()), false, position);
 
@@ -71,13 +68,13 @@ void View::drawEvent(Notification event) {
 
         case ENEMY_DIED:
             // probably want to change this to something better todo
-            drawText(32, sf::Color::Blue, "Congrats, you win! Press r to restart", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200));
+            drawText(32, sf::Color::Blue, "Congrats, you win! Press R to reset", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200));
             break;
 
-        //case ENEMY_ATTACK:
-        //   drawSprite(event.enemy->x() - event.enemy->width()/2, event.enemy->y(), "src/View/Textures/Enemy_Sword_1.png");
-        //   drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(event.enemy->x() + 50, event.enemy->y() - 100));
-        //   break;
+        case ENEMY_ATTACK:
+           drawSprite(event.enemy->x() - event.enemy->width()/2, event.enemy->y(), "resources/Textures/Enemy_Sword_1.png");
+           drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(event.enemy->x() + 50, event.enemy->y() - 100));
+           break;
 
         default:
             break;
@@ -193,7 +190,7 @@ sf::IntRect View::getPlayerImage(Sprite& s) {
 void View::drawPlayerAttack(bool hit, int damage) {
     // Draw the sword
     float x = model_->player().x() + model_->player().width() / 2;
-    drawSprite(x, model_->player().y(), "src/View/Textures/Sword_1.png");
+    drawSprite(x, model_->player().y(), "resources/Textures/Sword_1.png");
 
     // Draw the hit or miss
     sf::Vector2f position(model_->player().x() + 50, model_->player().y() - 100);

@@ -1,5 +1,4 @@
 #include "View.h"
-#include <iostream>
 
 View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false) {
     // Initialize the window (can be a local var because game ends when this returns)
@@ -13,12 +12,10 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
     model_->subscribe( this );
 
     // Initialize the view data
-    font_.loadFromFile("src/View/Old_School_Adventures.ttf");
-    /*   TODO
+    font_.loadFromFile("resources/Old_School_Adventures.ttf");
     sf::Music music;
-    music.openFromFile("nice_music.ogg");
+    music.openFromFile("resources/AMemoryAway.ogg");
     music.play();
-     */
     specialScreen_ = NONE;
 
     // Launch the 3 main game loops

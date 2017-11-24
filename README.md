@@ -6,7 +6,6 @@ A C++ game I wrote to practice multithreading. It uses OpenGL with SFML.
 Design patterns used:
 - MVC
 - Observer
-- (Future: Factory)
 
 #### Installation
 1. Install the dependencies (SFML)
@@ -21,15 +20,15 @@ Design patterns used:
 3. `make test`
 4. `./bin/gtest`
 
-#### Current issues
-- [ ] Install/test on Linux/Win
-
-#### Next steps
-1. ~~Add a test framework ([googletest](https://github.com/google/googletest))~~ and integrate with Circle CI
-2. Add character & weapon stats
-3. Add items that can be interacted with
-4. Add a way to generate playable areas (**factory**)
+#### TODO
+- [ ] Test on Win/Linux
+- [x] Add a test framework ([googletest](https://github.com/google/googletest)) and integrate with Circle CI
+- [ ] Add character & weapon stats
+- [ ] Add items that can be interacted with
+- [ ] Add a way to generate playable areas
     - YAML file with the details that gets parsed and generated
     - ie enemies & their stats & locations, items on the screen
-5. Add save/continue ability 
-6. Add a dependency manager/installation script (?)
+- [ ] Add save/continue ability 
+- [ ] Add a dependency manager/installation script (?)
+- [ ] Refactor sprites to use factory pattern
+- [ ] Try to remove all direct accesses among threads/replace locks with channels
