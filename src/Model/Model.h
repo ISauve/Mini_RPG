@@ -3,6 +3,9 @@
 
 #include "../Observer/Subject.h"
 #include "Character.h"
+#include "../Channel.h"
+#include "EventPackage.h"
+
 #include <queue>
 #include <vector>
 #include <thread>
@@ -25,26 +28,39 @@ class Model : public Subject {
     std::mutex charsLock_;
     std::vector< Character > chars_;
 
-    //void enemyAttack();
-    //std::queue< Attack > enemyAttacks_;     // Public queue of messages for the view
-    //std::thread attackThread_;
+    // One entry exists in this vector for each char in chars_
+    // Each entry corresponds to the timeout before that character can attack again
+    std::vector< int > charTimeouts_;
+
+    // Flag for when we need to ignore (certain) calls from the controller
+    bool ignoreInput_;
+
+    // Channel & handler for receiving calls from the controller
+    Channel<EventPackage>* eventsChannel_;
+    void handleEvent(EventPackage);
+
+    // Handles enemy attacks
+    void checkActiveEnemies();
+
+    // Helpers
+    void movePlayer(int x, int y);
+    void playerAttack();
+    void resetState();
 
 public:
     Model();
     ~Model() = default;
 
-    // Modifiers for the controller to call
-    void resetState();
-    void endGame();
-    void changePlayer() { notify(PLAYER_CHANGE); };
-    void regularScreenShow() { notify(EXIT_SPECIAL_SCREEN); };
-    void attack();
-    void movePlayer(int, int);
+    // Modifier for the controller to pass the shared channel to the model
+    void setChannel(Channel<EventPackage>*);
 
-    // Accessors for the view (all thread-safe)
-    Character* player();
-    Character* enemy();
-    std::vector< Character > getChars();     // Doesn't return a reference
+    // Main game loop for updating the state of the game
+    void startGameLoop();
+
+    // Accessors for the view - return copies, not references, so as to be thread-safe
+    Character player();
+    Character enemy();
+    std::vector< Character > getChars();
 };
 
 

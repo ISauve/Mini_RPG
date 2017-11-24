@@ -39,14 +39,14 @@ void View::drawBackground() {
     text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 100));
     window_->draw(text);
 
-    text.setString( std::to_string(model_->player()->health() ) );
+    text.setString( std::to_string(model_->player().health() ) );
     text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 150));
     window_->draw(text);
 
     drawText(25, sf::Color::White, "The Big Evil", false, sf::Vector2f(SCREEN_WIDTH/2 + 100, 100));
 
     sf::Vector2f position(SCREEN_WIDTH/2 + 100, 150);
-    drawText(25, sf::Color::White, std::to_string(model_->enemy()->health()), false, position);
+    drawText(25, sf::Color::White, std::to_string(model_->enemy().health()), false, position);
 
     // Draw buttons (for now, we only have the "change character" button - later we might have more)
     sf::Vector2f pos(175, SCREEN_HEIGHT - 75);
@@ -62,7 +62,7 @@ void View::drawBackground() {
 void View::drawEvent(Notification event) {
     switch (event.type) {
         case PLAYER_COLLISION:
-            drawText(25, sf::Color::White, "OPE", false, sf::Vector2f(model_->player()->x()+50, model_->player()->y()-50));
+            drawText(25, sf::Color::White, "OPE", false, sf::Vector2f(model_->player().x()+50, model_->player().y()-50));
             break;
 
         case PLAYER_ATTACK:
@@ -177,14 +177,14 @@ sf::IntRect View::getPlayerImage(Sprite& s) {
         animate = true; }
 
     if (animate) {
-        if (counter < 10)
+        if (counter < 5)
             player_img = sf::IntRect( (col-1)*width, row*height, width, height );
-        else if (counter < 20 || (counter >= 30 && counter < 40))
+        else if (counter < 10 || (counter >= 15 && counter < 20))
             player_img = sf::IntRect( (col)*width, row*height, width, height );
         else
             player_img = sf::IntRect( (col+1)*width, row*height, width, height );
 
-        counter++; if (counter == 40) counter = 0;
+        counter++; if (counter == 20) counter = 0;
     }
 
     return player_img;
@@ -192,11 +192,11 @@ sf::IntRect View::getPlayerImage(Sprite& s) {
 
 void View::drawPlayerAttack(bool hit, int damage) {
     // Draw the sword
-    float x = model_->player()->x() + model_->player()->width() / 2;
-    drawSprite(x, model_->player()->y(), "src/View/Textures/Sword_1.png");
+    float x = model_->player().x() + model_->player().width() / 2;
+    drawSprite(x, model_->player().y(), "src/View/Textures/Sword_1.png");
 
     // Draw the hit or miss
-    sf::Vector2f position(model_->player()->x() + 50, model_->player()->y() - 100);
+    sf::Vector2f position(model_->player().x() + 50, model_->player().y() - 100);
     if (hit) drawText(25, sf::Color::Red, std::to_string(damage), false, position);
     else drawText(25, sf::Color::White, "Miss", false, position);
 }

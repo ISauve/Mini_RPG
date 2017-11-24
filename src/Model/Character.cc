@@ -6,7 +6,9 @@ Character::Character(int str, int sp, float x, float y, bool sheet, std::string 
         activeEnemy_(false), health_(100), strength_(str), speed_(sp), weapon_(nullptr) {};
 
 int Character::attack(Character* c) const {
-    auto generate_rand = std::bind(std::uniform_int_distribution<float>(1,5), std::mt19937(time(0)));
+    auto now = std::chrono::high_resolution_clock::now();
+    auto seed = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+    auto generate_rand = std::bind(std::uniform_int_distribution<float>(1,5), std::mt19937(seed));
 
     int damage = floor(generate_rand() * strength_);
     c->hit(damage);

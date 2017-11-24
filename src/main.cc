@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-int main( int argc, char * argv[] ) {
+int main() {
     // Initialize the main components of the game
     Model model;
     Controller controller( &model );

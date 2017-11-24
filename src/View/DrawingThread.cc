@@ -3,6 +3,8 @@
 void View::render() {
     window_->setActive(true);
     while (true) {
+        auto start = std::chrono::high_resolution_clock::now();
+
         // Check for updates from the model
         // deal with multiple updates at once? or is 1/100ms fast enough?  TODO
         Notification update;
@@ -16,10 +18,11 @@ void View::render() {
         drawFrame();
         window_->display();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000/frameRate_));
+        // 10 fps
+        std::this_thread::sleep_until(start + std::chrono::milliseconds(100));
 
         if (gameOver_) {
-            // sleep briefly to allow for quitting screen to display
+            // sleep briefly (1s) to allow for quitting screen to be seen
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             break;
         }
@@ -40,18 +43,18 @@ void View::handleUpdate(Notification event) {
             specialScreen_ = NONE;
             break;
         case PLAYER_DIED:
-            // Blocking? special screen? What do we want to happen?  TODO
+            specialScreen_ = DEAD;
             break;
         case PLAYER_COLLISION:
         case PLAYER_ATTACK:
+        //case ENEMY_ATTACK:        TODO
         case ENEMY_DIED:
-            temporaryEvents_.emplace_back(std::make_pair (event, 25));
+            temporaryEvents_.emplace_back(std::make_pair (event, 5));
             break;
         default:
             break;
     }
 }
-
 
 void View::drawFrame() {
     switch (specialScreen_) {
@@ -60,6 +63,9 @@ void View::drawFrame() {
             return;
         case QUIT:
             drawQuitScreen();
+            return;
+        case DEAD:
+            drawPlayerDied();
             return;
         case NONE:
         default:

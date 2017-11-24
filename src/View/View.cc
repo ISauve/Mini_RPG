@@ -21,15 +21,18 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
      */
     specialScreen_ = NONE;
 
-    // Launch the 2 main game loops
+    // Launch the 3 main game loops
     std::thread render_thread(&View::render, this);
+    std::thread game_thread(&Model::startGameLoop, model_);
+    // Note: "main" thread has to be the controller because SFML does not allow window
+    // event processing in threads (only rendering)
     controller_->handleEvents();
 
-    // Wait for both threads before returning (both will return once the game is over)
+    // Wait for all threads before exiting (will return once the game is over)
     render_thread.join();
+    game_thread.join();
     window_->close();
 };
-
 
 void View::update(Notification n) {
     // Pass the notification into the events channel for the drawing thread to safely process

@@ -1,70 +1,63 @@
 #include "Controller.h"
-#include "../Model/Model.h"
 
-// TODO: remove
-#include <iostream>
-using namespace std;
+Controller::Controller( Model* m ) : gameOver_(false) {
+    m->setChannel(&modelChannel_);
+};
 
-Controller::Controller( Model* m ) : model_(m), ignoreEvents_(false), gameOver_(false) {};
-
-void Controller::setWindow(sf::RenderWindow* window) { window_ = window; }
+void Controller::setWindow(sf::RenderWindow* window) {
+    window_ = window;
+}
 
 void Controller::clearActiveButtons() {
     std::lock_guard<std::mutex> lock(buttonsLock_);
-    activeButtons_.clear();
+    activeButtonAreas_.clear();
 };
 
 void Controller::addActiveButton(Button b, sf::FloatRect f) {
     std::lock_guard<std::mutex> lock(buttonsLock_);
-    activeButtons_.push_back(std::make_pair(b, f));
+    activeButtonAreas_.emplace_back(std::make_pair(b, f));
 }
+
 
 void Controller::handleEvents() {
     while (!gameOver_) {
+        auto start = std::chrono::high_resolution_clock::now();
+
+        // Check if the user is pressing a "movement" key
+        checkPlayerMovement();
+
         // Pop any events that have occurred off the top of the event queue
         sf::Event windowEvent;
         while ( window_->pollEvent(windowEvent) ) { // returns false when queue is empty
             handleEvent(windowEvent);
         }
 
-        // Alternative: (this is blocking, ideal for if we don't have to process anything
-        // else in this loop)
-        /*
-        sf::Event windowEvent;
-        if (window.waitEvent(windowEvent)) {
-           handleEvent(windowEvent);
-        }
-         */
-
-        /*
-        // Poll for information from the attack thread
-        // do in model??? this doesn't seem like the place for it...
-        while ( !model_->enemyAttacks_.empty() ) {      // todo: need lockguard?
-            Attack newAttack = model_->enemyAttacks_.front();
-            model_->enemyAttacks_.pop();
-
-            enemyAttack(newAttack.enemy, newAttack.damage);
-        }
-
-        // Check if player was killed
-        if ( !model_->player()->isAlive() ) {
-
-        }
-         */
-
+        // This loop should run exactly once every 100ms (to get a consistent movement speed)
+        std::this_thread::sleep_until(start + std::chrono::milliseconds(100));
     }
 }
 
-// Handles events that come from the window
+
+void Controller::checkPlayerMovement() {
+    int x = 0;
+    int y = 0;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) x -= 10;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) x += 10;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) y -= 10;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) y += 10;
+
+    if (x != 0 || y != 0) modelChannel_.send( EventPackage(MOVE_PLAYER, x, y) );
+}
+
+
 void Controller::handleEvent(sf::Event& event) {
-    // Always handle "exit" events
+    // Handle "exit" events first
     if (event.type == sf::Event::Closed ||
         (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
         gameOver_ = true;   // ends this loop
-        model_->endGame();  // triggers the model to clean up, which notifies the view to close as well
+        modelChannel_.send(EventPackage(END_GAME)); // ends the model's game loop -> view gets notified to close too
+        return;
     }
-
-    if (ignoreEvents_) return;
 
     switch (event.type) {
         case sf::Event::KeyPressed:
@@ -78,31 +71,20 @@ void Controller::handleEvent(sf::Event& event) {
     }
 }
 
+
 void Controller::handleKeyPress(sf::Event& e) {
     switch (e.key.code) {
-        case sf::Keyboard::Left:
-            model_->movePlayer(-10, 0);
-            break;
-        case sf::Keyboard::Right:
-            model_->movePlayer(10, 0);
-            break;
-        case sf::Keyboard::Up:
-            model_->movePlayer(0, -10);
-            break;
-        case sf::Keyboard::Down:
-            model_->movePlayer(0, 10);
-            break;
         case sf::Keyboard::Space:
-            model_->attack();
-            // ignore events for 1.5s?
+            modelChannel_.send(EventPackage(ATTACK));
             break;
         case sf::Keyboard::R:
-            model_->resetState();
+            modelChannel_.send(EventPackage(RESET_STATE));
             break;
         default:
             break;
     }
 }
+
 
 void Controller::handleMouseClick(sf::Event& e) {
     std::lock_guard<std::mutex> lock(buttonsLock_);
@@ -110,31 +92,26 @@ void Controller::handleMouseClick(sf::Event& e) {
     int y = e.mouseButton.y;
 
     // Check if this click was on any active buttons
-    for (auto it : activeButtons_) {
+    for (auto it : activeButtonAreas_) {
         if ( it.second.contains(x, y) ) {
             switch (it.first) {
                 case CHANGE_PLAYER:
-                    model_->changePlayer();
+                    modelChannel_.send(EventPackage(CHANGE_CHAR));
                     break;
                 case SELECT_PLAYER_1:
-                    model_->player()->setCharacter(0, 1);
-                    model_->regularScreenShow();
+                    modelChannel_.send(EventPackage(SET_CHAR, 0, 1));
                     break;
                 case SELECT_PLAYER_2:
-                    model_->player()->setCharacter(0, 4);
-                    model_->regularScreenShow();
+                    modelChannel_.send(EventPackage(SET_CHAR, 0, 4));
                     break;
                 case SELECT_PLAYER_3:
-                    model_->player()->setCharacter(4, 1);
-                    model_->regularScreenShow();
+                    modelChannel_.send(EventPackage(SET_CHAR, 4, 1));
                     break;
                 case SELECT_PLAYER_4:
-                    model_->player()->setCharacter(4, 4);
-                    model_->regularScreenShow();
+                    modelChannel_.send(EventPackage(SET_CHAR, 4, 4));
                     break;
                 case SELECT_PLAYER_5:
-                    model_->player()->setCharacter(4, 7);
-                    model_->regularScreenShow();
+                    modelChannel_.send(EventPackage(SET_CHAR, 4, 7));
                     break;
             }
         }

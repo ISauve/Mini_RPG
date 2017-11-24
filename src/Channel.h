@@ -4,7 +4,7 @@
 #include <list>
 #include <thread>
 
-// A thread-safe queue for communicating events between the threads
+// A safe queue for communicating events between the threads
 // Inspired by https://st.xorian.net/blog/2012/08/go-style-channel-in-c/
 template <class type>
 class Channel {

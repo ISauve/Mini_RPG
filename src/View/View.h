@@ -4,7 +4,7 @@
 #include "../Observer/Observer.h"
 #include "../Model/Model.h"
 #include "../Controller/Controller.h"
-#include "Channel.h"
+#include "../Channel.h"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <algorithm>
@@ -21,7 +21,7 @@ class Model;
 class Controller;
 class Character;
 
-enum SpecialScreen {NONE, SELECT_PLAYER, QUIT};
+enum SpecialScreen {NONE, SELECT_PLAYER, QUIT, DEAD};
 
 class View : public Observer {
     Model* model_;
@@ -30,7 +30,6 @@ class View : public Observer {
     sf::RenderWindow* window_;
     Channel<Notification> eventsChannel_;
     sf::Font font_;
-    const int frameRate_ = 10; //fps
 
     bool gameOver_;
     SpecialScreen specialScreen_;
@@ -59,7 +58,6 @@ class View : public Observer {
     void drawQuitScreen();
     void drawPlayerAttack(bool, int);
     void drawEnemyAttack(Character*, int);
-    void drawPlayerCollision();
     void drawPlayerDied();
 
 public:

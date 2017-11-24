@@ -1,9 +1,13 @@
 #ifndef MINI_RPG_CONTROLLER_H
 #define MINI_RPG_CONTROLLER_H
 
+#include "../Channel.h"
+#include "../Model/EventPackage.h"
+#include "../Model/Model.h"
+
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <unordered_map>
+#include <list>
 
 // Controller: mediates between model & view
 //  -> translates UI events into call to model
@@ -11,16 +15,18 @@
 class Model;
 
 enum Button {CHANGE_PLAYER, SELECT_PLAYER_1, SELECT_PLAYER_2, SELECT_PLAYER_3, SELECT_PLAYER_4, SELECT_PLAYER_5};
-class Controller {
-    Model* model_;
 
+class Controller {
     sf::RenderWindow* window_;
     std::mutex buttonsLock_;
-    std::unordered_map <Button, sf::FloatRect> activeButtons_;
-    bool ignoreEvents_;
+    std::list<std::pair<Button, sf::FloatRect>> activeButtonAreas_;
     bool gameOver_;
 
+    // Thread-safe channel to send messages to the model
+    Channel<EventPackage> modelChannel_;
+
     // Helper functions for interpreting events
+    void checkPlayerMovement();
     void handleEvent(sf::Event&);
     void handleKeyPress(sf::Event&);
     void handleMouseClick(sf::Event&);
