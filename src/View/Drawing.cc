@@ -30,7 +30,7 @@ void View::drawQuitScreen() {
 };
 
 void View::drawPlayerDied() {
-    drawText(25, sf::Color::Red, "You are dead! Press R to reset.", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+    drawText(35, sf::Color::Red, "You are dead! Press R to reset.", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
 };
 
 void View::drawBackground() {
@@ -63,24 +63,31 @@ void View::drawEvent(Notification event) {
             break;
 
         case PLAYER_ATTACK:
-            drawPlayerAttack(event.hit, event.damage);
+            // Draw the sword
+            drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), "resources/Textures/Sword_1.png");
+
+            if (event.hit) {   // Draw a hit above the enemy
+                drawText(25, sf::Color::Green, std::to_string(event.damage), false, sf::Vector2f(event.enemy.x(), event.enemy.y() - 100));
+            }
+            else {      // Draw a miss above the player's sword
+                drawText(25, sf::Color::White, "Miss", false, sf::Vector2f(model_->player().x() + 50, model_->player().y() - 100));
+            }
             break;
 
         case ENEMY_DIED:
-            // probably want to change this to something better todo
-            drawText(32, sf::Color::Blue, "Congrats, you win! Press R to reset", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200));
+            // Draw a crossbones where the enemy was
+            drawSprite(event.enemy.x(), event.enemy.y(), "resources/Textures/Skull_crossbones.png");
             break;
 
         case ENEMY_ATTACK:
-           drawSprite(event.enemy->x() - event.enemy->width()/2, event.enemy->y(), "resources/Textures/Enemy_Sword_1.png");
-           drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(event.enemy->x() + 50, event.enemy->y() - 100));
-           break;
+            // Draw the damage above the player's head
+            drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(model_->player().x(), model_->player().y()-70));
+            break;
 
         default:
             break;
     }
 }
-
 
 
 /*************************************************************************
@@ -94,15 +101,6 @@ sf::RectangleShape View::drawRectangle(int w, int h, sf::Color c1, sf::Vector2f 
     rectangle.setFillColor(c1);
     rectangle.setOutlineThickness(th);
     rectangle.setOutlineColor(c2);
-    window_->draw(rectangle);
-    return rectangle;
-}
-
-sf::RectangleShape View::drawRectangle(int w, int h, sf::Color c1, sf::Vector2f pos) {
-    sf::RectangleShape rectangle(sf::Vector2f(w, h));
-    rectangle.setOrigin(w/2, h/2);
-    rectangle.setPosition(pos);
-    rectangle.setFillColor(c1);
     window_->draw(rectangle);
     return rectangle;
 }
@@ -150,50 +148,3 @@ sf::FloatRect View::drawSprite(float x, float y, std::string path, sf::IntRect s
     window_->draw(sprite);
     return sprite.getGlobalBounds();
 };
-
-// Determine which image to use from a char sheet based on direction char is moving
-static int counter = 0;
-sf::IntRect View::getPlayerImage(Sprite& s) {
-    int row = s.row();
-    int col = s.col();
-    int width = s.width();
-    int height = s.height();
-
-    // Select the rectangle for the "default" stance
-    sf::IntRect player_img = sf::IntRect(col*width, row*height, width, height);
-
-    // Animate player movement by changing the image if a key is pressed
-    bool animate = false;
-    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ) {
-        row = row+1; animate = true;
-    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ) {
-        row = row+2; animate = true;
-    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ) {
-        row = row+3; animate = true;
-    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ) {
-        animate = true; }
-
-    if (animate) {
-        if (counter < 5)
-            player_img = sf::IntRect( (col-1)*width, row*height, width, height );
-        else if (counter < 10 || (counter >= 15 && counter < 20))
-            player_img = sf::IntRect( (col)*width, row*height, width, height );
-        else
-            player_img = sf::IntRect( (col+1)*width, row*height, width, height );
-
-        counter++; if (counter == 20) counter = 0;
-    }
-
-    return player_img;
-}
-
-void View::drawPlayerAttack(bool hit, int damage) {
-    // Draw the sword
-    float x = model_->player().x() + model_->player().width() / 2;
-    drawSprite(x, model_->player().y(), "resources/Textures/Sword_1.png");
-
-    // Draw the hit or miss
-    sf::Vector2f position(model_->player().x() + 50, model_->player().y() - 100);
-    if (hit) drawText(25, sf::Color::Red, std::to_string(damage), false, position);
-    else drawText(25, sf::Color::White, "Miss", false, position);
-}

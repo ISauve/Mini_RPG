@@ -17,6 +17,7 @@ class Character : public Sprite {
     //Armor armor_;
 
 public:
+    Character();
     Character(int, int, float, float, bool, std::string, int, int);
     int attack(Character*) const;
 

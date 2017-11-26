@@ -23,6 +23,7 @@ Design patterns used:
 #### TODO
 - [ ] Test on Win/Linux
 - [x] Add a test framework ([googletest](https://github.com/google/googletest)) and integrate with Circle CI
+- [ ] Write tests
 - [ ] Add character & weapon stats
 - [ ] Add items that can be interacted with
 - [ ] Add a way to generate playable areas

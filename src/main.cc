@@ -2,9 +2,9 @@
 #include "Controller/Controller.h"
 #include "View/View.h"
 
-#include <iostream>
-
 int main() {
+    // Read in the confs file to the "conf" class todo
+
     // Initialize the main components of the game
     Model model;
     Controller controller( &model );

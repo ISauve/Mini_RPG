@@ -1,10 +1,10 @@
 #ifndef MINI_RPG_NOTIFICATION_H
 #define MINI_RPG_NOTIFICATION_H
 
-class Character;
+#include "Character.h"
 
 enum Code {PLAYER_ATTACK, ENEMY_DIED, ENEMY_ATTACK, PLAYER_DIED, PLAYER_COLLISION, PLAYER_CHANGE,
-    EXIT_SPECIAL_SCREEN, QUIT_GAME };
+    EXIT_SPECIAL_SCREEN, QUIT_GAME, RESET};
 
 struct Notification {
     Notification(){};
@@ -16,7 +16,7 @@ struct Notification {
     // Related data
     int damage;
     bool hit;
-    Character* enemy;
+    Character enemy;
 };
 
 #endif //MINI_RPG_NOTIFICATION_H

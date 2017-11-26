@@ -45,20 +45,22 @@ class View : public Observer {
     // Draws the current state on the window
     void drawFrame();
 
-    // Helper drawing functions
+    // Determines which image to use from a char sheet based on direction char is moving
+    sf::IntRect getPlayerImage(Sprite&);
+
+    // Drawing functions
     void drawEvent(Notification);
+    void drawBackground();
+    void drawPlayerSelection();
+    void drawQuitScreen();
+    void drawPlayerDied();
+
+    // Helpers
     sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color);
-    sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f);
     sf::Text generateText(int, sf::Color, std::string, bool);
     void drawText(int, sf::Color, std::string, bool, sf::Vector2f);
     sf::FloatRect drawSprite(float, float, std::string);
     sf::FloatRect drawSprite(float, float, std::string, sf::IntRect);
-    sf::IntRect getPlayerImage(Sprite&);
-    void drawBackground();
-    void drawPlayerSelection();
-    void drawQuitScreen();
-    void drawPlayerAttack(bool, int);
-    void drawPlayerDied();
 
 public:
     View(Model*, Controller*);

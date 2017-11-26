@@ -1,6 +1,7 @@
 #include "Model.h"
 
 Model::Model() {
+    std::lock_guard<std::mutex> lock(charsLock_);
     resetState();
 };
 

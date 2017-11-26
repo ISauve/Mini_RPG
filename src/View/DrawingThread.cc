@@ -36,6 +36,10 @@ void View::handleUpdate(Notification event) {
             specialScreen_ = QUIT;
             gameOver_ = true;   // stops drawing thread
             break;
+        case RESET:
+            specialScreen_ = NONE;
+            temporaryEvents_.clear();
+            break;
         case PLAYER_CHANGE:
             specialScreen_ = SELECT_PLAYER;
             break;
@@ -47,9 +51,11 @@ void View::handleUpdate(Notification event) {
             break;
         case PLAYER_COLLISION:
         case PLAYER_ATTACK:
-        //case ENEMY_ATTACK:        TODO
-        case ENEMY_DIED:
+        case ENEMY_ATTACK:
             temporaryEvents_.emplace_back(std::make_pair (event, 5));
+            break;
+        case ENEMY_DIED:
+            temporaryEvents_.emplace_back(std::make_pair (event, 20));
             break;
         default:
             break;
@@ -106,12 +112,46 @@ void View::drawFrame() {
 
     // Draw any temporary events
     for (auto it = temporaryEvents_.begin(); it != temporaryEvents_.end(); it++){
-        if (it->second == 0) {
-            temporaryEvents_.erase(it++);
-            continue;
-        }
-
         drawEvent(it->first);
         it->second--;
     }
+
+    // Remove any "expired" temporary events
+    temporaryEvents_.erase(std::remove_if(temporaryEvents_.begin(), temporaryEvents_.end(),
+        [](std::pair<Notification, int> event) { return event.second <= 0; }), temporaryEvents_.end());
+}
+
+static int counter = 0;
+sf::IntRect View::getPlayerImage(Sprite& s) {
+    int row = s.row();
+    int col = s.col();
+    int width = s.width();
+    int height = s.height();
+
+    // Select the rectangle for the "default" stance
+    sf::IntRect player_img = sf::IntRect(col*width, row*height, width, height);
+
+    // Animate player movement by changing the image if a key is pressed
+    bool animate = false;
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ) {
+        row = row+1; animate = true;
+    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ) {
+        row = row+2; animate = true;
+    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ) {
+        row = row+3; animate = true;
+    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ) {
+        animate = true; }
+
+    if (animate) {
+        if (counter < 5)
+            player_img = sf::IntRect( (col-1)*width, row*height, width, height );
+        else if (counter < 10 || (counter >= 15 && counter < 20))
+            player_img = sf::IntRect( (col)*width, row*height, width, height );
+        else
+            player_img = sf::IntRect( (col+1)*width, row*height, width, height );
+
+        counter++; if (counter == 20) counter = 0;
+    }
+
+    return player_img;
 }

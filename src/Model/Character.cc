@@ -1,5 +1,8 @@
 #include "Character.h"
 
+Character::Character() : Sprite(0, 0, false, "", 0, 0),
+                         activeEnemy_(false), health_(100), strength_(0), speed_(0), weapon_(nullptr) {};
+
 // Note that row/col don't need to be in the ctor because their only needed for char sheets
 Character::Character(int str, int sp, float x, float y, bool sheet, std::string path, int w, int h) :
         Sprite(x, y, sheet, path, w, h),

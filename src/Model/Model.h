@@ -5,19 +5,13 @@
 #include "Character.h"
 #include "../Channel.h"
 #include "EventPackage.h"
+#include "../Config.h"
 
 #include <queue>
 #include <vector>
 #include <thread>
 #include <mutex>
 #include <chrono>
-
-
-// TODO: keep this somewhere better (also, make screen proportions not modifyable)
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 1024
-#define PLAYER_WIDTH 80
-#define PLAYER_HEIGHT 80
 
 struct Attack {
     int damage;
@@ -35,7 +29,7 @@ class Model : public Subject {
     std::vector< int > charTimeouts_;
 
     // Flag for when we need to ignore (certain) calls from the controller
-    bool ignoreInput_;
+    bool specialScreen_;
 
     // Channel & handler for receiving calls from the controller
     Channel<EventPackage>* eventsChannel_;

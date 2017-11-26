@@ -37,23 +37,20 @@ void Model::handleEvent(EventPackage e) {
     std::lock_guard<std::mutex> lock(charsLock_);       // most of these functions modify chars_
     switch (e.type) {
         case MOVE_PLAYER:
-            if (ignoreInput_) return;
             movePlayer(e.x, e.y);
             break;
 
         case ATTACK:
-            if (ignoreInput_) return;
-            playerAttack(); // consistent conventions
+            playerAttack();
             break;
 
         case RESET_STATE:
-            if (ignoreInput_) return;
             resetState();
             break;
 
         case CHANGE_CHAR:
             notify(PLAYER_CHANGE);
-            ignoreInput_ = true;
+            specialScreen_ = true;
             return;
 
         case SET_CHAR:
@@ -61,7 +58,7 @@ void Model::handleEvent(EventPackage e) {
             chars_[0].setCharacter(e.row, e.col);
             // Notify the view that player selection is complete
             notify(EXIT_SPECIAL_SCREEN);
-            ignoreInput_ = false;
+            specialScreen_ = false;
             break;
 
         default:
@@ -69,11 +66,13 @@ void Model::handleEvent(EventPackage e) {
     }
 }
 
-// Always called from within a function with a charsLock_ (& ctor)
+// Always called from within a function with a charsLock_
 void Model::resetState() {
+    // Set the state
     chars_.clear();
     charTimeouts_.clear();
-    ignoreInput_ = false;
+    specialScreen_ = false;
+    notify(RESET);
 
     float x, y;
     x = SCREEN_WIDTH/2 - PLAYER_WIDTH;
@@ -83,19 +82,21 @@ void Model::resetState() {
     //                          640px x 8 sprites    -> 80px height
 
     // Set default char (moustached man)
-    Character player(10, 10, x, y, true, "src/View/Textures/Character_set_2.png", 80, 80);
+    Character player(10, 10, x, y, true, "resources/Textures/Character_set_2.png", 80, 80);
     player.setCharacter(4, 1);
     chars_.push_back(player);
     charTimeouts_.push_back(0);
 
     // Set 1st enemy
     x = SCREEN_WIDTH/2 + PLAYER_WIDTH;
-    chars_.emplace_back( Character(10, 10, x, y, false, "src/View/Textures/Enemy_1.png", 100, 110) );
+    chars_.emplace_back( Character(10, 10, x, y, false, "resources/Textures/Enemy_1.png", 100, 110) );
     charTimeouts_.push_back(0);
 }
 
 // Always called from within a function with a charsLock_
 void Model::movePlayer(int x, int y) {
+    if (specialScreen_) return;
+
     chars_[0].move(x, y);
 
     // Check for player collision
@@ -112,6 +113,8 @@ void Model::movePlayer(int x, int y) {
 
 // Always called from within a function with a charsLock_
 void Model::playerAttack() {
+    if (specialScreen_) return;
+
     // We only allow 1 attack per 500ms
     if (charTimeouts_[0] > 0) return;
 
@@ -131,11 +134,12 @@ void Model::playerAttack() {
 
             attack.damage = d;
             attack.hit = true;
+            attack.enemy = chars_[i];
 
             // If this is the first hit, make enemy draw weapon & start fighting
             if ( !chars_[i].hasWeapon() ) {
                 Weapon* enemy_sword = new Weapon(10, 10, chars_[i].x() + chars_[i].width()/2,  chars_[i].y(), false,
-                                                 "src/View/Textures/Enemy_Sword_2.png", 50, 54);
+                                                 "resources/Textures/Enemy_Sword_2.png", 50, 54);
                 chars_[i].equipWeapon(enemy_sword);
                 chars_[i].setActiveEnemy(true);
                 charTimeouts_[i] = 20;      // add a small delay before he hits back
@@ -146,22 +150,21 @@ void Model::playerAttack() {
     notify( attack );
 
     // Check if any enemies died
-    for (int i = 1; i < int(chars_.size()); i++ ) {
+    for (int i = 1; i < int(chars_.size()); ) {     // start at 1 to skip the player
         if (!chars_[i].isAlive()) {
-            chars_[i].setImage("src/View/Textures/Dead.png");
-            chars_[i].removeWeapon();
-            chars_[i].setActiveEnemy(false);
-
             Notification death(ENEMY_DIED);
-            death.enemy = &chars_[i];       // TODO can't do this... chars_ has to stay local
-            notify( death );
-        }
+            death.enemy = chars_[i];
+            notify(death);
+
+            chars_.erase(chars_.begin() + i);
+        } else i++;
     }
 
     charTimeouts_[0] = 10;
 }
 
 void Model::checkActiveEnemies() {
+    if (specialScreen_) return;
     std::lock_guard<std::mutex> lock(charsLock_);
 
     for (int i = 1; i < int(chars_.size()); i++ ) {
@@ -171,7 +174,8 @@ void Model::checkActiveEnemies() {
 
         if (inRange && chars_[i].isActiveEnemy() && charTimeouts_[i] == 0 ) {
             Notification attack(ENEMY_ATTACK);
-            attack.damage = chars_[i].attack( &chars_[0] );
+            attack.damage = -1 * chars_[i].attack( &chars_[0] );   // display as negative damage
+            attack.enemy = chars_[i];
             notify(attack);
 
             // 1s before this enemy can attack again
@@ -180,7 +184,7 @@ void Model::checkActiveEnemies() {
     }
 
     if ( !chars_[0].isAlive() ) {
-        //notify(PLAYER_DIED);      // todo
-        resetState();
+        notify(PLAYER_DIED);
+        specialScreen_ = true;
     }
 }
