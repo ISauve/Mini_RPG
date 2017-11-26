@@ -11,6 +11,7 @@ protected:
     float x_;
     float y_;
     bool character_sheet_;
+    bool isPlayer_;
     std::string path_;           // Path to image
     int row_;                    // Row at which it appears on sheet
     int col_;                    // Col which it appears on sheet
@@ -28,6 +29,8 @@ public:
     float x() const { return x_; };
     float y() const { return y_; };
     bool isOnCharSheet() const { return character_sheet_; };
+    bool isPlayer() const { return isPlayer_; };
+
     std::string path() const { return path_; }
     int row() const { return row_; };
     int col() const { return col_; };
@@ -39,6 +42,7 @@ public:
     // Mutators
     void setCharacter(int, int);
     void setImage(std::string p) { path_ = p; };
+    void setPlayer(bool b) { isPlayer_ = b; };
 };
 
 

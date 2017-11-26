@@ -11,6 +11,7 @@ Design patterns used:
 1. Install the dependencies (SFML)
     - `brew update`
     - `brew install sfml`
+    - `brew install jsoncpp`
 2. Compile the game with `make`
 3. Run with `./bin/game`
 
@@ -26,9 +27,8 @@ Design patterns used:
 - [ ] Write tests
 - [ ] Add character & weapon stats
 - [ ] Add items that can be interacted with
-- [ ] Add a way to generate playable areas
-    - YAML file with the details that gets parsed and generated
-    - ie enemies & their stats & locations, items on the screen
+- [x] Add a way to generate playable areas
+- [ ] Add weapons & their "active" states to the config file
 - [ ] Add save/continue ability 
 - [ ] Add a dependency manager/installation script (?)
 - [ ] Refactor sprites to use factory pattern

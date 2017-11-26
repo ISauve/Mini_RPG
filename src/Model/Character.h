@@ -33,6 +33,7 @@ public:
     void setActiveEnemy(bool b) { activeEnemy_ = b; };
     void equipWeapon(Weapon*);
     void removeWeapon() { hasWeapon_ = false; }
+    void addHealth(int h) { health_ += h; }
 
     bool operator == (const Character& c) const {
         return (this->x() == c.x() &&           // same location

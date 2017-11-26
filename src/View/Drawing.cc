@@ -83,6 +83,9 @@ void View::drawEvent(Notification event) {
             break;
 
         case Notification::ENEMY_ATTACK:
+            // Draw the sword movement
+            drawSprite(event.enemy.x() - event.enemy.width() / 2, event.enemy.y(), "resources/Textures/Enemy_Sword_1.png");
+
             // Draw the damage above the player's head
             drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(model_->player().x(), model_->player().y()-70));
             break;

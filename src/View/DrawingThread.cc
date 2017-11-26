@@ -98,12 +98,13 @@ void View::drawFrame() {
 
     // Draw the sprites
     for (auto it : sprites) {
-        if (it.isOnCharSheet()) {
+        if (it.isPlayer()) {
             sf::IntRect playerImage = getPlayerImage(it);
             drawSprite(it.x(), it.y(), it.path(), playerImage);
-        } else {
-            drawSprite(it.x(), it.y(), it.path());
-        }
+        } else if (it.isOnCharSheet()) {
+            sf::IntRect playerImage = getCharImage(it);
+            drawSprite(it.x(), it.y(), it.path(), playerImage);
+        } else drawSprite(it.x(), it.y(), it.path());
 
         if (it.hasWeapon()) {   // Can only be true for characters
             drawSprite(it.x() - it.width() / 2, it.y(), it.weaponPath());
@@ -154,4 +155,13 @@ sf::IntRect View::getPlayerImage(Sprite& s) {
     }
 
     return player_img;
+}
+
+sf::IntRect View::getCharImage(Sprite& s) {
+    int row = s.row();
+    int col = s.col();
+    int width = s.width();
+    int height = s.height();
+
+    return sf::IntRect(col*width, row*height, width, height);
 }

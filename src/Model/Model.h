@@ -23,6 +23,7 @@ struct Attack {
 class Model : public Subject {
     std::mutex charsLock_;
     std::vector< Character > chars_;
+    std::vector< Sprite > items_;
 
     // One entry exists in this vector for each char in chars_
     // Each entry corresponds to the timeout before that character can attack again

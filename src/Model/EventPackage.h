@@ -2,7 +2,7 @@
 #define MINI_RPG_EVENTPACKAGE_H
 
 struct EventPackage {
-    enum Type {MOVE_PLAYER, PLAYER_ATTACK, CHANGE_PLAYER, SELECT_PLAYER, QUIT, RESET};
+    enum Type {MOVE_PLAYER, PLAYER_ATTACK, CHANGE_PLAYER, SELECT_PLAYER, QUIT, RESET, ADD_HEALTH};
 
     EventPackage() {};
     EventPackage(Type t) : type(t){};

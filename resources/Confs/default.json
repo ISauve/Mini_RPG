@@ -1,0 +1,83 @@
+// Configuration file for the default page
+{
+  "background": null,
+  "characters": [
+    {
+      "player": true,
+      "str": 10,
+      "sp": 10,
+      "x": 432,
+      "y": 512,
+
+      "sheet": true,
+      "path": "resources/Textures/Character_set_2.png", // Default = moustached man
+      "row": 4,   // optional
+      "col": 1,    // optional
+
+      // Note: Character sheet is 960px x 12 sprites   -> 80px width
+      //                          640px x 8 sprites    -> 80px height
+      "w": 80,
+      "h": 80
+    },
+    {
+      "active": false,
+      "str": 10,
+      "sp": 10,
+      "x": 592,
+      "y": 512,
+      "sheet": false,
+      "path": "resources/Textures/Enemy_1.png",
+      "w": 100,
+      "h": 110
+    },
+    {
+      "active": false,
+      "str": 10,
+      "sp": 10,
+      "x": 692,
+      "y": 312,
+      "sheet": true,
+      "path": "resources/Textures/Character_set_5.png",
+      "row": 4,
+      "col": 7,
+      "w": 80,
+      "h": 80
+    },
+    {
+      "active": true,
+      "str": 10,
+      "sp": 10,
+      "x": 292,
+      "y": 212,
+      "sheet": true,
+      "path": "resources/Textures/Character_set_5.png",
+      "row": 4,
+      "col": 1,
+      "w": 80,
+      "h": 80
+    },
+    {
+      "active": true,
+      "str": 10,
+      "sp": 10,
+      "x": 900,
+      "y": 850,
+      "sheet": true,
+      "path": "resources/Textures/Character_set_5.png",
+      "row": 0,
+      "col": 11,
+      "w": 80,
+      "h": 80
+    }
+  ], "items": [
+    {
+      "heart": {
+        "x": 150,
+        "y": 900,
+        "path": "resources/Textures/heart.png",
+        "w": 40,
+        "h": 40
+      }
+    }
+  ]
+}

@@ -45,7 +45,11 @@ class View : public Observer {
     void drawFrame();
 
     // Determines which image to use from a char sheet based on direction char is moving
+    // (reads input from the keyboard)
     sf::IntRect getPlayerImage(Sprite&);
+
+    // Grabs the correct image to use off a character sheet based on their set row/col
+    sf::IntRect getCharImage(Sprite& s);
 
     // Drawing functions
     void drawEvent(Notification);

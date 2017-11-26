@@ -61,6 +61,9 @@ void Model::handleEvent(EventPackage e) {
             specialScreen_ = false;
             break;
 
+        case EventPackage::ADD_HEALTH:      // for testing - need to remove  TODO
+            chars_[0].addHealth(100);
+
         default:
             break;
     }
@@ -74,23 +77,14 @@ void Model::resetState() {
     specialScreen_ = false;
     notify(Notification::RESET);
 
-    float x, y;
-    x = SCREEN_WIDTH/2 - PLAYER_WIDTH;
-    y = SCREEN_HEIGHT/2;
+    // Read in default configuration
+    Config conf;
+    conf.readConfig("resources/Confs/default.json");
+    chars_ = conf.getChars();
+    for (int i = 0; i < int(chars_.size()); i++) { charTimeouts_.push_back(0); }
+    items_ = conf.getItems();   // TODO: add items
 
-    // Note: Character sheet is 960px x 12 sprites   -> 80px width
-    //                          640px x 8 sprites    -> 80px height
-
-    // Set default char (moustached man)
-    Character player(10, 10, x, y, true, "resources/Textures/Character_set_2.png", 80, 80);
-    player.setCharacter(4, 1);
-    chars_.push_back(player);
-    charTimeouts_.push_back(0);
-
-    // Set 1st enemy
-    x = SCREEN_WIDTH/2 + PLAYER_WIDTH;
-    chars_.emplace_back( Character(10, 10, x, y, false, "resources/Textures/Enemy_1.png", 100, 110) );
-    charTimeouts_.push_back(0);
+    // todo: get a ptr to the player & save it separately from the array
 }
 
 // Always called from within a function with a charsLock_
@@ -120,9 +114,7 @@ void Model::playerAttack() {
 
     // idea: only show sword swinging if weapon is wielded, otherwise show a slap  todo
     // idea: show sword on L/R depending on which side enemy is standing           todo
-    Notification attack(Notification::PLAYER_ATTACK);
-    attack.damage = 0;
-    attack.hit = false;
+    bool hit = false;
 
     // Check if any enemies are in range - if so, attack them
     for (int i = 1; i < int(chars_.size()); i++ ) {
@@ -130,11 +122,15 @@ void Model::playerAttack() {
         float dist_y = std::abs(chars_[0].y() - chars_[i].y());
 
         if ( dist_x < chars_[0].width() + 20 && dist_y < chars_[0].height() + 20) {
-            int d = chars_[0].attack( &chars_[1] );
+            int d = chars_[0].attack( &chars_[i] );
 
+            Notification attack(Notification::PLAYER_ATTACK);
             attack.damage = d;
             attack.hit = true;
             attack.enemy = chars_[i];
+            notify( attack );
+
+            hit = true;
 
             // If this is the first hit, make enemy draw weapon & start fighting
             if ( !chars_[i].hasWeapon() ) {
@@ -147,7 +143,11 @@ void Model::playerAttack() {
         }
     }
 
-    notify( attack );
+    if (!hit) {
+        Notification attack(Notification::PLAYER_ATTACK);
+        attack.hit = false;
+        notify( attack );
+    }
 
     // Check if any enemies died
     for (int i = 1; i < int(chars_.size()); ) {     // start at 1 to skip the player
