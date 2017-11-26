@@ -1,10 +1,9 @@
 #ifndef MINI_RPG_EVENTPACKAGE_H
 #define MINI_RPG_EVENTPACKAGE_H
 
-
-enum Type {MOVE_PLAYER, END_GAME, ATTACK, RESET_STATE, CHANGE_CHAR, SET_CHAR};
-
 struct EventPackage {
+    enum Type {MOVE_PLAYER, PLAYER_ATTACK, CHANGE_PLAYER, SELECT_PLAYER, QUIT, RESET};
+
     EventPackage() {};
     EventPackage(Type t) : type(t){};
     EventPackage(Type t, int a, int b) : type(t) {
@@ -13,7 +12,7 @@ struct EventPackage {
                 x = a;
                 y = b;
                 break;
-            case SET_CHAR:
+            case SELECT_PLAYER:
                 row = a;
                 col = b;
                 break;

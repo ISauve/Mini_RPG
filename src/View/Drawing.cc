@@ -18,11 +18,11 @@ void View::drawPlayerSelection() {
     sf::FloatRect rectangle_5 = drawSprite(900, SCREEN_HEIGHT/2, sheet_path, selection);
 
     controller_->clearActiveButtons();
-    controller_->addActiveButton(SELECT_PLAYER_1, rectangle_1);
-    controller_->addActiveButton(SELECT_PLAYER_2, rectangle_2);
-    controller_->addActiveButton(SELECT_PLAYER_3, rectangle_3);
-    controller_->addActiveButton(SELECT_PLAYER_4, rectangle_4);
-    controller_->addActiveButton(SELECT_PLAYER_5, rectangle_5);
+    controller_->addActiveButton(Controller::SELECT_PLAYER_1, rectangle_1);
+    controller_->addActiveButton(Controller::SELECT_PLAYER_2, rectangle_2);
+    controller_->addActiveButton(Controller::SELECT_PLAYER_3, rectangle_3);
+    controller_->addActiveButton(Controller::SELECT_PLAYER_4, rectangle_4);
+    controller_->addActiveButton(Controller::SELECT_PLAYER_5, rectangle_5);
 }
 
 void View::drawQuitScreen() {
@@ -30,7 +30,13 @@ void View::drawQuitScreen() {
 };
 
 void View::drawPlayerDied() {
-    drawText(35, sf::Color::Red, "You are dead! Press R to reset.", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+    drawText(35, sf::Color::Red, "You are dead!", true, sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+
+    sf::RectangleShape r = drawRectangle(100, 50, sf::Color(52, 152, 219), sf::Vector2f(100, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
+    drawText(17, sf::Color::White, "Reset", true, sf::Vector2f(100, SCREEN_HEIGHT - 75));
+
+    controller_->clearActiveButtons();
+    controller_->addActiveButton(Controller::RESET, r.getGlobalBounds());
 };
 
 void View::drawBackground() {
@@ -45,24 +51,26 @@ void View::drawBackground() {
     sf::Vector2f position(SCREEN_WIDTH/2 + 100, 150);
     drawText(25, sf::Color::White, std::to_string(model_->enemy().health()), false, position);
 
-    // Draw buttons (for now, we only have the "change character" button - later we might have more)
-    sf::Vector2f pos(175, SCREEN_HEIGHT - 75);
-    sf::RectangleShape r = drawRectangle(250, 50, sf::Color(52, 152, 219), pos, 10, sf::Color(41, 128, 185));
-
+    // Add buttons
+    sf::RectangleShape r1 = drawRectangle(250, 50, sf::Color(52, 152, 219), sf::Vector2f(175, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
     drawText(17, sf::Color::White, "Change character", true, sf::Vector2f(175, SCREEN_HEIGHT - 75));
 
+    sf::RectangleShape r2 = drawRectangle(100, 50, sf::Color(52, 152, 219), sf::Vector2f(415, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
+    drawText(17, sf::Color::White, "Reset", true, sf::Vector2f(415, SCREEN_HEIGHT - 75));
+
     controller_->clearActiveButtons();
-    controller_->addActiveButton(CHANGE_PLAYER, r.getGlobalBounds());
+    controller_->addActiveButton(Controller::CHANGE_PLAYER, r1.getGlobalBounds());
+    controller_->addActiveButton(Controller::RESET, r2.getGlobalBounds());
 }
 
 
 void View::drawEvent(Notification event) {
     switch (event.type) {
-        case PLAYER_COLLISION:
+        case Notification::PLAYER_COLLISION:
             drawText(25, sf::Color::White, "OPE", false, sf::Vector2f(model_->player().x()+50, model_->player().y()-50));
             break;
 
-        case PLAYER_ATTACK:
+        case Notification::PLAYER_ATTACK:
             // Draw the sword
             drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), "resources/Textures/Sword_1.png");
 
@@ -74,14 +82,14 @@ void View::drawEvent(Notification event) {
             }
             break;
 
-        case ENEMY_DIED:
-            // Draw a crossbones where the enemy was
-            drawSprite(event.enemy.x(), event.enemy.y(), "resources/Textures/Skull_crossbones.png");
-            break;
-
-        case ENEMY_ATTACK:
+        case Notification::ENEMY_ATTACK:
             // Draw the damage above the player's head
             drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(model_->player().x(), model_->player().y()-70));
+            break;
+
+        case Notification::ENEMY_DIED:
+            // Draw a crossbones where the enemy was
+            drawSprite(event.enemy.x(), event.enemy.y(), "resources/Textures/Skull_crossbones.png");
             break;
 
         default:

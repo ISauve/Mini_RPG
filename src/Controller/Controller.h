@@ -15,10 +15,11 @@
 //  -> translates UI events into call to model
 
 class Model;
-
-enum Button {CHANGE_PLAYER, SELECT_PLAYER_1, SELECT_PLAYER_2, SELECT_PLAYER_3, SELECT_PLAYER_4, SELECT_PLAYER_5};
-
 class Controller {
+public:
+    enum Button {CHANGE_PLAYER, SELECT_PLAYER_1, SELECT_PLAYER_2, SELECT_PLAYER_3, SELECT_PLAYER_4, SELECT_PLAYER_5, RESET};
+
+private:
     sf::RenderWindow* window_;
     std::mutex buttonsLock_;
     std::list<std::pair<Button, sf::FloatRect>> activeButtonAreas_;
@@ -44,6 +45,7 @@ public:
     void setWindow(sf::RenderWindow* window);
     void clearActiveButtons();                      // thread safe
     void addActiveButton(Button, sf::FloatRect);    // thread safe
+
 };
 
 #endif //MINI_RPG_CONTROLLER_H

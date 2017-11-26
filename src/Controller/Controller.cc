@@ -46,7 +46,7 @@ void Controller::checkPlayerMovement() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) y -= 10;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) y += 10;
 
-    if (x != 0 || y != 0) modelChannel_.send( EventPackage(MOVE_PLAYER, x, y) );
+    if (x != 0 || y != 0) modelChannel_.send( EventPackage(EventPackage::MOVE_PLAYER, x, y) );
 }
 
 
@@ -55,7 +55,7 @@ void Controller::handleEvent(sf::Event& event) {
     if (event.type == sf::Event::Closed ||
         (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
         gameOver_ = true;   // ends this loop
-        modelChannel_.send(EventPackage(END_GAME)); // ends the model's game loop -> view gets notified to close too
+        modelChannel_.send(EventPackage(EventPackage::QUIT)); // ends the model's game loop -> view gets notified to close too
         return;
     }
 
@@ -75,10 +75,7 @@ void Controller::handleEvent(sf::Event& event) {
 void Controller::handleKeyPress(sf::Event& e) {
     switch (e.key.code) {
         case sf::Keyboard::Space:
-            modelChannel_.send(EventPackage(ATTACK));
-            break;
-        case sf::Keyboard::R:
-            modelChannel_.send(EventPackage(RESET_STATE));
+            modelChannel_.send(EventPackage(EventPackage::PLAYER_ATTACK));
             break;
         default:
             break;
@@ -96,23 +93,25 @@ void Controller::handleMouseClick(sf::Event& e) {
         if ( it.second.contains(x, y) ) {
             switch (it.first) {
                 case CHANGE_PLAYER:
-                    modelChannel_.send(EventPackage(CHANGE_CHAR));
+                    modelChannel_.send(EventPackage(EventPackage::CHANGE_PLAYER));
                     break;
                 case SELECT_PLAYER_1:
-                    modelChannel_.send(EventPackage(SET_CHAR, 0, 1));
+                    modelChannel_.send(EventPackage(EventPackage::SELECT_PLAYER, 0, 1));
                     break;
                 case SELECT_PLAYER_2:
-                    modelChannel_.send(EventPackage(SET_CHAR, 0, 4));
+                    modelChannel_.send(EventPackage(EventPackage::SELECT_PLAYER, 0, 4));
                     break;
                 case SELECT_PLAYER_3:
-                    modelChannel_.send(EventPackage(SET_CHAR, 4, 1));
+                    modelChannel_.send(EventPackage(EventPackage::SELECT_PLAYER, 4, 1));
                     break;
                 case SELECT_PLAYER_4:
-                    modelChannel_.send(EventPackage(SET_CHAR, 4, 4));
+                    modelChannel_.send(EventPackage(EventPackage::SELECT_PLAYER, 4, 4));
                     break;
                 case SELECT_PLAYER_5:
-                    modelChannel_.send(EventPackage(SET_CHAR, 4, 7));
+                    modelChannel_.send(EventPackage(EventPackage::SELECT_PLAYER, 4, 7));
                     break;
+                case RESET:
+                    modelChannel_.send(EventPackage(EventPackage::RESET));
             }
         }
     }

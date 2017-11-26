@@ -32,29 +32,29 @@ void View::render() {
 
 void View::handleUpdate(Notification event) {
     switch (event.type) {
-        case QUIT_GAME:
+        case Notification::QUIT:
             specialScreen_ = QUIT;
             gameOver_ = true;   // stops drawing thread
             break;
-        case RESET:
+        case Notification::RESET:
             specialScreen_ = NONE;
             temporaryEvents_.clear();
             break;
-        case PLAYER_CHANGE:
+        case Notification::CHANGE_PLAYER:
             specialScreen_ = SELECT_PLAYER;
             break;
-        case EXIT_SPECIAL_SCREEN:
+        case Notification::EXIT_SPECIAL_SCREEN:
             specialScreen_ = NONE;
             break;
-        case PLAYER_DIED:
+        case Notification::PLAYER_DIED:
             specialScreen_ = DEAD;
             break;
-        case PLAYER_COLLISION:
-        case PLAYER_ATTACK:
-        case ENEMY_ATTACK:
+        case Notification::PLAYER_COLLISION:
+        case Notification::PLAYER_ATTACK:
+        case Notification::ENEMY_ATTACK:
             temporaryEvents_.emplace_back(std::make_pair (event, 5));
             break;
-        case ENEMY_DIED:
+        case Notification::ENEMY_DIED:
             temporaryEvents_.emplace_back(std::make_pair (event, 20));
             break;
         default:

@@ -8,8 +8,8 @@ void Model::startGameLoop() {
         EventPackage pkg;
         bool eventOccurred = eventsChannel_->receive(pkg);
         if (eventOccurred) {
-            if (pkg.type == END_GAME) {
-                notify(QUIT_GAME);
+            if (pkg.type == EventPackage::QUIT) {
+                notify(Notification::QUIT);
                 // probably want to save game data to some external file        todo
                 return;
             }
@@ -36,28 +36,28 @@ void Model::startGameLoop() {
 void Model::handleEvent(EventPackage e) {
     std::lock_guard<std::mutex> lock(charsLock_);       // most of these functions modify chars_
     switch (e.type) {
-        case MOVE_PLAYER:
+        case EventPackage::MOVE_PLAYER:
             movePlayer(e.x, e.y);
             break;
 
-        case ATTACK:
+        case EventPackage::PLAYER_ATTACK:
             playerAttack();
             break;
 
-        case RESET_STATE:
+        case EventPackage::RESET:
             resetState();
             break;
 
-        case CHANGE_CHAR:
-            notify(PLAYER_CHANGE);
+        case EventPackage::CHANGE_PLAYER:
+            notify(Notification::CHANGE_PLAYER);
             specialScreen_ = true;
             return;
 
-        case SET_CHAR:
+        case EventPackage::SELECT_PLAYER:
             // Set the new character
             chars_[0].setCharacter(e.row, e.col);
             // Notify the view that player selection is complete
-            notify(EXIT_SPECIAL_SCREEN);
+            notify(Notification::EXIT_SPECIAL_SCREEN);
             specialScreen_ = false;
             break;
 
@@ -72,7 +72,7 @@ void Model::resetState() {
     chars_.clear();
     charTimeouts_.clear();
     specialScreen_ = false;
-    notify(RESET);
+    notify(Notification::RESET);
 
     float x, y;
     x = SCREEN_WIDTH/2 - PLAYER_WIDTH;
@@ -106,7 +106,7 @@ void Model::movePlayer(int x, int y) {
 
         if ( dist_x < chars_[0].width()/1.5 && dist_y < chars_[0].height()/1.5) {
             chars_[0].move(-x, -y);       // don't allow them to move
-            notify(PLAYER_COLLISION);
+            notify(Notification::PLAYER_COLLISION);
         }
     }
 }
@@ -120,7 +120,7 @@ void Model::playerAttack() {
 
     // idea: only show sword swinging if weapon is wielded, otherwise show a slap  todo
     // idea: show sword on L/R depending on which side enemy is standing           todo
-    Notification attack(PLAYER_ATTACK);
+    Notification attack(Notification::PLAYER_ATTACK);
     attack.damage = 0;
     attack.hit = false;
 
@@ -152,7 +152,7 @@ void Model::playerAttack() {
     // Check if any enemies died
     for (int i = 1; i < int(chars_.size()); ) {     // start at 1 to skip the player
         if (!chars_[i].isAlive()) {
-            Notification death(ENEMY_DIED);
+            Notification death(Notification::ENEMY_DIED);
             death.enemy = chars_[i];
             notify(death);
 
@@ -173,7 +173,7 @@ void Model::checkActiveEnemies() {
         bool inRange = dist_x < chars_[0].width() + 20 && dist_y < chars_[0].height() + 20;
 
         if (inRange && chars_[i].isActiveEnemy() && charTimeouts_[i] == 0 ) {
-            Notification attack(ENEMY_ATTACK);
+            Notification attack(Notification::ENEMY_ATTACK);
             attack.damage = -1 * chars_[i].attack( &chars_[0] );   // display as negative damage
             attack.enemy = chars_[i];
             notify(attack);
@@ -184,7 +184,7 @@ void Model::checkActiveEnemies() {
     }
 
     if ( !chars_[0].isAlive() ) {
-        notify(PLAYER_DIED);
+        notify(Notification::PLAYER_DIED);
         specialScreen_ = true;
     }
 }

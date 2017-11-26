@@ -22,8 +22,6 @@ class Model;
 class Controller;
 class Character;
 
-enum SpecialScreen {NONE, SELECT_PLAYER, QUIT, DEAD};
-
 class View : public Observer {
     Model* model_;
     Controller* controller_;
@@ -33,6 +31,7 @@ class View : public Observer {
     sf::Font font_;
 
     bool gameOver_;
+    enum SpecialScreen {NONE, SELECT_PLAYER, QUIT, DEAD};
     SpecialScreen specialScreen_;
     std::list<std::pair<Notification, int>> temporaryEvents_;
 

@@ -3,10 +3,10 @@
 
 #include "Character.h"
 
-enum Code {PLAYER_ATTACK, ENEMY_DIED, ENEMY_ATTACK, PLAYER_DIED, PLAYER_COLLISION, PLAYER_CHANGE,
-    EXIT_SPECIAL_SCREEN, QUIT_GAME, RESET};
-
 struct Notification {
+    enum Code {PLAYER_ATTACK, ENEMY_ATTACK, ENEMY_DIED, PLAYER_DIED, PLAYER_COLLISION, CHANGE_PLAYER,
+        EXIT_SPECIAL_SCREEN, QUIT, RESET};
+
     Notification(){};
     Notification(Code n) : type(n) {};
 
