@@ -77,8 +77,6 @@ void Controller::handleKeyPress(sf::Event& e) {
         case sf::Keyboard::Space:
             modelChannel_.send(EventPackage(EventPackage::PLAYER_ATTACK));
             break;
-        case sf::Keyboard::H:
-            modelChannel_.send(EventPackage(EventPackage::ADD_HEALTH));
         default:
             break;
     }

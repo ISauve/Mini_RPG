@@ -4,8 +4,8 @@
   "characters": [
     {
       "player": true,
-      "str": 10,
-      "sp": 10,
+      "str": 15,        // damage done is str * (random num from 1-5)
+      "sp": 5,         // timeout before another attack is 30 - speed * (rand num from 1-5)
       "x": 432,
       "y": 512,
 
@@ -16,13 +16,15 @@
 
       // Note: Character sheet is 960px x 12 sprites   -> 80px width
       //                          640px x 8 sprites    -> 80px height
+      // This is the size of the image itself, not of how big you want it to be. It's
+      // used for determining if the player has run into the sprite or not.
       "w": 80,
       "h": 80
     },
-    {
+    { // Big enemy
       "active": false,
       "str": 10,
-      "sp": 10,
+      "sp": 3,
       "x": 592,
       "y": 512,
       "sheet": false,
@@ -30,10 +32,10 @@
       "w": 100,
       "h": 110
     },
-    {
+    { // Skeleton
       "active": false,
       "str": 10,
-      "sp": 10,
+      "sp": 3,
       "x": 692,
       "y": 312,
       "sheet": true,
@@ -43,10 +45,17 @@
       "w": 80,
       "h": 80
     },
-    {
+    { // Wolf
       "active": true,
+      "weapon":  {
+        "path": "resources/Textures/Enemy_Sword_2.png",
+        "w": 40,
+        "h": 40,
+        "str": 10,
+        "weight": 10
+      },
       "str": 10,
-      "sp": 10,
+      "sp": 3,
       "x": 292,
       "y": 212,
       "sheet": true,
@@ -56,11 +65,18 @@
       "w": 80,
       "h": 80
     },
-    {
+    { // Zombie
       "active": true,
+      "weapon": {
+        "path": "resources/Textures/Enemy_Sword_2.png",
+        "w": 50,
+        "h": 54,
+        "str": 10,
+        "weight": 10
+      },
       "str": 10,
-      "sp": 10,
-      "x": 900,
+      "sp": 4,
+      "x": 950,
       "y": 850,
       "sheet": true,
       "path": "resources/Textures/Character_set_5.png",
@@ -71,13 +87,26 @@
     }
   ], "items": [
     {
-      "heart": {
-        "x": 150,
-        "y": 900,
-        "path": "resources/Textures/heart.png",
-        "w": 40,
-        "h": 40
-      }
+      "type": 0,    // HEART
+      "x": 150,
+      "y": 800,
+      "path": "resources/Textures/heart.png",
+      "w": 40,
+      "h": 40
+    },{
+      "type": 0,    // HEART
+      "x": 200,
+      "y": 800,
+      "path": "resources/Textures/heart.png",
+      "w": 40,
+      "h": 40
+    },{
+      "type": 0,    // HEART
+      "x": 250,
+      "y": 800,
+      "path": "resources/Textures/heart.png",
+      "w": 40,
+      "h": 40
     }
   ]
 }

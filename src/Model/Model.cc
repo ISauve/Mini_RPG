@@ -11,15 +11,14 @@ void Model::setChannel(Channel<EventPackage>* ch) {
 
 Character Model::player() {
     std::lock_guard<std::mutex> lock(charsLock_);
-    return chars_[0];
-};
-
-Character Model::enemy() {
-    std::lock_guard<std::mutex> lock(charsLock_);
-    return chars_[1];
+    return player_;
 };
 
 std::vector< Character > Model::getChars() {
     std::lock_guard<std::mutex> lock(charsLock_);
     return chars_;
+};
+
+std::vector< Item > Model::getItems() {
+    return items_;
 };

@@ -3,6 +3,7 @@
 
 #include "../Observer/Subject.h"
 #include "Character.h"
+#include "Item.h"
 #include "../Channel.h"
 #include "EventPackage.h"
 #include "../Config.h"
@@ -23,11 +24,14 @@ struct Attack {
 class Model : public Subject {
     std::mutex charsLock_;
     std::vector< Character > chars_;
-    std::vector< Sprite > items_;
+    Character player_;
+
+    std::vector< Item > items_;
 
     // One entry exists in this vector for each char in chars_
     // Each entry corresponds to the timeout before that character can attack again
     std::vector< int > charTimeouts_;
+    int playerTimeout_;
 
     // Flag for when we need to ignore (certain) calls from the controller
     bool specialScreen_;
@@ -56,8 +60,8 @@ public:
 
     // Accessors for the view - return copies, not references, so as to be thread-safe
     Character player();
-    Character enemy();
     std::vector< Character > getChars();
+    std::vector< Item > getItems();
 };
 
 

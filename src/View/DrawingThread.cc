@@ -52,6 +52,7 @@ void View::handleUpdate(Notification event) {
         case Notification::PLAYER_COLLISION:
         case Notification::PLAYER_ATTACK:
         case Notification::ENEMY_ATTACK:
+        case Notification::GOT_HEART:
             temporaryEvents_.emplace_back(std::make_pair (event, 5));
             break;
         case Notification::ENEMY_DIED:
@@ -84,6 +85,10 @@ void View::drawFrame() {
     std::vector< Sprite > sprites;
     std::vector< Character > chars = model_->getChars();
     for (auto it : chars) sprites.push_back(it);
+    sprites.push_back(model_->player());
+    std::vector< Item > items = model_->getItems();
+    for (auto it : items) sprites.push_back(it);
+
 
     // Order gets determined by y coordinates of the bottom of the sprite & by z-index
     std::sort (sprites.begin(), sprites.end(), [] (Sprite& a, Sprite& b) -> bool {

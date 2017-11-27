@@ -41,15 +41,10 @@ void View::drawPlayerDied() {
 
 void View::drawBackground() {
     // Draw the status bar
-    sf::Text text = generateText(25, sf::Color::White, "Monsieur Moustache", false);
-    text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 100));
+    sf::Text text = generateText(25, sf::Color::White, "Monsieur Moustache: " + std::to_string(model_->player().health()), false);
+    //text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 100));
+    text.setPosition(sf::Vector2f(100, 100));
     window_->draw(text);
-    text.setString( std::to_string(model_->player().health() ) );
-    text.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - text.getLocalBounds().width, 150));
-    window_->draw(text);
-    drawText(25, sf::Color::White, "The Big Evil", false, sf::Vector2f(SCREEN_WIDTH/2 + 100, 100));
-    sf::Vector2f position(SCREEN_WIDTH/2 + 100, 150);
-    drawText(25, sf::Color::White, std::to_string(model_->enemy().health()), false, position);
 
     // Add buttons
     sf::RectangleShape r1 = drawRectangle(250, 50, sf::Color(52, 152, 219), sf::Vector2f(175, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
@@ -75,7 +70,7 @@ void View::drawEvent(Notification event) {
             drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), "resources/Textures/Sword_1.png");
 
             if (event.hit) {   // Draw a hit above the enemy
-                drawText(25, sf::Color::Green, std::to_string(event.damage), false, sf::Vector2f(event.enemy.x(), event.enemy.y() - 100));
+                drawText(25, sf::Color::Magenta, std::to_string(event.damage), false, sf::Vector2f(event.enemy.x(), event.enemy.y() - 100));
             }
             else {      // Draw a miss above the player's sword
                 drawText(25, sf::Color::White, "Miss", false, sf::Vector2f(model_->player().x() + 50, model_->player().y() - 100));
@@ -94,6 +89,10 @@ void View::drawEvent(Notification event) {
             // Draw a crossbones where the enemy was
             drawSprite(event.enemy.x(), event.enemy.y(), "resources/Textures/Skull_crossbones.png");
             break;
+
+        case Notification::GOT_HEART:
+            // Draw +50 above the player's head
+            drawText(25, sf::Color::Green, "+50", false, sf::Vector2f(model_->player().x()-50, model_->player().y()-80));
 
         default:
             break;

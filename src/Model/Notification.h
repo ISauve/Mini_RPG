@@ -5,7 +5,7 @@
 
 struct Notification {
     enum Code {PLAYER_ATTACK, ENEMY_ATTACK, ENEMY_DIED, PLAYER_DIED, PLAYER_COLLISION, CHANGE_PLAYER,
-        EXIT_SPECIAL_SCREEN, QUIT, RESET};
+        EXIT_SPECIAL_SCREEN, GOT_HEART, QUIT, RESET};
 
     Notification(){};
     Notification(Code n) : type(n) {};

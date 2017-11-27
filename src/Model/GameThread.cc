@@ -18,9 +18,8 @@ void Model::startGameLoop() {
         }
 
         // Decrease any timeouts we have counting
-        for (int i = 0; i < int(charTimeouts_.size()); i++) {
-            if (charTimeouts_[i] > 0) charTimeouts_[i]--;
-        }
+        for (auto& it : charTimeouts_) if (it > 0) it--;
+        if (playerTimeout_ > 0) playerTimeout_--;
 
         // Check if player is in the range of any active enemies
         // Resets the game if the player dies
@@ -55,14 +54,11 @@ void Model::handleEvent(EventPackage e) {
 
         case EventPackage::SELECT_PLAYER:
             // Set the new character
-            chars_[0].setCharacter(e.row, e.col);
+            player_.setCharacter(e.row, e.col);
             // Notify the view that player selection is complete
             notify(Notification::EXIT_SPECIAL_SCREEN);
             specialScreen_ = false;
             break;
-
-        case EventPackage::ADD_HEALTH:      // for testing - need to remove  TODO
-            chars_[0].addHealth(100);
 
         default:
             break;
@@ -80,28 +76,51 @@ void Model::resetState() {
     // Read in default configuration
     Config conf;
     conf.readConfig("resources/Confs/default.json");
-    chars_ = conf.getChars();
-    for (int i = 0; i < int(chars_.size()); i++) { charTimeouts_.push_back(0); }
-    items_ = conf.getItems();   // TODO: add items
 
-    // todo: get a ptr to the player & save it separately from the array
+    // Fetch the characters from the config
+    chars_ = conf.getChars();
+    for (auto it : chars_) charTimeouts_.push_back(0);
+    player_ = conf.getPlayer();
+    playerTimeout_ = 0;
+
+    // Fetch other data from the config
+    items_ = conf.getItems();
 }
 
 // Always called from within a function with a charsLock_
 void Model::movePlayer(int x, int y) {
     if (specialScreen_) return;
 
-    chars_[0].move(x, y);
+    player_.move(x, y);
 
     // Check for player collision
-    for (int i = 1; i < int(chars_.size()); i++) {
-        float dist_x = std::abs(chars_[0].x() - chars_[i].x());
-        float dist_y = std::abs(chars_[0].y() - chars_[i].y());
+    for (auto character : chars_) {
+        float dist_x = std::abs(player_.x() - character.x());
+        float dist_y = std::abs(player_.y() - character.y());
 
-        if ( dist_x < chars_[0].width()/1.5 && dist_y < chars_[0].height()/1.5) {
-            chars_[0].move(-x, -y);       // don't allow them to move
+        if ( dist_x < player_.width()/1.5 && dist_y < player_.height()/1.5) {
+            player_.move(-x, -y);       // don't allow them to move
             notify(Notification::PLAYER_COLLISION);
         }
+    }
+
+    // Check for item collisions
+    for (auto it = items_.begin(); it != items_.end(); ) {
+        float dist_x = std::abs(player_.x() - (*it).x());
+        float dist_y = std::abs(player_.y() - (*it).y());
+
+        if ( dist_x < player_.width()/2 && dist_y < player_.height()/2) {
+            switch ((*it).type()) {
+                case Item::Type::HEART:
+                    player_.addHealth(50);
+                    notify(Notification::GOT_HEART);
+                    break;
+                default:
+                    break;
+            }
+
+            items_.erase(it);
+        } else it++;
     }
 }
 
@@ -110,19 +129,19 @@ void Model::playerAttack() {
     if (specialScreen_) return;
 
     // We only allow 1 attack per 500ms
-    if (charTimeouts_[0] > 0) return;
+    if (playerTimeout_ > 0) return;
 
-    // idea: only show sword swinging if weapon is wielded, otherwise show a slap  todo
-    // idea: show sword on L/R depending on which side enemy is standing           todo
-    bool hit = false;
+    // idea: only show sword swinging if weapon is wielded, otherwise show a hit  todo
+    // idea: show sword on L/R depending on which side enemy is standing          todo
 
     // Check if any enemies are in range - if so, attack them
-    for (int i = 1; i < int(chars_.size()); i++ ) {
-        float dist_x = std::abs(chars_[0].x() - chars_[i].x());
-        float dist_y = std::abs(chars_[0].y() - chars_[i].y());
+    bool hit = false;
+    for (int i = 0; i < int(chars_.size()); i++ ) {
+        float dist_x = std::abs(player_.x() - chars_[i].x());
+        float dist_y = std::abs(player_.y() - chars_[i].y());
 
-        if ( dist_x < chars_[0].width() + 20 && dist_y < chars_[0].height() + 20) {
-            int d = chars_[0].attack( &chars_[i] );
+        if ( dist_x < player_.width() + 20 && dist_y < player_.height() + 20) {
+            int d = player_.attack( &chars_[i] );
 
             Notification attack(Notification::PLAYER_ATTACK);
             attack.damage = d;
@@ -138,7 +157,7 @@ void Model::playerAttack() {
                                                  "resources/Textures/Enemy_Sword_2.png", 50, 54);
                 chars_[i].equipWeapon(enemy_sword);
                 chars_[i].setActiveEnemy(true);
-                charTimeouts_[i] = 20;      // add a small delay before he hits back
+                charTimeouts_[i] = 20;      // add a small delay before enemy hits back
             }
         }
     }
@@ -150,40 +169,40 @@ void Model::playerAttack() {
     }
 
     // Check if any enemies died
-    for (int i = 1; i < int(chars_.size()); ) {     // start at 1 to skip the player
-        if (!chars_[i].isAlive()) {
+    for (auto it = chars_.begin(); it != chars_.end(); ) {
+        if (!(*it).isAlive()) {
             Notification death(Notification::ENEMY_DIED);
-            death.enemy = chars_[i];
+            death.enemy = (*it);
             notify(death);
 
-            chars_.erase(chars_.begin() + i);
-        } else i++;
+            chars_.erase(it);
+        } else it++;
     }
 
-    charTimeouts_[0] = 10;
+    playerTimeout_ = 10;
 }
 
 void Model::checkActiveEnemies() {
     if (specialScreen_) return;
     std::lock_guard<std::mutex> lock(charsLock_);
 
-    for (int i = 1; i < int(chars_.size()); i++ ) {
-        float dist_x = std::abs(chars_[0].x() - chars_[i].x());
-        float dist_y = std::abs(chars_[0].y() - chars_[i].y());
-        bool inRange = dist_x < chars_[0].width() + 20 && dist_y < chars_[0].height() + 20;
+    for (int i = 0; i < int(chars_.size()); i++ ) {
+        float dist_x = std::abs(player_.x() - chars_[i].x());
+        float dist_y = std::abs(player_.y() - chars_[i].y());
+        bool inRange = dist_x < player_.width() + 20 && dist_y < player_.height() + 20;
 
         if (inRange && chars_[i].isActiveEnemy() && charTimeouts_[i] == 0 ) {
             Notification attack(Notification::ENEMY_ATTACK);
-            attack.damage = -1 * chars_[i].attack( &chars_[0] );   // display as negative damage
+            attack.damage = -1 * chars_[i].attack( &player_ );   // display as negative damage
             attack.enemy = chars_[i];
             notify(attack);
 
-            // 1s before this enemy can attack again
-            charTimeouts_[i] = 20;
+            // Set a timeout before they can attack again (based on speed)
+            charTimeouts_[i] = chars_[i].timeOut();
         }
     }
 
-    if ( !chars_[0].isAlive() ) {
+    if ( !player_.isAlive() ) {
         notify(Notification::PLAYER_DIED);
         specialScreen_ = true;
     }

@@ -1,24 +1,26 @@
 #ifndef MINI_RPG_CONFIG_H
 #define MINI_RPG_CONFIG_H
 
+#include "Model/Character.h"
+#include "Model/Item.h"
 #include <json/json.h>
 #include <fstream>
 #include <iostream>
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 1024
-#define PLAYER_WIDTH 80
-#define PLAYER_HEIGHT 80
 
 class Config {
+    Character player_;
     std::vector< Character > chars_;
-    std::vector< Sprite > items_;
+    std::vector< Item > items_;
 
 public:
     Config() = default;
 
+    Character getPlayer() { return player_; };
     std::vector< Character > getChars() { return chars_; };
-    std::vector< Sprite > getItems() { return items_; };
+    std::vector< Item > getItems() { return items_; };
 
     void readConfig(std::string path) {
         // Read the config file
@@ -57,19 +59,42 @@ public:
             if (!it["active"].isNull()) character.setActiveEnemy(it["active"].asBool());
             if (!it["row"].isNull() && !it["col"].isNull()) character.setCharacter(it["row"].asInt(), it["col"].asInt());
 
+
+            if (!it["weapon"].isNull()) {
+                float x = it["weapon"]["x"].asFloat();
+                float y = it["weapon"]["y"].asFloat();
+                std::string path = it["weapon"]["path"].asString();
+                int w = it["weapon"]["w"].asInt();
+                int h = it["weapon"]["h"].asInt();
+
+                character.equipWeapon(new Weapon(x, y, x + w/2,  y, false, path, w, h));
+            }
+
             // Store the character
             if ( !it["player"].isNull() ) {
-                player = character;
-                player.setPlayer(true);
+                character.setPlayer(true);
+                player_ = character;
             }
             else chars_.push_back(character);
         }
 
-        // Put the player at the front
-        // TODO: we have the "isPlayer" flag, no need to ensure player is at the front any more
-        chars_.insert(chars_.begin(), player);
+        // Read items from the config
+        for (auto it : root["items"]) {
+            // Initialize item w/ the required data
+            auto t = static_cast<Item::Type>(it["type"].asInt());
+            float x = it["x"].asFloat();
+            float y = it["y"].asFloat();
+            bool sheet = it["sheet"].asBool();
+            std::string path = it["path"].asString();
+            int w = it["w"].asInt();
+            int h = it["h"].asInt();
 
-        // TODO: read items
+            Item item = Item(t, x, y, sheet, path, w, h);
+
+            items_.push_back(item);
+        }
+
+        // TODO read the background
     }
 };
 

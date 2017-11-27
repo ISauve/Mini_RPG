@@ -3,7 +3,7 @@ project(Mini_RPG)
 
 include_directories(src)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -framework OpenGL -lsfml-system -lsfml-window -lsfml-graphics")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 set(SOURCE_FILES Makefile README.md resources src test bin .circleci)
 

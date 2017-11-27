@@ -35,6 +35,9 @@ public:
     void removeWeapon() { hasWeapon_ = false; }
     void addHealth(int h) { health_ += h; }
 
+    // Determine timeout before next hit based on speed
+    int timeOut();
+
     bool operator == (const Character& c) const {
         return (this->x() == c.x() &&           // same location
                 this->y() == c.y() &&

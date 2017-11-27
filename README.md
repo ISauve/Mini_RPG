@@ -24,7 +24,7 @@ Design patterns used:
 - [x] Add a test framework ([googletest](https://github.com/google/googletest)) and integrate with Circle CI
 - [ ] Write tests
 - [ ] Add character & weapon stats
-- [ ] Add items that can be interacted with
+- [x] Add items that can be interacted with
 - [x] Add a way to generate playable areas
 - [ ] Add weapons & their "active" states to the config file
 - [ ] Add save/continue ability 

@@ -28,3 +28,14 @@ void Character::equipWeapon(Weapon* w) {
     hasWeapon_ = true;
     weaponPath_ = w->path();
 };
+
+int Character::timeOut() {
+    int maxTimeout = 30; // 1.5s
+
+    std::random_device rd;
+    std::mt19937 generate_rand(rd());;
+    std::uniform_int_distribution<> distr(1, 3);
+
+    // Note: max speed is 5 (or else we might get a negative timeout)
+    return maxTimeout - int(floor(distr(generate_rand) * speed_));
+}
