@@ -8,10 +8,8 @@ Design patterns used:
 - Observer
 
 #### Installation
-1. Install the dependencies (SFML)
-    - `brew update`
-    - `brew install sfml`
-    - `brew install jsoncpp`
+1. Install the dependencies ([SFML 2.4.2](https://www.sfml-dev.org/download/sfml/2.4.2/) & [Jsoncpp 1.8.3](https://github.com/open-source-parsers/jsoncpp/releases))
+    - On OS X:  `brew update`; `brew install sfml`; `brew install jsoncpp`
 2. Compile the game with `make`
 3. Run with `./bin/game`
 

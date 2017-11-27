@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/ruby:stretch   # Debian stretch, has git pre-installed
 
     steps:
       - checkout  # check out src code into working directory
@@ -10,8 +10,11 @@ jobs:
       - run:
           name: Set up
           command: |
-            git submodule sync; git submodule update --init
-            sudo apt-get update; sudo apt-get install libsfml-dev
+            sudo apt-get update
+            git submodule sync; git submodule update --init # initialize git submodules
+            sudo apt-get install libsfml-dev                # version 2.4.2
+            sudo apt-get install libjsoncpp-dev             # version 1.7.3
+            cd /usr/include;sudo ln -s jsoncpp/json json    # change include path so it matches local build
 
       - run:
           name: Compile

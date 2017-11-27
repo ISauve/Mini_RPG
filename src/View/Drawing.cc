@@ -120,7 +120,7 @@ sf::Text View::generateText(int size, sf::Color color, std::string text, bool re
     sf::Text t;
     t.setFont(font_);
     t.setCharacterSize(size);
-    t.setColor(color);
+    t.setFillColor(color);
     t.setStyle(sf::Text::Bold);
     t.setString(text);
     if (resetOrigin) t.setOrigin(t.getLocalBounds().width/2, t.getLocalBounds().height/2);
