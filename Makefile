@@ -2,7 +2,7 @@
 # Created August 10, 2017
 
 BUILD_DIR = obj
-SRC_DIR = src
+SRC_DIR = source
 BIN_DIR = bin
 
 CXX = g++ -std=c++14
