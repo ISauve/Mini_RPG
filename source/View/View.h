@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <thread>
 #include <mutex>
+#include <memory>
 
 // View: displays the game to the user
 //	-> observes the mode

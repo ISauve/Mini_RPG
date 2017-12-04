@@ -61,13 +61,12 @@ public:
 
 
             if (!it["weapon"].isNull()) {
-                float x = it["weapon"]["x"].asFloat();
-                float y = it["weapon"]["y"].asFloat();
+                int str = it["weapon"]["str"].asInt();
+                int weight = it["weapon"]["weight"].asInt();
                 std::string path = it["weapon"]["path"].asString();
-                int w = it["weapon"]["w"].asInt();
-                int h = it["weapon"]["h"].asInt();
+                std::string activePath = it["weapon"]["activePath"].asString();
 
-                character.equipWeapon(new Weapon(x, y, x + w/2,  y, false, path, w, h));
+                character.equipWeapon(new Weapon(str, weight, path, activePath));
             }
 
             // Store the character

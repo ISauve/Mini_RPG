@@ -1,7 +1,7 @@
 ## Mini RPG
 [![CircleCI](https://circleci.com/gh/ISauve/Mini_RPG.png?style=shield&circle-token=774174d09b31158629a5abf5e26d5f8bd70f62e8)](https://circleci.com/gh/ISauve/Mini_RPG)
 
-
+## (Add gif here)
 
 #### Installation
 1. Clone this repository
@@ -20,11 +20,12 @@
 - [ ] Test on Win/Linux
 - [x] Add a test framework ([googletest](https://github.com/google/googletest)) and integrate with Circle CI
 - [ ] Write tests
-- [ ] Add character & weapon stats
+- [x] Add character & weapon stats
 - [x] Add items that can be interacted with
 - [x] Add a way to generate playable areas
-- [ ] Add weapons & their "active" states to the config file
+- [x] Add weapons & their "active" states to the config file
 - [ ] Add save/continue ability
 - [ ] Add a dependency manager/installation script (?)
-- [ ] Refactor sprites to use factory pattern
-- [ ] Try to remove all direct accesses among threads/replace locks with channels
+- [ ] Add backgrounds/environment
+- [ ] Add ability to cross between screens
+- [ ] Build a short story!

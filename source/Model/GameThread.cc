@@ -151,11 +151,12 @@ void Model::playerAttack() {
 
             hit = true;
 
-            // If this is the first hit, make enemy draw weapon & start fighting
+            // If this is the first hit, activate the enemy
             if ( !chars_[i].hasWeapon() ) {
-                Weapon* enemy_sword = new Weapon(10, 10, chars_[i].x() + chars_[i].width()/2,  chars_[i].y(), false,
-                                                 "resources/Textures/Enemy_Sword_2.png", 50, 54);
+                Weapon* enemy_sword = new Weapon(0, 0, "resources/Textures/Enemy_Sword.png", "resources/Textures/Enemy_Sword_Active.png");
                 chars_[i].equipWeapon(enemy_sword);
+            }
+            if (!chars_[i].isActiveEnemy()) {
                 chars_[i].setActiveEnemy(true);
                 charTimeouts_[i] = 20;      // add a small delay before enemy hits back
             }

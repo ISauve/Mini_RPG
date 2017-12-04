@@ -82,18 +82,20 @@ void View::drawFrame() {
     drawBackground();
 
     // Grab all the sprites we have to draw
-    std::vector< Sprite > sprites;
-    std::vector< Character > chars = model_->getChars();
-    for (auto it : chars) sprites.push_back(it);
-    sprites.push_back(model_->player());
-    std::vector< Item > items = model_->getItems();
-    for (auto it : items) sprites.push_back(it);
+    std::vector< std::reference_wrapper<Sprite> > sprites;
 
+    std::vector< Character > chars = model_->getChars();
+    for (int i=0; i < chars.size(); i++) sprites.emplace_back(chars[i]);
+
+    Character player = model_->player();
+    sprites.emplace_back(player);
+
+    std::vector< Item > items = model_->getItems();
+    for (int i=0; i < items.size(); i++) sprites.emplace_back(items[i]);
 
     // Order gets determined by y coordinates of the bottom of the sprite & by z-index
     std::sort (sprites.begin(), sprites.end(), [] (Sprite& a, Sprite& b) -> bool {
-        // idea: add z-index quality to sprites     todo
-        //if (a.z() < b.z()) return true
+        if (a.zIndex() > b.zIndex()) return false;
 
         float a_bottom = a.y() + a.height()/2;
         float b_bottom = b.y() + b.height()/2;
@@ -102,17 +104,28 @@ void View::drawFrame() {
     });
 
     // Draw the sprites
-    for (auto it : sprites) {
-        if (it.isPlayer()) {
-            sf::IntRect playerImage = getPlayerImage(it);
-            drawSprite(it.x(), it.y(), it.path(), playerImage);
-        } else if (it.isOnCharSheet()) {
-            sf::IntRect playerImage = getCharImage(it);
-            drawSprite(it.x(), it.y(), it.path(), playerImage);
-        } else drawSprite(it.x(), it.y(), it.path());
+    for (auto& it : sprites) {
+        try {  // Attempt to downcast sprite to character
+            auto character = dynamic_cast<Character&>(it.get());
+            // Only characters can have weapons
+            if (character.hasWeapon()) {
+                drawSprite(character.x() - character.width() / 2, character.y(), character.weaponPath());
+            }
 
-        if (it.hasWeapon()) {   // Can only be true for characters
-            drawSprite(it.x() - it.width() / 2, it.y(), it.weaponPath());
+            // The player gets drawn differently (image used depends on the keys being pressed)
+            if (character.isPlayer()) {
+                sf::IntRect playerImage = getPlayerImage(it);
+                drawSprite(character.x(), character.y(), character.path(), playerImage);
+                continue;
+            }
+        } catch (std::bad_cast &e) {};
+
+        auto sprite = it.get();
+        if (sprite.isOnCharSheet()) {
+            sf::IntRect playerImage = getCharImage(it);
+            drawSprite(sprite.x(), sprite.y(), sprite.path(), playerImage);
+        } else {
+            drawSprite(sprite.x(), sprite.y(), sprite.path());
         }
     }
 

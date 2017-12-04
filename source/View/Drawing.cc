@@ -66,8 +66,8 @@ void View::drawEvent(Notification event) {
             break;
 
         case Notification::PLAYER_ATTACK:
-            // Draw the sword
-            drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), "resources/Textures/Sword_1.png");
+            // Draw the player's active sword
+            drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), model_->player().activeWeaponPath());
 
             if (event.hit) {   // Draw a hit above the enemy
                 drawText(25, sf::Color::Magenta, std::to_string(event.damage), false, sf::Vector2f(event.enemy.x(), event.enemy.y() - 100));
@@ -78,8 +78,8 @@ void View::drawEvent(Notification event) {
             break;
 
         case Notification::ENEMY_ATTACK:
-            // Draw the sword movement
-            drawSprite(event.enemy.x() - event.enemy.width() / 2, event.enemy.y(), "resources/Textures/Enemy_Sword_1.png");
+            // Draw the weapon as active
+            drawSprite(event.enemy.x() - event.enemy.width() / 2, event.enemy.y(), event.enemy.activeWeaponPath());
 
             // Draw the damage above the player's head
             drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(model_->player().x(), model_->player().y()-70));

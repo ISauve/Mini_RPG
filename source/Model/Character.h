@@ -2,10 +2,27 @@
 #define MINI_RPG_CHARACTER_H
 
 #include "Sprite.h"
-#include "Weapon.h"
+
+struct Weapon {
+private:
+    int strength_;
+    int weight_;
+    std::string path_;
+    std::string activePath_;
+
+public:
+    Weapon(int str, int wght, std::string path, std::string activePath) :
+            strength_(str), weight_(wght), path_(path), activePath_(activePath) {};
+
+    int strength() { return strength_; };
+    int weight() { return weight_; };
+    std::string path() { return path_; };
+    std::string activePath() { return activePath_; };
+};
 
 class Character : public Sprite {
     bool activeEnemy_;
+    bool isPlayer_;
 
     // Stats
     int health_;
@@ -19,24 +36,30 @@ class Character : public Sprite {
 public:
     Character();
     Character(int, int, float, float, bool, std::string, int, int);
+
+    // Attack another player - damage based on strength & weapon strength
     int attack(Character*) const;
+
+    // Determine timeout before next hit based on speed & weapon weight
+    int timeOut();
 
     // Accessors
     int health() const { return health_; };
     bool isAlive() const { return health_ > 0; };
     bool isActiveEnemy() const { return activeEnemy_; };
-    std::string weaponPath() const { return weapon_->path(); };
+    bool isPlayer() const { return isPlayer_; };
+    bool hasWeapon() const { return weapon_ != nullptr; };
+    std::string weaponPath() const;
+    std::string activeWeaponPath() const;
 
     // Mutators
     void move(float n, float m) { x_ += n; y_ += m; };
     void hit(int);
     void setActiveEnemy(bool b) { activeEnemy_ = b; };
     void equipWeapon(Weapon*);
-    void removeWeapon() { hasWeapon_ = false; }
-    void addHealth(int h) { health_ += h; }
-
-    // Determine timeout before next hit based on speed
-    int timeOut();
+    void removeWeapon();
+    void addHealth(int h) { health_ += h; };
+    void setPlayer(bool b) { isPlayer_ = b; };
 
     bool operator == (const Character& c) const {
         return (this->x() == c.x() &&           // same location
