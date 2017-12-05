@@ -4,12 +4,6 @@
   "characters": [
     {
       "player": true,
-      "weapon":  {
-        "str": 0,
-        "weight": 0,
-        "path": "resources/Textures/null.png",
-        "activePath": "resources/Textures/Sword_1.png"
-      },
       "str": 15,        // damage done is str * (random num from 1-5)
       "sp": 5,          // timeout before another attack is 30 - speed * (rand num from 1-5)
       "x": 432,

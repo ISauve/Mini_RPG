@@ -52,6 +52,11 @@ void Model::handleEvent(EventPackage e) {
             specialScreen_ = true;
             return;
 
+        case EventPackage::VIEW_STATS:
+            notify(Notification::VIEW_STATS);
+            specialScreen_ = true;
+            return;
+
         case EventPackage::SELECT_PLAYER:
             // Set the new character
             player_.setCharacter(e.row, e.col);
@@ -59,6 +64,11 @@ void Model::handleEvent(EventPackage e) {
             notify(Notification::EXIT_SPECIAL_SCREEN);
             specialScreen_ = false;
             break;
+
+        case EventPackage::EXIT_SPECIAL_SCREEN:
+            notify(Notification::EXIT_SPECIAL_SCREEN);
+            specialScreen_ = false;
+            return;
 
         default:
             break;

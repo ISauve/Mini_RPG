@@ -39,6 +39,56 @@ void View::drawPlayerDied() {
     controller_->addActiveButton(Controller::RESET, r.getGlobalBounds());
 };
 
+void View::drawViewStats() {
+    // Draw the player's image, blown up 3x
+    Sprite player = model_->player();
+    sf::IntRect playerImage = getCharImage(player);
+    sf::Texture texture;
+    texture.loadFromFile(model_->player().path(), playerImage);
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+    sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 + 100, SCREEN_HEIGHT/2 - 300));
+    sprite.setScale(3, 3);
+    window_->draw(sprite);
+    sf::FloatRect bounds = sprite.getGlobalBounds();
+
+    // Add stats
+    drawText(25, sf::Color::White, "STATS", true,
+             sf::Vector2f(SCREEN_WIDTH/2 + 100 + bounds.width/2, bounds.top +  bounds.height + 100));
+    drawText(25, sf::Color::White, "Strength: " + std::to_string(model_->player().strength()), true,
+             sf::Vector2f(SCREEN_WIDTH/2 + 100 + bounds.width/2, bounds.top +  bounds.height + 150));
+    drawText(25, sf::Color::White, "Speed: " + std::to_string(model_->player().speed()), true,
+             sf::Vector2f(SCREEN_WIDTH/2 + 100 + bounds.width/2, bounds.top + bounds.height + 200));
+
+    // Draw the player's weapon, blown up 3x
+    if (model_->player().hasWeapon()) {
+        sf::Texture texture;
+        texture.loadFromFile(model_->player().weaponPath());
+        sf::Sprite sprite;
+        sprite.setTexture(texture);
+        sprite.setScale(3, 3);
+        sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - sprite.getGlobalBounds().width, SCREEN_HEIGHT/2 - 300));
+        window_->draw(sprite);
+        sf::FloatRect bounds = sprite.getGlobalBounds();
+
+        // Add stats
+        drawText(25, sf::Color::White, "STATS", true,
+                 sf::Vector2f(SCREEN_WIDTH/2 - 100 - bounds.width/2, bounds.top +  bounds.height + 100));
+        drawText(25, sf::Color::White, "Strength: " + std::to_string(model_->player().weaponStrength()), true,
+                 sf::Vector2f(SCREEN_WIDTH/2 - 100 - bounds.width/2, bounds.top +  bounds.height + 150));
+        drawText(25, sf::Color::White, "Weight: " + std::to_string(model_->player().weaponWeight()), true,
+                 sf::Vector2f(SCREEN_WIDTH/2 - 100 - bounds.width/2, bounds.top + bounds.height + 200));
+    } else {
+        drawText(25, sf::Color::White, "No weapon equipped", true, sf::Vector2f(SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2));
+    }
+
+    // Draw "return" button
+    sf::RectangleShape r = drawRectangle(100, 50, sf::Color(52, 152, 219), sf::Vector2f(100, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
+    drawText(17, sf::Color::White, "Return", true, sf::Vector2f(100, SCREEN_HEIGHT - 75));
+    controller_->clearActiveButtons();
+    controller_->addActiveButton(Controller::EXIT_SPECIAL_SCREEN, r.getGlobalBounds());
+}
+
 void View::drawBackground() {
     // Draw the status bar
     sf::Text text = generateText(25, sf::Color::White, "Monsieur Moustache: " + std::to_string(model_->player().health()), false);
@@ -50,12 +100,16 @@ void View::drawBackground() {
     sf::RectangleShape r1 = drawRectangle(250, 50, sf::Color(52, 152, 219), sf::Vector2f(175, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
     drawText(17, sf::Color::White, "Change character", true, sf::Vector2f(175, SCREEN_HEIGHT - 75));
 
-    sf::RectangleShape r2 = drawRectangle(100, 50, sf::Color(52, 152, 219), sf::Vector2f(415, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
-    drawText(17, sf::Color::White, "Reset", true, sf::Vector2f(415, SCREEN_HEIGHT - 75));
+    sf::RectangleShape r2 = drawRectangle(150, 50, sf::Color(52, 152, 219), sf::Vector2f(435, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
+    drawText(17, sf::Color::White, "View stats", true, sf::Vector2f(435, SCREEN_HEIGHT - 75));
+
+    sf::RectangleShape r3 = drawRectangle(100, 50, sf::Color(52, 152, 219), sf::Vector2f(625, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
+    drawText(17, sf::Color::White, "Reset", true, sf::Vector2f(625, SCREEN_HEIGHT - 75));
 
     controller_->clearActiveButtons();
     controller_->addActiveButton(Controller::CHANGE_PLAYER, r1.getGlobalBounds());
-    controller_->addActiveButton(Controller::RESET, r2.getGlobalBounds());
+    controller_->addActiveButton(Controller::VIEW_STATS, r2.getGlobalBounds());
+    controller_->addActiveButton(Controller::RESET, r3.getGlobalBounds());
 }
 
 
@@ -66,8 +120,10 @@ void View::drawEvent(Notification event) {
             break;
 
         case Notification::PLAYER_ATTACK:
-            // Draw the player's active sword
-            drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), model_->player().activeWeaponPath());
+            // Draw the player's active weapon
+            if (model_->player().hasWeapon()) {
+                drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), model_->player().activeWeaponPath());
+            }
 
             if (event.hit) {   // Draw a hit above the enemy
                 drawText(25, sf::Color::Magenta, std::to_string(event.damage), false, sf::Vector2f(event.enemy.x(), event.enemy.y() - 100));

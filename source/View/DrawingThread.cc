@@ -49,6 +49,9 @@ void View::handleUpdate(Notification event) {
         case Notification::PLAYER_DIED:
             specialScreen_ = DEAD;
             break;
+        case Notification::VIEW_STATS:
+            specialScreen_ = VIEW_STATS;
+            break;
         case Notification::PLAYER_COLLISION:
         case Notification::PLAYER_ATTACK:
         case Notification::ENEMY_ATTACK:
@@ -73,6 +76,9 @@ void View::drawFrame() {
             return;
         case DEAD:
             drawPlayerDied();
+            return;
+        case VIEW_STATS:
+            drawViewStats();
             return;
         case NONE:
         default:
@@ -130,6 +136,7 @@ void View::drawFrame() {
     }
 
     // Draw any temporary events
+    // BUG: these shouldn't all necessarily be the highest (ie crossbones...)       todo - fix
     for (auto it = temporaryEvents_.begin(); it != temporaryEvents_.end(); it++){
         drawEvent(it->first);
         it->second--;

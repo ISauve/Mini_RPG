@@ -9,13 +9,23 @@ Character::Character(int str, int sp, float x, float y, bool sheet, std::string 
         activeEnemy_(false), isPlayer_(false), health_(100), strength_(str), speed_(sp), weapon_(nullptr) {};
 
 std::string Character::weaponPath() const {
-    if (weapon_ == nullptr) return "";
+    if (weapon_ == nullptr) return "error: no weapon set";
     return weapon_->path();
 };
 
 std::string Character::activeWeaponPath() const {
-    if (weapon_ == nullptr) return "";
+    if (weapon_ == nullptr) return "error: no weapon set";
     return weapon_->activePath();
+};
+
+int Character::weaponStrength() const {
+    if (weapon_ == nullptr) return 0;
+    return weapon_->strength();
+};
+
+int Character::weaponWeight() const {
+    if (weapon_ == nullptr) return 0;
+    return weapon_->weight();
 };
 
 int Character::attack(Character* c) const {

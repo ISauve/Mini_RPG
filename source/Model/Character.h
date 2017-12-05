@@ -44,13 +44,18 @@ public:
     int timeOut();
 
     // Accessors
-    int health() const { return health_; };
-    bool isAlive() const { return health_ > 0; };
     bool isActiveEnemy() const { return activeEnemy_; };
     bool isPlayer() const { return isPlayer_; };
+    int health() const { return health_; };
+    int strength() const { return strength_; };
+    int speed() const { return speed_; };
     bool hasWeapon() const { return weapon_ != nullptr; };
+
     std::string weaponPath() const;
     std::string activeWeaponPath() const;
+    int weaponStrength() const;
+    int weaponWeight() const;
+    bool isAlive() const { return health_ > 0; };
 
     // Mutators
     void move(float n, float m) { x_ += n; y_ += m; };

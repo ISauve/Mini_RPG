@@ -110,8 +110,15 @@ void Controller::handleMouseClick(sf::Event& e) {
                 case SELECT_PLAYER_5:
                     modelChannel_.send(EventPackage(EventPackage::SELECT_PLAYER, 4, 7));
                     break;
+                case VIEW_STATS:
+                    modelChannel_.send(EventPackage(EventPackage::VIEW_STATS));
+                    break;
+                case EXIT_SPECIAL_SCREEN:
+                    modelChannel_.send(EventPackage(EventPackage::EXIT_SPECIAL_SCREEN));
+                    break;
                 case RESET:
                     modelChannel_.send(EventPackage(EventPackage::RESET));
+                    break;
             }
         }
     }

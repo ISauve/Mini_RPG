@@ -14,6 +14,7 @@
 #include <thread>
 #include <mutex>
 #include <memory>
+#include <string>
 
 // View: displays the game to the user
 //	-> observes the mode
@@ -32,7 +33,7 @@ class View : public Observer {
     sf::Font font_;
 
     bool gameOver_;
-    enum SpecialScreen {NONE, SELECT_PLAYER, QUIT, DEAD};
+    enum SpecialScreen {NONE, SELECT_PLAYER, QUIT, DEAD, VIEW_STATS};
     SpecialScreen specialScreen_;
     std::list<std::pair<Notification, int>> temporaryEvents_;
 
@@ -58,6 +59,7 @@ class View : public Observer {
     void drawPlayerSelection();
     void drawQuitScreen();
     void drawPlayerDied();
+    void drawViewStats();
 
     // Helpers
     sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color);

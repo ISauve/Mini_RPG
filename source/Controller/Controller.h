@@ -17,7 +17,8 @@
 class Model;
 class Controller {
 public:
-    enum Button {CHANGE_PLAYER, SELECT_PLAYER_1, SELECT_PLAYER_2, SELECT_PLAYER_3, SELECT_PLAYER_4, SELECT_PLAYER_5, RESET};
+    enum Button {CHANGE_PLAYER, SELECT_PLAYER_1, SELECT_PLAYER_2, SELECT_PLAYER_3, SELECT_PLAYER_4, SELECT_PLAYER_5,
+                 VIEW_STATS, RESET, EXIT_SPECIAL_SCREEN};
 
 private:
     sf::RenderWindow* window_;
