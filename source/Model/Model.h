@@ -2,16 +2,15 @@
 #define MINI_RPG_MODEL_H
 
 #include "../Observer/Subject.h"
-#include "Character.h"
-#include "Item.h"
+#include "Sprites/Character.h"
+#include "Sprites/Prop.h"
 #include "../Channel.h"
 #include "EventPackage.h"
-#include "../Config.h"
 
-#include <queue>
 #include <vector>
-#include <thread>
 #include <mutex>
+#include <queue>
+#include <thread>
 #include <chrono>
 
 struct Attack {
@@ -21,12 +20,14 @@ struct Attack {
     Attack(int d, Character* e) : damage(d), enemy(e) {};
 };
 
+class Prop;
 class Model : public Subject {
+    std::mutex propsLock_;
+    std::vector< Prop > props_;
+
     std::mutex charsLock_;
     std::vector< Character > chars_;
     Character player_;
-
-    std::vector< Item > items_;
 
     // One entry exists in this vector for each char in chars_
     // Each entry corresponds to the timeout before that character can attack again
@@ -61,8 +62,7 @@ public:
     // Accessors for the view - return copies, not references, so as to be thread-safe
     Character player();
     std::vector< Character > getChars();
-    std::vector< Item > getItems();
+    std::vector< Prop > getProps();
 };
-
 
 #endif //MINI_RPG_MODEL_H

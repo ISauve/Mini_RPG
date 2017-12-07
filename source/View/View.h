@@ -2,10 +2,8 @@
 #define MINI_RPG_VIEW_H
 
 #include "../Observer/Observer.h"
-#include "../Model/Model.h"
-#include "../Controller/Controller.h"
 #include "../Channel.h"
-#include "../Config.h"
+#include "../Model/Notification.h"
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -15,9 +13,10 @@
 #include <mutex>
 #include <memory>
 #include <string>
+#include <list>
 
 // View: displays the game to the user
-//	-> observes the mode
+//	-> observes the model
 //  -> can query the model for information (ie character positions)
 
 class Model;

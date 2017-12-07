@@ -1,4 +1,6 @@
 #include "Character.h"
+#include "../Tools/Weapon.h"
+#include <random>
 
 Character::Character() : Sprite(0, 0, false, "", 0, 0),
                          activeEnemy_(false), isPlayer_(false), health_(100), strength_(0), speed_(0), weapon_(nullptr) {};

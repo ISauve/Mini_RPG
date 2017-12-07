@@ -1,7 +1,7 @@
 #ifndef MINI_RPG_NOTIFICATION_H
 #define MINI_RPG_NOTIFICATION_H
 
-#include "Character.h"
+#include "Sprites/Character.h"
 
 struct Notification {
     enum Code {PLAYER_ATTACK, ENEMY_ATTACK, ENEMY_DIED, PLAYER_DIED, PLAYER_COLLISION, CHANGE_PLAYER,

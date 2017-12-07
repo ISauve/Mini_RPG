@@ -11,7 +11,7 @@ GTKFLAGS = `pkg-config --cflags --libs`
 SFMLFLAGS = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -lsfml-audio -ljsoncpp
 
 # compile all .cc files in source directory & it's subdirectories
-SOURCES = $(wildcard $(SRC_DIR)/*.cc) $(wildcard $(SRC_DIR)/*/*.cc)
+SOURCES = $(wildcard $(SRC_DIR)/*.cc) $(wildcard $(SRC_DIR)/*/*.cc) $(wildcard $(SRC_DIR)/*/*/*.cc)
 
 # .o files depend upon .cc files with same names
 OBJECTS = $(patsubst $(SRC_DIR)/%, $(BUILD_DIR)/%, $(SOURCES:.cc=.o))

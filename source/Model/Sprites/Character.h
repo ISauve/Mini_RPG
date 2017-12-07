@@ -2,36 +2,26 @@
 #define MINI_RPG_CHARACTER_H
 
 #include "Sprite.h"
+#include <vector>
 
-struct Weapon {
-private:
-    int strength_;
-    int weight_;
-    std::string path_;
-    std::string activePath_;
-
-public:
-    Weapon(int str, int wght, std::string path, std::string activePath) :
-            strength_(str), weight_(wght), path_(path), activePath_(activePath) {};
-
-    int strength() { return strength_; };
-    int weight() { return weight_; };
-    std::string path() { return path_; };
-    std::string activePath() { return activePath_; };
-};
-
+class Tool;
+class Weapon;
+class Armor;
 class Character : public Sprite {
     bool activeEnemy_;
     bool isPlayer_;
 
-    // Stats
+    // Base stats
     int health_;
     int strength_;
     int speed_;
 
-    // Tools
+    // Tools owned by this character
+    std::vector< Tool* > tools_;
+
+    // Equipped items
     Weapon* weapon_;
-    //Armor armor_;
+    Armor* armor_;
 
 public:
     Character();
@@ -49,22 +39,26 @@ public:
     int health() const { return health_; };
     int strength() const { return strength_; };
     int speed() const { return speed_; };
-    bool hasWeapon() const { return weapon_ != nullptr; };
-
-    std::string weaponPath() const;
-    std::string activeWeaponPath() const;
-    int weaponStrength() const;
-    int weaponWeight() const;
     bool isAlive() const { return health_ > 0; };
 
     // Mutators
     void move(float n, float m) { x_ += n; y_ += m; };
     void hit(int);
     void setActiveEnemy(bool b) { activeEnemy_ = b; };
-    void equipWeapon(Weapon*);
-    void removeWeapon();
     void addHealth(int h) { health_ += h; };
     void setPlayer(bool b) { isPlayer_ = b; };
+
+    // Weapon-related functions
+    bool hasWeapon() const { return weapon_ != nullptr; };
+    std::string weaponPath() const;
+    std::string activeWeaponPath() const;
+    int weaponStrength() const;
+    int weaponWeight() const;
+    void equipWeapon(Weapon*);
+    void removeWeapon();
+
+    // Tool-related functions
+    // ie drop, add, etc        todo
 
     bool operator == (const Character& c) const {
         return (this->x() == c.x() &&           // same location

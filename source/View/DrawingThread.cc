@@ -1,4 +1,5 @@
 #include "View.h"
+#include "../Model/Model.h"
 
 void View::render() {
     window_->setActive(true);
@@ -91,13 +92,13 @@ void View::drawFrame() {
     std::vector< std::reference_wrapper<Sprite> > sprites;
 
     std::vector< Character > chars = model_->getChars();
-    for (int i=0; i < chars.size(); i++) sprites.emplace_back(chars[i]);
+    for (int i=0; i < int(chars.size()); i++) sprites.emplace_back(chars[i]);
 
     Character player = model_->player();
     sprites.emplace_back(player);
 
-    std::vector< Item > items = model_->getItems();
-    for (int i=0; i < items.size(); i++) sprites.emplace_back(items[i]);
+    std::vector< Prop > items = model_->getProps();
+    for (int i=0; i < int(items.size()); i++) sprites.emplace_back(items[i]);
 
     // Order gets determined by y coordinates of the bottom of the sprite & by z-index
     std::sort (sprites.begin(), sprites.end(), [] (Sprite& a, Sprite& b) -> bool {
@@ -127,7 +128,7 @@ void View::drawFrame() {
         } catch (std::bad_cast &e) {};
 
         auto sprite = it.get();
-        if (sprite.isOnCharSheet()) {
+        if (sprite.isOnSheet()) {
             sf::IntRect playerImage = getCharImage(it);
             drawSprite(sprite.x(), sprite.y(), sprite.path(), playerImage);
         } else {

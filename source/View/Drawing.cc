@@ -1,4 +1,7 @@
 #include "View.h"
+#include "../Controller/Controller.h"
+#include "../Model/Model.h"
+#include "../ConfigReader.h"
 
 void View::drawPlayerSelection() {
     std::string sheet_path = "resources/Textures/Character_set_2.png";

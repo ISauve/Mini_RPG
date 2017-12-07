@@ -1,0 +1,51 @@
+# Note: these references are not tool- or prop- specific
+name: "level 1 sword"
+type: "weapon"  # weapon, armor, item
+
+image:
+  - path: ""
+  - sheet: true
+  - row: 0
+  - col: 0
+  - w: 10
+  - h: 10
+
+# Whether or not the item can be dropped by an enemy
+# Value of 0-10, 0 means can't be dropped, 10 means always dropped
+drop_chance: 0
+
+# How much it costs to purchase from a merchant, 0 means can't be sold
+cost: 0
+
+animations:
+  # Required for weapons
+  - attack:
+    - activePath: ""
+    - timeout: 10
+
+# Can this item be acquired (can it turn into a tool)
+acquirable: false
+
+# Optional: immediate effect of the item if it's not acquirable (ie a heart)
+# immediate_effect:
+#  - healing: 50       # health points it regenerates
+#  - value: 0          # how much money it gives you
+#  - temp_strength:
+#     - timeout: 100
+#     - bonus: 5
+
+# Required for weapons
+strength: 5
+
+# Required for armor
+# defense: 3
+
+# Required for armor & weapons
+weight: 3
+bonus_health: 0
+# other bonus features
+
+# Optional: Special abilities the item might have
+# ability: "key, door 5"
+
+

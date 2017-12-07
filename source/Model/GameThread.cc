@@ -1,4 +1,6 @@
 #include "Model.h"
+#include "../ConfigReader.h"
+#include <cmath>
 
 void Model::startGameLoop() {
     while(true) {
@@ -84,7 +86,7 @@ void Model::resetState() {
     notify(Notification::RESET);
 
     // Read in default configuration
-    Config conf;
+    ConfigReader conf;
     conf.readConfig("resources/Confs/default.json");
 
     // Fetch the characters from the config
@@ -94,7 +96,7 @@ void Model::resetState() {
     playerTimeout_ = 0;
 
     // Fetch other data from the config
-    items_ = conf.getItems();
+    //items_ = conf.getItems();
 }
 
 // Always called from within a function with a charsLock_
@@ -115,6 +117,7 @@ void Model::movePlayer(int x, int y) {
     }
 
     // Check for item collisions
+    /*
     for (auto it = items_.begin(); it != items_.end(); ) {
         float dist_x = std::abs(player_.x() - (*it).x());
         float dist_y = std::abs(player_.y() - (*it).y());
@@ -132,6 +135,7 @@ void Model::movePlayer(int x, int y) {
             items_.erase(it);
         } else it++;
     }
+     */
 }
 
 // Always called from within a function with a charsLock_
@@ -163,8 +167,8 @@ void Model::playerAttack() {
 
             // If this is the first hit, activate the enemy
             if ( !chars_[i].hasWeapon() ) {
-                Weapon* enemy_sword = new Weapon(0, 0, "resources/Textures/Enemy_Sword.png", "resources/Textures/Enemy_Sword_Active.png");
-                chars_[i].equipWeapon(enemy_sword);
+                //Weapon* enemy_sword = new Weapon(0, 0, "resources/Textures/Enemy_Sword.png", "resources/Textures/Enemy_Sword_Active.png");
+                //chars_[i].equipWeapon(enemy_sword);
             }
             if (!chars_[i].isActiveEnemy()) {
                 chars_[i].setActiveEnemy(true);

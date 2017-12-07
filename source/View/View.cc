@@ -1,4 +1,7 @@
 #include "View.h"
+#include "../Model/Model.h"
+#include "../Controller/Controller.h"
+#include "../ConfigReader.h"
 
 View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false) {
     // Initialize the window (can be a local var because game ends when this returns)

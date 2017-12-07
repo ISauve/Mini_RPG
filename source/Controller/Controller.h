@@ -3,7 +3,6 @@
 
 #include "../Channel.h"
 #include "../Model/EventPackage.h"
-#include "../Model/Model.h"
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>

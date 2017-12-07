@@ -1,5 +1,7 @@
 #include "Controller.h"
 
+#include "../Model/Model.h"
+
 Controller::Controller( Model* m ) : gameOver_(false) {
     m->setChannel(&modelChannel_);
 };

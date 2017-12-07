@@ -19,6 +19,7 @@ std::vector< Character > Model::getChars() {
     return chars_;
 };
 
-std::vector< Item > Model::getItems() {
-    return items_;
+std::vector< Prop > Model::getProps() {
+    std::lock_guard<std::mutex> lock(propsLock_);
+    return props_;
 };
