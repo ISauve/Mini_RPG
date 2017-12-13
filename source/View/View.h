@@ -31,9 +31,13 @@ class View : public Observer {
     Channel<Notification> eventsChannel_;
     sf::Font font_;
 
+    // Images used (stored in memory for fast access)
+    std::map<std::string, sf::Image> imageCache_;
+    void loadImages();
+
     bool gameOver_;
-    enum SpecialScreen {NONE, SELECT_PLAYER, QUIT, DEAD, VIEW_STATS};
-    SpecialScreen specialScreen_;
+    enum ViewState {PLAYING, SELECT_PLAYER, QUIT, DEAD, VIEW_STATS};
+    ViewState viewState_;
     std::list<std::pair<Notification, int>> temporaryEvents_;
 
     // Observer pattern: concrete callback for when subject (model) sends a notification

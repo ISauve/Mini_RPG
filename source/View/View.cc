@@ -15,11 +15,12 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
     model_->subscribe( this );
 
     // Initialize the view data
+    loadImages();
     font_.loadFromFile("resources/Old_School_Adventures.ttf");
     sf::Music music;
     music.openFromFile("resources/AMemoryAway.ogg");
     music.play();
-    specialScreen_ = NONE;
+    viewState_ = PLAYING;
 
     // Launch the 3 main game loops
     std::thread render_thread(&View::render, this);
@@ -37,4 +38,23 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
 void View::update(Notification n) {
     // Pass the notification into the events channel for the drawing thread to safely process
     eventsChannel_.send(n);
+};
+
+void View::loadImages() {
+    // TODO read all the images present in the Textures directory
+    std::vector<std::string> paths = {"resources/Textures/Character_set_5.png",
+                                       "resources/Textures/Character_set_2.png",
+                                       "resources/Textures/Enemy_1.png",
+                                       "resources/Textures/null.png",
+                                       "resources/Textures/Enemy_Sword.png",
+                                       "resources/Textures/Enemy_Sword_Active.png",
+                                       "resources/Textures/Skull_crossbones.png",
+                                       "resources/Textures/scratch.png",
+    };
+
+    for (auto path : paths) {
+        sf::Image image;
+        image.loadFromFile(path);
+        imageCache_[path] = image;
+    }
 };

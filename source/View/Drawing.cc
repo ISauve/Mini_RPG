@@ -47,7 +47,7 @@ void View::drawViewStats() {
     Sprite player = model_->player();
     sf::IntRect playerImage = getCharImage(player);
     sf::Texture texture;
-    texture.loadFromFile(model_->player().path(), playerImage);
+    texture.loadFromImage(imageCache_[model_->player().path()], playerImage);
     sf::Sprite sprite;
     sprite.setTexture(texture);
     sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 + 100, SCREEN_HEIGHT/2 - 300));
@@ -66,7 +66,7 @@ void View::drawViewStats() {
     // Draw the player's weapon, blown up 3x
     if (model_->player().hasWeapon()) {
         sf::Texture texture;
-        texture.loadFromFile(model_->player().weaponPath());
+        texture.loadFromImage(imageCache_[model_->player().weaponPath()]);
         sf::Sprite sprite;
         sprite.setTexture(texture);
         sprite.setScale(3, 3);
@@ -138,7 +138,9 @@ void View::drawEvent(Notification event) {
 
         case Notification::ENEMY_ATTACK:
             // Draw the weapon as active
-            drawSprite(event.enemy.x() - event.enemy.width() / 2, event.enemy.y(), event.enemy.activeWeaponPath());
+            if (event.enemy.hasWeapon()) {
+                drawSprite(event.enemy.x() - event.enemy.width() / 2, event.enemy.y(), event.enemy.activeWeaponPath());
+            }
 
             // Draw the damage above the player's head
             drawText(25, sf::Color::Red, std::to_string(event.damage), false, sf::Vector2f(model_->player().x(), model_->player().y()-70));
@@ -193,7 +195,7 @@ void View::drawText(int size, sf::Color color, std::string text, bool origin, sf
 
 sf::FloatRect View::drawSprite(float x, float y, std::string path) {
     sf::Texture texture;
-    texture.loadFromFile( path );
+    texture.loadFromImage(imageCache_[path]);
 
     sf::Sprite sprite;
     sprite.setTexture(texture);
@@ -207,7 +209,7 @@ sf::FloatRect View::drawSprite(float x, float y, std::string path) {
 // Overloaded version which takes only a section of an image as the texture
 sf::FloatRect View::drawSprite(float x, float y, std::string path, sf::IntRect selection) {
     sf::Texture texture;
-    texture.loadFromFile(path, selection);
+    texture.loadFromImage(imageCache_[path], selection);
 
     sf::Sprite sprite;
     sprite.setTexture(texture);

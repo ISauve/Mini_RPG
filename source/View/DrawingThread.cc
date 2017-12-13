@@ -19,8 +19,8 @@ void View::render() {
         drawFrame();
         window_->display();
 
-        // 10 fps
-        std::this_thread::sleep_until(start + std::chrono::milliseconds(100));
+        // 30 fps
+        std::this_thread::sleep_until(start + std::chrono::milliseconds(33));
 
         if (gameOver_) {
             // sleep briefly (1s) to allow for quitting screen to be seen
@@ -34,33 +34,33 @@ void View::render() {
 void View::handleUpdate(Notification event) {
     switch (event.type) {
         case Notification::QUIT:
-            specialScreen_ = QUIT;
+            viewState_ = QUIT;
             gameOver_ = true;   // stops drawing thread
             break;
         case Notification::RESET:
-            specialScreen_ = NONE;
+            viewState_ = PLAYING;
             temporaryEvents_.clear();
             break;
         case Notification::CHANGE_PLAYER:
-            specialScreen_ = SELECT_PLAYER;
+            viewState_ = SELECT_PLAYER;
             break;
         case Notification::EXIT_SPECIAL_SCREEN:
-            specialScreen_ = NONE;
+            viewState_ = PLAYING;
             break;
         case Notification::PLAYER_DIED:
-            specialScreen_ = DEAD;
+            viewState_ = DEAD;
             break;
         case Notification::VIEW_STATS:
-            specialScreen_ = VIEW_STATS;
+            viewState_ = VIEW_STATS;
             break;
         case Notification::PLAYER_COLLISION:
         case Notification::PLAYER_ATTACK:
         case Notification::ENEMY_ATTACK:
         case Notification::GOT_HEART:
-            temporaryEvents_.emplace_back(std::make_pair (event, 5));
+            temporaryEvents_.emplace_back(std::make_pair (event, 15));
             break;
         case Notification::ENEMY_DIED:
-            temporaryEvents_.emplace_back(std::make_pair (event, 20));
+            temporaryEvents_.emplace_back(std::make_pair (event, 60));
             break;
         default:
             break;
@@ -68,7 +68,7 @@ void View::handleUpdate(Notification event) {
 }
 
 void View::drawFrame() {
-    switch (specialScreen_) {
+    switch (viewState_) {
         case SELECT_PLAYER:
             drawPlayerSelection();
             return;
@@ -81,7 +81,7 @@ void View::drawFrame() {
         case VIEW_STATS:
             drawViewStats();
             return;
-        case NONE:
+        case PLAYING:
         default:
             break;
     }
@@ -170,11 +170,11 @@ sf::IntRect View::getPlayerImage(Sprite& s) {
         animate = true; }
 
     if (animate) {
-        if (counter < 5)
+        if (counter < 5)                            // 0-4
             player_img = sf::IntRect( (col-1)*width, row*height, width, height );
-        else if (counter < 10 || (counter >= 15 && counter < 20))
+        else if (counter < 10 || counter >= 15)     // 5-9, 15-19
             player_img = sf::IntRect( (col)*width, row*height, width, height );
-        else
+        else                                        // 10-14
             player_img = sf::IntRect( (col+1)*width, row*height, width, height );
 
         counter++; if (counter == 20) counter = 0;
