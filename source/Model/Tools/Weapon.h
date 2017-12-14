@@ -2,12 +2,17 @@
 #define MINI_RPG_WEAPON_H
 
 #include "Tool.h"
-#include "../../ItemReference.h"
+#include "../../ItemReader.h"
 
 class Weapon : public Tool {
 
 public:
     explicit Weapon(ItemReference* ref) : Tool(ref) {};
+
+    static Weapon* makeWeapon(std::string name) {
+        ItemReference* ref = ItemReader::instance()->getReference(name);
+        return new Weapon(ref);
+    }
 
     std::string type() { return "weapon"; };
 

@@ -1,5 +1,7 @@
 #include "Model.h"
 #include "../ConfigReader.h"
+#include "Tools/Tool.h"
+#include "Tools/Weapon.h"
 #include <cmath>
 
 void Model::startGameLoop() {
@@ -88,7 +90,7 @@ void Model::resetState() {
 
     // Read in default configuration
     ConfigReader conf;
-    conf.readConfig("resources/Areas/default.json");
+    conf.readConfig("resources/Areas/start.yaml");
 
     // Fetch the characters from the config
     chars_ = conf.getChars();
@@ -173,8 +175,7 @@ void Model::playerAttack() {
 
             // If this is the first hit, activate the enemy
             if ( !chars_[i].hasWeapon() ) {
-                //Weapon* enemy_sword = new Weapon(0, 0, "resources/Textures/Enemy_Sword.png", "resources/Textures/Enemy_Sword_Active.png");
-                //chars_[i].equipWeapon(enemy_sword);
+                chars_[i].equipWeapon(Weapon::makeWeapon("default enemy sword"));
             }
             if (!chars_[i].isActiveEnemy()) {
                 chars_[i].setActiveEnemy(true);

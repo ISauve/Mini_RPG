@@ -1,0 +1,25 @@
+name: "player sword 1"
+type: "weapon"
+
+image:
+  path: "resources/Textures/Sword_1.png"
+  sheet: false
+  row: 0
+  col: 0
+  w: 70
+  h: 83
+
+drop_chance: 0
+cost: 0
+
+animations:
+  attack:
+    activePath: "resources/Textures/Sword_1_Active.png"
+    timeout: 15
+
+acquirable: true
+strength: 1
+weight: 1
+bonus_health: 0
+
+

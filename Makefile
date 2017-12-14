@@ -8,7 +8,7 @@ BIN_DIR = bin
 CXX = g++ -std=c++14
 CXXFLAGS = -Wall -O -g -MMD                          # use -MMD to generate dependencies
 GTKFLAGS = `pkg-config --cflags --libs`
-SFMLFLAGS = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -lsfml-audio -ljsoncpp -lyaml-cpp
+SFMLFLAGS = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -lsfml-audio -lyaml-cpp
 
 # compile all .cc files in source directory & it's subdirectories
 SOURCES = $(wildcard $(SRC_DIR)/*.cc) $(wildcard $(SRC_DIR)/*/*.cc) $(wildcard $(SRC_DIR)/*/*/*.cc)

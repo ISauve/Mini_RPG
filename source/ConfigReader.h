@@ -7,6 +7,7 @@
 #include "Model/Sprites/Character.h"
 #include "Model/Sprites/Prop.h"
 #include <vector>
+#include <yaml-cpp/yaml.h>
 
 // Reads configuration files for game areas
 class ConfigReader {

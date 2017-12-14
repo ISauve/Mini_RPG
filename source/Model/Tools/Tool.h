@@ -1,6 +1,8 @@
 #ifndef MINI_RPG_TOOL_H
 #define MINI_RPG_TOOL_H
 
+#include <string>
+
 // A Tool is an acquired version of an item (ie a potion in a bag, or an equipped weapon)
 // It is not a standalone sprite, but it is "drawable" (the reference contains the information
 // necessary to render an image of it)
@@ -13,7 +15,7 @@ protected:
     explicit Tool(ItemReference* ref) : ref_(ref) {};
 public:
     // Factory method: defer instantiation to subclasses
-    Tool* makeTool(std::string itemName);
+    static Tool* makeTool(std::string itemName);
 
     // Accessor for the fields all Tools have
     std::string name();

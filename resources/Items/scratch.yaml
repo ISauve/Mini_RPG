@@ -1,0 +1,25 @@
+name: "scratch"
+type: "weapon"
+
+image:
+  path: "resources/Textures/null.png"
+  sheet: false
+  row: 0
+  col: 0
+  w: 0
+  h: 0
+
+drop_chance: 0
+cost: 0
+
+animations:
+  attack:
+    activePath: "resources/Textures/scratch.png"
+    timeout: 15
+
+acquirable: false
+strength: 2
+weight: 0
+bonus_health: 0
+
+

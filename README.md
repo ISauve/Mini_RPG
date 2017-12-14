@@ -5,8 +5,8 @@
 
 ### Installation
 1. Clone this repository
-2. Install the dependencies ([SFML 2.4.2](https://www.sfml-dev.org/download/sfml/2.4.2/) & [Jsoncpp 1.8.3](https://github.com/open-source-parsers/jsoncpp/releases))
-    - On OS X:  `brew update`; `brew install sfml`; `brew install jsoncpp`
+2. Install the dependencies ([SFML 2.4.2](https://www.sfml-dev.org/download/sfml/2.4.2/) & [Yaml-cpp 0.5.3](https://github.com/jbeder/yaml-cpp/releases/tag/release-0.5.3))
+    - On OS X:  `brew update`; `brew install sfml`; `brew install yaml-cpp`
 3. Compile the game with `make`
 4. Run with `./bin/game`
 
@@ -26,8 +26,8 @@
 - [x] Support for items that can be interacted with
 - [x] A way to generate playable areas via a configuration file
 - [x] Weapons & their "active" states should be in the configuration files
-- [ ] **Switch configurations to YAML (http://brewformulas.org/YamlCpp)**
-- [ ] **Refactor item class to use flyweight pattern & to have weapon/tool subclasses**
+- [x] Switch configurations to YAML
+- [x] Refactor item class to use flyweight pattern & to have weapon/tool subclasses
 - [ ] Add proper error handling (especially for input files)
 - [ ] Move animations into configuration files
     - [ ] Related: Have animations be player fields which can be read & interpreted by the view

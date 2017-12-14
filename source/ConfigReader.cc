@@ -1,58 +1,33 @@
 #include "ConfigReader.h"
+#include "Model/Tools/Weapon.h"
 
-#include <json/json.h>
-#include <fstream>
 #include <iostream>
 
 void ConfigReader::readConfig(std::string path) {
-    // Read the config file
-    std::ifstream infile( path );
-    if ( not infile.is_open() ) { // Ensure file successfully opened
-        std::cerr << "Failed to open file \"" << path << "\".\n";
-        return;
-    }
-
-    // Parse the file
-    Json::Value root;
-    Json::CharReaderBuilder rbuilder;
-    std::string errors;
-    bool parsedOk = Json::parseFromStream( rbuilder, infile, &root, &errors );
-    if (!parsedOk) {
-        std::cerr << "Error in parsing JSON: " << errors << "\n";
-        return;
-    }
+    YAML::Node config = YAML::LoadFile(path);
 
     // Read the characters
     Character player;
-    for (auto it : root["characters"]) {
+    for (auto it : config["characters"]) {
         // Initialize char w/ the required data
-        int str = it["str"].asInt();
-        int sp = it["sp"].asInt();
-        float x = it["x"].asFloat();
-        float y = it["y"].asFloat();
-        bool sheet = it["sheet"].asBool();
-        std::string path = it["path"].asString();
-        int w = it["w"].asInt();
-        int h = it["h"].asInt();
+        int str = it["str"].as<int>();
+        int sp = it["sp"].as<int>();
+        float x = it["x"].as<float>();
+        float y = it["y"].as<float>();
+        bool sheet = it["sheet"].as<bool>();;
+        std::string path = it["path"].as<std::string>();
+        int w = it["w"].as<int>();
+        int h = it["h"].as<int>();
 
         Character character = Character(str, sp, x, y, sheet, path, w, h);
 
         // Add the optional data
-        if (!it["active"].isNull()) character.setActiveEnemy(it["active"].asBool());
-        if (!it["row"].isNull() && !it["col"].isNull()) character.setCharacter(it["row"].asInt(), it["col"].asInt());
-
-        if (!it["weapon"].isNull()) {
-            int str = it["weapon"]["str"].asInt();
-            int weight = it["weapon"]["weight"].asInt();
-            std::string path = it["weapon"]["path"].asString();
-            std::string activePath = it["weapon"]["activePath"].asString();
-
-            // TODO
-            //character.equipWeapon(new Weapon(str, weight, path, activePath));
-        }
+        if (it["active"]) character.setActiveEnemy(it["active"].as<bool>());
+        if (it["row"] && it["col"]) character.setCharacter(it["row"].as<int>(), it["col"].as<int>());
+        if (it["weapon"]) character.equipWeapon(Weapon::makeWeapon(it["weapon"].as<std::string>()));
 
         // Store the character
-        if ( !it["player"].isNull() ) {
+        if ( it["player"] ) {
             character.setPlayer(true);
             player_ = character;
         }
@@ -60,11 +35,11 @@ void ConfigReader::readConfig(std::string path) {
     }
 
     // Read the props
-    for (auto it : root["props"]) {
+    for (auto it : config["props"]) {
         // Read the required data
-        std::string name = it["name"].asString();
-        float x =  it["x"].asFloat();
-        float y =  it["y"].asFloat();
+        std::string name = it["name"].as<std::string>();
+        float x =  it["x"].as<float>();
+        float y =  it["y"].as<float>();
 
         // TODO add any other instance-specific data (ie a chest's contents)
 

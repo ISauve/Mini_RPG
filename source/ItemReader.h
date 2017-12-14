@@ -59,6 +59,11 @@ public:
             if (config["immediate_effect"]["healing"]) ref.setHealing(config["immediate_effect"]["healing"].as<int>());
             if (config["immediate_effect"]["value"]) ref.setValue(config["immediate_effect"]["value"].as<int>());
 
+            // Animations should be dealt with in a better way  TODO
+            if (config["animations"]["attack"]["activePath"]) {
+                ref.setActivePath(config["animations"]["attack"]["activePath"].as<std::string>());
+            }
+
             // TODO:
             //   animations
             //   other immediate effects
