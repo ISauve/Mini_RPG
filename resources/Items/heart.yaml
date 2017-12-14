@@ -1,0 +1,15 @@
+name: "heart"
+type: "item"
+image:
+  path: "resources/Textures/heart.png"
+  sheet: false
+  row: 0
+  col: 0
+  w: 40
+  h: 40
+drop_chance: 4
+cost: 0
+
+acquirable: false
+immediate_effect:
+  healing: 50

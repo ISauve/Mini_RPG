@@ -47,6 +47,7 @@ void ConfigReader::readConfig(std::string path) {
             std::string path = it["weapon"]["path"].asString();
             std::string activePath = it["weapon"]["activePath"].asString();
 
+            // TODO
             //character.equipWeapon(new Weapon(str, weight, path, activePath));
         }
 
@@ -59,23 +60,16 @@ void ConfigReader::readConfig(std::string path) {
     }
 
     // Read the props
-    /*
-    for (auto it : root["items"]) {
-        // Initialize item w/ the required data
-        auto t = static_cast<Item::Type>(it["type"].asInt());
-        float x = it["x"].asFloat();
-        float y = it["y"].asFloat();
-        bool sheet = it["sheet"].asBool();
-        std::string path = it["path"].asString();
-        int w = it["w"].asInt();
-        int h = it["h"].asInt();
+    for (auto it : root["props"]) {
+        // Read the required data
+        std::string name = it["name"].asString();
+        float x =  it["x"].asFloat();
+        float y =  it["y"].asFloat();
 
-        Item item = Item(t, x, y, sheet, path, w, h);
-        if (!it["row"].isNull() && !it["col"].isNull()) item.setCharacter(it["row"].asInt(), it["col"].asInt());
+        // TODO add any other instance-specific data (ie a chest's contents)
 
-        items_.push_back(item);
+        props_.push_back(Prop::makeProp(name, x, y));
     }
-     */
 
     // TODO read the background
 }

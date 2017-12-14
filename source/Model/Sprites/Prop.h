@@ -11,7 +11,7 @@ class Prop : public Sprite {
 
     Prop(float x, float y, ItemReference* ref);
 public:
-    Prop* makeProp(std::string itemName, float x, float y);
+    static Prop makeProp(std::string itemName, float x, float y);
 
     std::string name();
     int dropChance();
@@ -20,6 +20,8 @@ public:
     bool acquirable();
     int healing();  // for hearts (immediate)
     int value();    // for money (immediate)
+
+    // TODO add more instance-specific data (like a chest's contents)
 };
 
 #endif //MINI_RPG_ITEM_H

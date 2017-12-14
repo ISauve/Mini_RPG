@@ -53,16 +53,11 @@ void View::handleUpdate(Notification event) {
         case Notification::VIEW_STATS:
             viewState_ = VIEW_STATS;
             break;
-        case Notification::PLAYER_COLLISION:
-        case Notification::PLAYER_ATTACK:
-        case Notification::ENEMY_ATTACK:
-        case Notification::GOT_HEART:
-            temporaryEvents_.emplace_back(std::make_pair (event, 15));
-            break;
         case Notification::ENEMY_DIED:
             temporaryEvents_.emplace_back(std::make_pair (event, 60));
             break;
         default:
+            temporaryEvents_.emplace_back(std::make_pair (event, 15));
             break;
     }
 }
@@ -97,8 +92,8 @@ void View::drawFrame() {
     Character player = model_->player();
     sprites.emplace_back(player);
 
-    std::vector< Prop > items = model_->getProps();
-    for (int i=0; i < int(items.size()); i++) sprites.emplace_back(items[i]);
+    std::vector< Prop > props = model_->getProps();
+    for (int i=0; i < int(props.size()); i++) sprites.emplace_back(props[i]);
 
     // Order gets determined by y coordinates of the bottom of the sprite & by z-index
     std::sort (sprites.begin(), sprites.end(), [] (Sprite& a, Sprite& b) -> bool {

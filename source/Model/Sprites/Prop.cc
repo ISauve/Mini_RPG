@@ -6,9 +6,8 @@
 Prop::Prop(float x, float y, ItemReference* ref) :
             Sprite(x, y, ref->sheet(), ref->path(), ref->width(), ref->healing()), ref_(ref) {};
 
-
-Prop* Prop::makeProp(std::string itemName, float x, float y) {
-    return new Prop(x, y, ItemReader::instance()->getReference(itemName));
+Prop Prop::makeProp(std::string itemName, float x, float y) {
+    return Prop(x, y, ItemReader::instance()->getReference(itemName));
 };
 
 std::string Prop::name() { return ref_->name(); };

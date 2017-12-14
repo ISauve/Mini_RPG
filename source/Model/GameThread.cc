@@ -83,11 +83,12 @@ void Model::resetState() {
     chars_.clear();
     charTimeouts_.clear();
     specialScreen_ = false;
+    playerMoney_ = 0;
     notify(Notification::RESET);
 
     // Read in default configuration
     ConfigReader conf;
-    conf.readConfig("resources/Confs/default.json");
+    conf.readConfig("resources/Areas/default.json");
 
     // Fetch the characters from the config
     chars_ = conf.getChars();
@@ -96,7 +97,7 @@ void Model::resetState() {
     playerTimeout_ = 0;
 
     // Fetch other data from the config
-    //items_ = conf.getItems();
+    props_ = conf.getProps();
 }
 
 // Always called from within a function with a charsLock_
@@ -117,25 +118,30 @@ void Model::movePlayer(int x, int y) {
     }
 
     // Check for item collisions
-    /*
-    for (auto it = items_.begin(); it != items_.end(); ) {
+    for (auto it = props_.begin(); it != props_.end(); ) {
         float dist_x = std::abs(player_.x() - (*it).x());
         float dist_y = std::abs(player_.y() - (*it).y());
 
         if ( dist_x < player_.width()/2 && dist_y < player_.height()/2) {
-            switch ((*it).type()) {
-                case Item::Type::HEART:
-                    player_.addHealth(50);
-                    notify(Notification::GOT_HEART);
-                    break;
-                default:
-                    break;
+            if ((*it).acquirable()) {
+                // TODO acquire the item
+            } else {
+                if ((*it).healing() > 0) {
+                    player_.addHealth((*it).healing());
+                    Notification effect(Notification::HEALED);
+                    effect.healed = (*it).healing();
+                    notify(effect);
+                }
+                if ((*it).value() > 0) {
+                    playerMoney_ += (*it).value();
+                    Notification event(Notification::GOT_MONEY);
+                    event.value = (*it).value();
+                    notify(event);
+                }
             }
-
-            items_.erase(it);
+            props_.erase(it);
         } else it++;
     }
-     */
 }
 
 // Always called from within a function with a charsLock_

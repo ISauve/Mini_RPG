@@ -83,51 +83,31 @@
       "w": 80,
       "h": 80
     }
-  ], "items": [
-
-
-    {
-      "type": 0,    // HEART
-      "x": 150,
-      "y": 800,
-      "sheet": false,
-      "path": "resources/Textures/heart.png",
-      "w": 40,
-      "h": 40
-    },{
-      "type": 0,    // HEART
-      "x": 200,
-      "y": 800,
-      "sheet": false,
-      "path": "resources/Textures/heart.png",
-      "w": 40,
-      "h": 40
-    },{
-      "type": 0,    // HEART
-      "x": 250,
-      "y": 800,
-      "sheet": false,
-      "path": "resources/Textures/heart.png",
-      "w": 40,
-      "h": 40
-    },{
-      "type": 1,    // CHEST
-      "contents": {
-        "weapon": {
-          "str": 2,
-          "weight": 1,
-          "path": "resources/Textures/Sword_1.png",
-          "activePath": "resources/Textures/Sword_1_Active.png"
-        }
-      },
-      "x": 200,
-      "y": 200,
-      "sheet": true,
-      "path": "resources/Textures/chests.png",
-      "row": 0,
-      "col": 1,
-      "w": 32,
-      "h": 32
-    }
+  ], "props": [
+      {
+        "name": "heart",
+        "x": 150,
+        "y": 800
+      },{
+        "name": "heart",
+        "x": 200,
+        "y": 800
+      },{
+        "name": "heart",
+        "x": 250,
+        "y": 800
+      },{
+        "name": "coin",
+        "x": 150,
+        "y": 500
+      },{
+        "name": "coin",
+        "x": 160,
+        "y": 300
+      },{
+        "name": "coin",
+        "x": 90,
+        "y": 630
+      }
   ]
 }

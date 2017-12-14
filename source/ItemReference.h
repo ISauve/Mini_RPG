@@ -8,20 +8,20 @@ class ItemReference {
     /**** Required for all items ****/
 
     // Identifiers
-    const std::string name_;
-    const std::string type_;
+    std::string name_;
+    std::string type_;
 
     // Stats
-    const int dropChance_;
-    const int cost_;
+    int dropChance_;
+    int cost_;
 
     // Image details
-    const std::string path_;
-    const bool sheet_;
-    const int row_;
-    const int col_;
-    const int width_;
-    const int height_;
+    std::string path_;
+    bool sheet_;
+    int row_;
+    int col_;
+    int width_;
+    int height_;
 
     /**** Not required for all items ****/
 
@@ -61,8 +61,7 @@ public:
             path_(""),  sheet_(false),  row_(0),  col_(0), width_(0), height_(0),
             activePath_(""), str_(0), def_(0), wght_(0), bonusHealth_(0), healing_(0), ability_(""),
             value_(0), acquirable_(false) {};
-
-    ItemReference(ItemReference const& i) :
+    ItemReference(const ItemReference& i) :
             name_(i.name()),  type_(i.type()),  dropChance_(i.dropChance()),  cost_(i.cost()),
             path_(i.path()),  sheet_(i.sheet()),  row_(i.row()),  col_(i.col()), width_(i.width()), height_(i.height()),
             activePath_(i.activePath()), str_(i.strength()), def_(i.defense()), wght_(i.weight()),
@@ -96,7 +95,16 @@ public:
     bool acquirable() const { return acquirable_; };
 
     // Modifiers for the optional data
-    // TODO
+    // These should only be called when the item reference is being initialized
+    void setActivePath(std::string a) { activePath_ = a; };
+    void setStrength(int s) { str_ = s; };
+    void setDefense(int d) { def_ = d; };
+    void setWeight(int w) { wght_ = w; };
+    void setBonusHealth(int b) { bonusHealth_ = b; };
+    void setHealing(int h) { healing_ = h; };
+    void setAbility(std::string a) { ability_ = a; };
+    void setValue(int v) { value_ = v; };
+    void setAcquirable(bool a) { acquirable_ = a; };
 };
 
 

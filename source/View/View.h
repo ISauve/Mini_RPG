@@ -14,6 +14,7 @@
 #include <memory>
 #include <string>
 #include <list>
+#include <dirent.h>
 
 // View: displays the game to the user
 //	-> observes the model

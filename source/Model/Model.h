@@ -12,13 +12,7 @@
 #include <queue>
 #include <thread>
 #include <chrono>
-
-struct Attack {
-    int damage;
-    Character* enemy;
-
-    Attack(int d, Character* e) : damage(d), enemy(e) {};
-};
+#include <atomic>
 
 class Prop;
 class Model : public Subject {
@@ -28,6 +22,7 @@ class Model : public Subject {
     std::mutex charsLock_;
     std::vector< Character > chars_;
     Character player_;
+    std::atomic<int>  playerMoney_;
 
     // One entry exists in this vector for each char in chars_
     // Each entry corresponds to the timeout before that character can attack again
@@ -63,6 +58,7 @@ public:
     Character player();
     std::vector< Character > getChars();
     std::vector< Prop > getProps();
+    int playerMoney();
 };
 
 #endif //MINI_RPG_MODEL_H

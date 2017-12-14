@@ -23,3 +23,7 @@ std::vector< Prop > Model::getProps() {
     std::lock_guard<std::mutex> lock(propsLock_);
     return props_;
 };
+
+int Model::playerMoney() {
+   return playerMoney_.load();
+};

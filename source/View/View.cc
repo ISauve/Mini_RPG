@@ -3,6 +3,8 @@
 #include "../Controller/Controller.h"
 #include "../ConfigReader.h"
 
+#include <iostream>
+
 View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false) {
     // Initialize the window (can be a local var because game ends when this returns)
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Izzy's OpenGL Adventure", sf::Style::Default);
@@ -41,16 +43,13 @@ void View::update(Notification n) {
 };
 
 void View::loadImages() {
-    // TODO read all the images present in the Textures directory
-    std::vector<std::string> paths = {"resources/Textures/Character_set_5.png",
-                                       "resources/Textures/Character_set_2.png",
-                                       "resources/Textures/Enemy_1.png",
-                                       "resources/Textures/null.png",
-                                       "resources/Textures/Enemy_Sword.png",
-                                       "resources/Textures/Enemy_Sword_Active.png",
-                                       "resources/Textures/Skull_crossbones.png",
-                                       "resources/Textures/scratch.png",
-    };
+    auto directory = opendir("resources/Textures");
+    std::vector<std::string> paths;
+    while (auto file = readdir(directory)) {
+        std::string name = file->d_name;
+        if (name.substr(name.find_last_of(".") + 1) != "png") continue;
+        paths.push_back("resources/Textures/" + name);
+    }
 
     for (auto path : paths) {
         sf::Image image;
