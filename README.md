@@ -7,6 +7,7 @@
 1. Clone this repository
 2. Install the dependencies ([SFML 2.4.2](https://www.sfml-dev.org/download/sfml/2.4.2/) & [Yaml-cpp 0.5.3](https://github.com/jbeder/yaml-cpp/releases/tag/release-0.5.3))
     - On OS X:  `brew update`; `brew install sfml`; `brew install yaml-cpp`
+    - On Debian/Ubuntu: `sudo apt-get update`; `sudo apt-get install libsfml-dev`; `sudo apt-get install libyaml-cpp-dev`
 3. Compile the game with `make`
 4. Run with `./bin/game`
 
