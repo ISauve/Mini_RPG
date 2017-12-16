@@ -1,8 +1,9 @@
-name: "player sword 1"
+name: "default player sword"
 type: "weapon"
 
 image:
   path: "resources/Textures/Sword_1.png"
+  pathR: "resources/Textures/Sword_1_R.png"
   sheet: false
   row: 0
   col: 0
@@ -15,7 +16,7 @@ cost: 0
 animations:
   attack:
     activePath: "resources/Textures/Sword_1_Active.png"
-    timeout: 15
+    activePathR: "resources/Textures/Sword_1_Active_R.png"
 
 acquirable: true
 strength: 1

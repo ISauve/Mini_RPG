@@ -36,6 +36,7 @@ void Model::startGameLoop() {
     }
 }
 
+#include <iostream>
 void Model::handleEvent(EventPackage e) {
     std::lock_guard<std::mutex> lock(charsLock_);       // most of these functions modify chars_
     switch (e.type) {
@@ -54,12 +55,12 @@ void Model::handleEvent(EventPackage e) {
         case EventPackage::CHANGE_PLAYER:
             notify(Notification::CHANGE_PLAYER);
             specialScreen_ = true;
-            return;
+            break;
 
         case EventPackage::VIEW_STATS:
             notify(Notification::VIEW_STATS);
             specialScreen_ = true;
-            return;
+            break;
 
         case EventPackage::SELECT_PLAYER:
             // Set the new character
@@ -72,7 +73,11 @@ void Model::handleEvent(EventPackage e) {
         case EventPackage::EXIT_SPECIAL_SCREEN:
             notify(Notification::EXIT_SPECIAL_SCREEN);
             specialScreen_ = false;
-            return;
+            break;
+
+        case EventPackage::QUICK_ACCESS:
+            player_.useQuickAccess(e.quickAccess);
+            break;
 
         default:
             break;
@@ -126,7 +131,7 @@ void Model::movePlayer(int x, int y) {
 
         if ( dist_x < player_.width()/2 && dist_y < player_.height()/2) {
             if ((*it).acquirable()) {
-                // TODO acquire the item
+                player_.addTool(Tool::makeTool((*it).name()));
             } else {
                 if ((*it).healing() > 0) {
                     player_.addHealth((*it).healing());

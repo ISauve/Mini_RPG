@@ -18,54 +18,6 @@
 
 ---
 
-## To-Do List
-
-#### Gameplay (bold = in progress/next target)
-- [x] Character & weapon stats
-- [x] Ability to view character/weapon stats
-- [x] Support for items that can be interacted with
-- [x] A way to generate playable areas via a configuration file
-- [x] Weapons & their "active" states should be in the configuration files
-- [x] Switch configurations to YAML
-- [x] Refactor item class to use flyweight pattern & to have weapon/tool subclasses
-- [ ] Add proper error handling (especially for input files)
-- [ ] Move animations into configuration files
-    - [ ] Related: Have animations be player fields which can be read & interpreted by the view
-    - https://gamedev.stackexchange.com/questions/124132/2d-top-down-rpg-animation-architecture-problem
-- [ ] Player's speed should also affect timeout before being able to attack again
-- [ ] Weapons should have a specific animation location based on character orienation
-    - [ ] Related: Direction of attack should matter (at least for the animation)
-        - Facing L/R -> attacking L/R
-        - Facing down/up -> attacking in direction of enemy
-        - Need 4 images of each weapon: active/inactive L/R
-- [ ] Friendly characters
-- [ ] Money (as a way to upgrade stats & weapons)
-- [ ] Merchants
-- [ ] Bag for storing items
-- [ ] Ability to view bag
-- [ ] Shortcuts to items: top of screen should have slots which you can designate as "active" items
-- [ ] Item drop ability
-    - enemies own items, have a probability of being dropped, killing enemy -> generate drop rate on items, items 
-    above a certain threshold get dropped
-- [ ] Decorations/background
-- [ ] Screen boundaries 
-- [ ] Ability to cross between screens (in certain areas)
-- [ ] Resting area (can save & possibly heal)
-- [ ] Build a short dungeon
-    - [ ] Should start off outside, can "train" (aka kill to get money to upgrade weapons/armor/items)
-        - Enemies can drop items as well & there should be some hidden items that you can pick up (ie money/hearts in tall grass)
-    - [ ] Little village with merchant & resting area
-    - [ ] Can enter dungeon from village once you've killed the "practice" boss who drops a key
-    
-#### Game setup
-- [ ] Test on Win/Linux
-- [x] Add a test framework ([googletest](https://github.com/google/googletest)) and integrate with Circle CI
-- [ ] Write tests
-- [ ] Add a dependency manager/installation script (?)
-- [ ] Release compiled executables for diff platforms
-
----
-
 ## Game Design
 
 _I made this game for fun, but also to practice multithreading in C++ and implementing various OOP design patterns. 

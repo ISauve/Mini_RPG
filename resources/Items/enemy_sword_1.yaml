@@ -3,6 +3,7 @@ type: "weapon"
 
 image:
   path: "resources/Textures/Enemy_Sword.png"
+  pathR: "resources/Textures/Enemy_Sword_R.png"
   sheet: false
   row: 0
   col: 0
@@ -15,7 +16,7 @@ cost: 0
 animations:
   attack:
     activePath: "resources/Textures/Enemy_Sword_Active.png"
-    timeout: 15
+    activePathR: "resources/Textures/Enemy_Sword_Active_R.png"
 
 acquirable: false
 strength: 0

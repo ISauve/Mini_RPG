@@ -3,7 +3,9 @@ name: "level 1 sword"
 type: "weapon"  # weapon, armor, item
 
 image:
+  # Note: a weapon's default direction is tilted to the L
   path: ""
+  pathR: ""     # Required for all weapons: the same image mirrored (tilting right)
   sheet: true
   row: 0
   col: 0
@@ -21,7 +23,7 @@ animations:
   # Required for weapons
   attack:
     activePath: ""
-    timeout: 10
+    activePathR: ""
 
 # Can this item be acquired (can it turn into a tool)
 acquirable: false

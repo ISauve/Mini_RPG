@@ -21,6 +21,8 @@ public:
     int bonusHealth() { return ref_->bonusHealth(); };
 
     std::string activePath() { return ref_->activePath(); };
+    std::string activePathR() { return ref_->activePathR(); };
+    std::string pathR() { return ref_->pathR(); };
 };
 
 #endif //MINI_RPG_WEAPON_H

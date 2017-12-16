@@ -1,8 +1,8 @@
 #ifndef MINI_RPG_CONFIG_H
 #define MINI_RPG_CONFIG_H
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 1024
+#define SCREEN_WIDTH 2048
+#define SCREEN_HEIGHT 1124
 
 #include "Model/Sprites/Character.h"
 #include "Model/Sprites/Prop.h"

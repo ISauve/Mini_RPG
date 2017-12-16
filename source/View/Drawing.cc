@@ -5,20 +5,32 @@
 
 void View::drawPlayerSelection() {
     std::string sheet_path = "resources/Textures/Character_set_2.png";
+    drawText(30, sf::Color::White, "Select your character", false, sf::Vector2f(50, 50));
+
     sf::IntRect selection = sf::IntRect(1*80, 0*80, 80, 80);
-    sf::FloatRect rectangle_1 = drawSprite(100, SCREEN_HEIGHT/2, sheet_path, selection);
+    sf::FloatRect rectangle_1 = drawSprite(100, 200, sheet_path, selection);
+    drawText(25, sf::Color::White, "Business-y Bob: Not sure how he ended up here. Is late for a meeting.",
+             false, sf::Vector2f(175, 200));
 
     selection = sf::IntRect(4*80, 0*80, 80, 80);
-    sf::FloatRect rectangle_2 = drawSprite(300, SCREEN_HEIGHT/2, sheet_path, selection);
+    sf::FloatRect rectangle_2 = drawSprite(100, 400, sheet_path, selection);
+    drawText(25, sf::Color::White, "Beeb (generic): Very cuddly & loves back massages.",
+             false, sf::Vector2f(175, 400));
 
     selection = sf::IntRect(1*80, 4*80, 80, 80);
-    sf::FloatRect rectangle_3 = drawSprite(500, SCREEN_HEIGHT/2, sheet_path, selection);
+    sf::FloatRect rectangle_3 = drawSprite(100, 600, sheet_path, selection);
+    drawText(25, sf::Color::White, "Monsieur Moustache: A classic hero, this great lad is prepared for all sorts of adventure.",
+             false, sf::Vector2f(175, 600));
 
     selection = sf::IntRect(4*80, 4*80, 80, 80);
-    sf::FloatRect rectangle_4 = drawSprite(700, SCREEN_HEIGHT/2, sheet_path, selection);
+    sf::FloatRect rectangle_4 = drawSprite(100, 800, sheet_path, selection);
+    drawText(25, sf::Color::White, "Jean-Pierre-Marie-Cloud: Has never been seen without his beret, and scoffs at anyone \nwho says 'Chocolatine'. It's Pain au Chocolate... putain.",
+             false, sf::Vector2f(175, 775));
 
     selection = sf::IntRect(7*80, 4*80, 80, 80);
-    sf::FloatRect rectangle_5 = drawSprite(900, SCREEN_HEIGHT/2, sheet_path, selection);
+    sf::FloatRect rectangle_5 = drawSprite(100, 1000, sheet_path, selection);
+    drawText(25, sf::Color::White, "Gerard: A black belt, but a pacifist at heart. One time he almost got in a fight, when someone \nsaid his kitten wasn't THAT cute.",
+             false, sf::Vector2f(175, 975));
 
     controller_->clearActiveButtons();
     controller_->addActiveButton(Controller::SELECT_PLAYER_1, rectangle_1);
@@ -43,14 +55,14 @@ void View::drawPlayerDied() {
 };
 
 void View::drawViewStats() {
-    // Draw the player's image, blown up 3x
+    // Draw the player's image
     Sprite player = model_->player();
     sf::IntRect playerImage = getCharImage(player);
     sf::Texture texture;
     texture.loadFromImage(imageCache_[model_->player().path()], playerImage);
     sf::Sprite sprite;
     sprite.setTexture(texture);
-    sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 + 100, SCREEN_HEIGHT/2 - 300));
+    sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 + 100, 200));
     sprite.setScale(3, 3);
     window_->draw(sprite);
     sf::FloatRect bounds = sprite.getGlobalBounds();
@@ -70,7 +82,7 @@ void View::drawViewStats() {
         sf::Sprite sprite;
         sprite.setTexture(texture);
         sprite.setScale(3, 3);
-        sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - sprite.getGlobalBounds().width, SCREEN_HEIGHT/2 - 300));
+        sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - sprite.getGlobalBounds().width, 200));
         window_->draw(sprite);
         sf::FloatRect bounds = sprite.getGlobalBounds();
 
@@ -85,37 +97,68 @@ void View::drawViewStats() {
         drawText(25, sf::Color::White, "No weapon equipped", true, sf::Vector2f(SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2));
     }
 
+    // Draw the bag contents
+    // TODO
+
     // Draw "return" button
-    sf::RectangleShape r = drawRectangle(100, 50, sf::Color(52, 152, 219), sf::Vector2f(100, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
-    drawText(17, sf::Color::White, "Return", true, sf::Vector2f(100, SCREEN_HEIGHT - 75));
+    sf::FloatRect arrow = drawSprite(100, SCREEN_HEIGHT - 75, "resources/Textures/return.png");
     controller_->clearActiveButtons();
-    controller_->addActiveButton(Controller::EXIT_SPECIAL_SCREEN, r.getGlobalBounds());
+    controller_->addActiveButton(Controller::EXIT_SPECIAL_SCREEN, arrow);
 }
 
-void View::drawBackground() {
-    // Draw the status bar
-    sf::Text health = generateText(25, sf::Color::White, "Monsieur Moustache: " + std::to_string(model_->player().health()), false);
-    health.setPosition(sf::Vector2f(100, 100));
-    window_->draw(health);
+sf::IntRect cropImage(int percentage, int width, int height) {
+    return sf::IntRect(0, 0, width * percentage / 100, height);
+}
 
-    sf::Text money = generateText(25, sf::Color::White, "$ " + std::to_string(model_->playerMoney()), false);
-    money.setPosition(sf::Vector2f(SCREEN_WIDTH - 100 - money.getLocalBounds().width, 100));
+#include <iostream>
+
+void View::drawBackground() {
+    controller_->clearActiveButtons();
+
+    // Health
+    auto empty_bar = drawSprite(50, 50, "resources/Textures/empty_bar.png", sf::IntRect(), false);
+    drawSprite(50, 50, "resources/Textures/green_bar.png", cropImage(model_->player().health(), 425, 57), false);
+
+    // Money
+    drawSprite(50 + empty_bar.width + 50, 30, "resources/Textures/coin_pile.png", sf::IntRect(), false);
+    sf::Text money = generateText(25, sf::Color::White, std::to_string(model_->playerMoney()), false);
+    money.setPosition(sf::Vector2f(50 + empty_bar.width + 125, 60));
     window_->draw(money);
 
-    // Add buttons
-    sf::RectangleShape r1 = drawRectangle(250, 50, sf::Color(52, 152, 219), sf::Vector2f(175, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
-    drawText(17, sf::Color::White, "Change character", true, sf::Vector2f(175, SCREEN_HEIGHT - 75));
+    // Backpack button
+    sf::FloatRect backpack = drawSprite(50 + empty_bar.width + 240, 75, "resources/Textures/pack.png");
+    controller_->addActiveButton(Controller::VIEW_STATS, backpack);
 
-    sf::RectangleShape r2 = drawRectangle(150, 50, sf::Color(52, 152, 219), sf::Vector2f(435, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
-    drawText(17, sf::Color::White, "View stats", true, sf::Vector2f(435, SCREEN_HEIGHT - 75));
+    // Quick-access items
+    sf::FloatRect slots = drawSprite(backpack.left + backpack.width + 50, 30, "resources/Textures/slots.png", sf::IntRect(), false);
+    std::vector<Prop> quickAccessItems = model_->player().quickAccessContents();
+    for (int i=0; i < int(quickAccessItems.size()); i++) {
+        auto it = quickAccessItems[i];
+        if (it.isOnSheet()) {
+            sf::IntRect playerImage = getCharImage(it);
+            sf::FloatRect item = drawSprite(it.x(), it.y(), it.path(), playerImage);
+            controller_->addActiveButton(static_cast<Controller::Button>(i), item);
+        } else {
+            sf::FloatRect item =  drawSprite(it.x(), it.y(), it.path());
+            controller_->addActiveButton(static_cast<Controller::Button>(i), item);
+        }
+    }
 
-    sf::RectangleShape r3 = drawRectangle(100, 50, sf::Color(52, 152, 219), sf::Vector2f(625, SCREEN_HEIGHT - 75), 10, sf::Color(41, 128, 185));
-    drawText(17, sf::Color::White, "Reset", true, sf::Vector2f(625, SCREEN_HEIGHT - 75));
+    // Change character
+    sf::RectangleShape change = drawRectangle(255, 50, sf::Color(52, 152, 219),
+                                          sf::Vector2f(slots.left + slots.width + 50, 50), 10,
+                                          sf::Color(41, 128, 185), false);
+    drawText(17, sf::Color::White, "Change character", false,
+             sf::Vector2f(slots.left + slots.width + 60, 65));
+    controller_->addActiveButton(Controller::CHANGE_PLAYER, change.getGlobalBounds());
 
-    controller_->clearActiveButtons();
-    controller_->addActiveButton(Controller::CHANGE_PLAYER, r1.getGlobalBounds());
-    controller_->addActiveButton(Controller::VIEW_STATS, r2.getGlobalBounds());
-    controller_->addActiveButton(Controller::RESET, r3.getGlobalBounds());
+    // Reset
+    sf::RectangleShape reset = drawRectangle(100, 50, sf::Color(52, 152, 219),
+                                          sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 50, 50), 10,
+                                          sf::Color(41, 128, 185), false);
+    drawText(17, sf::Color::White, "Reset", false,
+             sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 60, 65));
+    controller_->addActiveButton(Controller::RESET, reset.getGlobalBounds());
 }
 
 
@@ -126,9 +169,9 @@ void View::drawEvent(Notification event) {
             break;
 
         case Notification::PLAYER_ATTACK:
-            // Draw the player's active weapon
-            if (model_->player().hasWeapon()) {
-                drawSprite(model_->player().x() + model_->player().width() / 2, model_->player().y(), model_->player().activeWeaponPath());
+            if (model_->player().hasWeapon()){
+                auto player = model_->player();
+                drawActivePlayerWeapon(player);
             }
 
             if (event.hit) {   // Draw a hit above the enemy
@@ -174,9 +217,9 @@ void View::drawEvent(Notification event) {
                             Helper functions
  *************************************************************************/
 
-sf::RectangleShape View::drawRectangle(int w, int h, sf::Color c1, sf::Vector2f pos, int th, sf::Color c2) {
+sf::RectangleShape View::drawRectangle(int w, int h, sf::Color c1, sf::Vector2f pos, int th, sf::Color c2, bool center) {
     sf::RectangleShape rectangle(sf::Vector2f(w, h));
-    rectangle.setOrigin(w/2, h/2);
+    if (center) rectangle.setOrigin(w/2, h/2);
     rectangle.setPosition(pos);
     rectangle.setFillColor(c1);
     rectangle.setOutlineThickness(th);
@@ -185,45 +228,31 @@ sf::RectangleShape View::drawRectangle(int w, int h, sf::Color c1, sf::Vector2f 
     return rectangle;
 }
 
-sf::Text View::generateText(int size, sf::Color color, std::string text, bool resetOrigin) {
+sf::Text View::generateText(int size, sf::Color color, std::string text, bool centerOrigin) {
     sf::Text t;
     t.setFont(font_);
     t.setCharacterSize(size);
     t.setFillColor(color);
     t.setStyle(sf::Text::Bold);
     t.setString(text);
-    if (resetOrigin) t.setOrigin(t.getLocalBounds().width/2, t.getLocalBounds().height/2);
+    if (centerOrigin) t.setOrigin(t.getLocalBounds().width/2, t.getLocalBounds().height/2);
     return t;
 }
 
-void View::drawText(int size, sf::Color color, std::string text, bool origin, sf::Vector2f pos) {
-    sf::Text t = generateText(size, color, text, origin);
+void View::drawText(int size, sf::Color color, std::string text, bool center_origin, sf::Vector2f pos) {
+    sf::Text t = generateText(size, color, text, center_origin);
     t.setPosition(pos);
     window_->draw(t);
 }
 
-sf::FloatRect View::drawSprite(float x, float y, std::string path) {
-    sf::Texture texture;
-    texture.loadFromImage(imageCache_[path]);
-
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.setPosition(sf::Vector2f(x, y));
-    sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
-
-    window_->draw(sprite);
-    return sprite.getGlobalBounds();
-}
-
-// Overloaded version which takes only a section of an image as the texture
-sf::FloatRect View::drawSprite(float x, float y, std::string path, sf::IntRect selection) {
+sf::FloatRect View::drawSprite(float x, float y, std::string path, sf::IntRect selection, bool center_origin) {
     sf::Texture texture;
     texture.loadFromImage(imageCache_[path], selection);
 
     sf::Sprite sprite;
     sprite.setTexture(texture);
     sprite.setPosition(sf::Vector2f(x, y));
-    sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+    if (center_origin) sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 
     window_->draw(sprite);
     return sprite.getGlobalBounds();

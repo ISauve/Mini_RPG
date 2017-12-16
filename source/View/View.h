@@ -54,6 +54,11 @@ class View : public Observer {
     // (reads input from the keyboard)
     sf::IntRect getPlayerImage(Sprite&);
 
+    // Determines which side to draw the weapon on base on direction char is moving
+    // (reads input from the keyboard)
+    void drawPlayerWeapon(Character&);
+    void drawActivePlayerWeapon(Character&);
+
     // Grabs the correct image to use off a character sheet based on their set row/col
     sf::IntRect getCharImage(Sprite& s);
 
@@ -66,11 +71,10 @@ class View : public Observer {
     void drawViewStats();
 
     // Helpers
-    sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color);
+    sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color, bool = true);
     sf::Text generateText(int, sf::Color, std::string, bool);
     void drawText(int, sf::Color, std::string, bool, sf::Vector2f);
-    sf::FloatRect drawSprite(float, float, std::string);
-    sf::FloatRect drawSprite(float, float, std::string, sf::IntRect);
+    sf::FloatRect drawSprite(float, float, std::string, sf::IntRect = sf::IntRect(), bool = true);
 
 public:
     View(Model*, Controller*);

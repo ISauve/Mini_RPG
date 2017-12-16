@@ -2,8 +2,10 @@
 #define MINI_RPG_CHARACTER_H
 
 #include "Sprite.h"
+#include "Prop.h"
 #include <vector>
 
+class Prop;
 class Tool;
 class Weapon;
 class Armor;
@@ -17,7 +19,8 @@ class Character : public Sprite {
     int speed_;
 
     // Tools owned by this character
-    std::vector< Tool* > tools_;
+    std::vector< Tool* > quickAccess_;
+    std::vector< Tool* > bag_;
 
     // Equipped items
     Weapon* weapon_;
@@ -45,20 +48,29 @@ public:
     void move(float n, float m) { x_ += n; y_ += m; };
     void hit(int);
     void setActiveEnemy(bool b) { activeEnemy_ = b; };
-    void addHealth(int h) { health_ += h; };
+    void addHealth(int h) {
+        health_ += h;
+        if (health_ > 100) health_ = 100;
+    };
     void setPlayer(bool b) { isPlayer_ = b; };
 
     // Weapon-related functions
     bool hasWeapon() const { return weapon_ != nullptr; };
     std::string weaponPath() const;
+    std::string weaponPathR() const;
     std::string activeWeaponPath() const;
+    std::string activeWeaponPathR() const;
     int weaponStrength() const;
     int weaponWeight() const;
     void equipWeapon(Weapon*);
     void removeWeapon();
 
     // Tool-related functions
-    // ie drop, add, etc        todo
+    void addTool(Tool*);
+    //void dropTool();
+    std::vector<Prop> quickAccessContents();
+    void useQuickAccess(int);
+    //std::vector<Prop*> bagContents();
 
     bool operator == (const Character& c) const {
         return (this->x() == c.x() &&           // same location

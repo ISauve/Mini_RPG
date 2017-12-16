@@ -63,13 +63,15 @@ public:
             if (config["animations"]["attack"]["activePath"]) {
                 ref.setActivePath(config["animations"]["attack"]["activePath"].as<std::string>());
             }
+            if (config["animations"]["attack"]["activePathR"]) {
+                ref.setActivePathR(config["animations"]["attack"]["activePathR"].as<std::string>());
+            }
 
-            // TODO:
-            //   animations
-            //   other immediate effects
-            //   strength
+            if (config["image"]["pathR"]) ref.setPathR(config["image"]["pathR"].as<std::string>());
+            if (config["strength"]) ref.setStrength(config["strength"].as<int>());
+            if (config["weight"]) ref.setWeight(config["weight"].as<int>());
+
             //   defense
-            //   weight
             //   bonus health
             //   other bonus features
             //   ability

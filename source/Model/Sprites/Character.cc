@@ -15,9 +15,19 @@ std::string Character::weaponPath() const {
     return weapon_->path();
 };
 
+std::string Character::weaponPathR() const {
+    if (weapon_ == nullptr) return "error: no weapon set";
+    return weapon_->pathR();
+};
+
 std::string Character::activeWeaponPath() const {
     if (weapon_ == nullptr) return "error: no weapon set";
     return weapon_->activePath();
+};
+
+std::string Character::activeWeaponPathR() const {
+    if (weapon_ == nullptr) return "error: no weapon set";
+    return weapon_->activePathR();
 };
 
 int Character::weaponStrength() const {
@@ -48,13 +58,13 @@ void Character::hit(int n) {
 };
 
 void Character::equipWeapon(Weapon* w) {
-    if (weapon_ != nullptr) delete weapon_;
+    if (weapon_ != nullptr) addTool(weapon_);   // unequip current weapon
     weapon_ = w;
 };
 
 void Character::removeWeapon() {
     if (weapon_ == nullptr) return;
-    delete weapon_;
+    addTool(weapon_);
     weapon_ = nullptr;
 };
 
@@ -70,3 +80,42 @@ int Character::timeOut() {
     if (weapon_ != nullptr) spd -= weapon_->weight();
     return maxTimeout - int(floor(distr(generate_rand) * speed_));
 }
+
+void Character::addTool(Tool* t) {
+    if (quickAccess_.size() < 7) quickAccess_.push_back(t);
+    else bag_.push_back(t);
+}
+
+std::vector<Prop> Character::quickAccessContents() {
+    std::vector<Prop> props;
+    // Quick access bar starts at 810/30 & each slot is 85 wide/90 tall
+    for (int i=0; i < int(quickAccess_.size()); i++) {
+        Prop prop = Prop::makeProp(quickAccess_[i]->name(), 810 + 43 + 85*i, 30 + 45);
+        props.push_back(prop);
+    }
+    return props;
+}
+
+#include <iostream>
+void Character::useQuickAccess(int slot) {
+    Tool* item = quickAccess_[slot];
+
+    // If it's a weapon, equip it
+    try {
+        Weapon* weapon = dynamic_cast< Weapon* >(item);
+        equipWeapon(weapon);
+        quickAccess_.erase(quickAccess_.begin() + slot);
+        return;
+    } catch (...) {};
+
+    // handle other items       todo
+}
+
+/*
+std::vector<Tool> Character::bagContents() {
+    std::vector<Prop*> props;
+    for (auto tool : tools_) {
+        Prop* prop = Prop::makeProp(tool);
+    }
+}
+ */

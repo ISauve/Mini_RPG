@@ -85,6 +85,7 @@ void Controller::handleKeyPress(sf::Event& e) {
 }
 
 
+#include <iostream>
 void Controller::handleMouseClick(sf::Event& e) {
     std::lock_guard<std::mutex> lock(buttonsLock_);
     int x = e.mouseButton.x;
@@ -94,6 +95,27 @@ void Controller::handleMouseClick(sf::Event& e) {
     for (auto it : activeButtonAreas_) {
         if ( it.second.contains(x, y) ) {
             switch (it.first) {
+                case QUICK_ACCESS_1:
+                    modelChannel_.send(EventPackage(EventPackage::QUICK_ACCESS, 0));
+                    break;
+                case QUICK_ACCESS_2:
+                    modelChannel_.send(EventPackage(EventPackage::QUICK_ACCESS, 1));
+                    break;
+                case QUICK_ACCESS_3:
+                    modelChannel_.send(EventPackage(EventPackage::QUICK_ACCESS, 2));
+                    break;
+                case QUICK_ACCESS_4:
+                    modelChannel_.send(EventPackage(EventPackage::QUICK_ACCESS, 3));
+                    break;
+                case QUICK_ACCESS_5:
+                    modelChannel_.send(EventPackage(EventPackage::QUICK_ACCESS, 4));
+                    break;
+                case QUICK_ACCESS_6:
+                    modelChannel_.send(EventPackage(EventPackage::QUICK_ACCESS, 5));
+                    break;
+                case QUICK_ACCESS_7:
+                    modelChannel_.send(EventPackage(EventPackage::QUICK_ACCESS, 6));
+                    break;
                 case CHANGE_PLAYER:
                     modelChannel_.send(EventPackage(EventPackage::CHANGE_PLAYER));
                     break;

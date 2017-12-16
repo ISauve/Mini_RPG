@@ -109,16 +109,19 @@ void View::drawFrame() {
     for (auto& it : sprites) {
         try {  // Attempt to downcast sprite to character
             auto character = dynamic_cast<Character&>(it.get());
-            // Only characters can have weapons
-            if (character.hasWeapon()) {
-                drawSprite(character.x() - character.width() / 2, character.y(), character.weaponPath());
-            }
 
             // The player gets drawn differently (image used depends on the keys being pressed)
             if (character.isPlayer()) {
                 sf::IntRect playerImage = getPlayerImage(it);
                 drawSprite(character.x(), character.y(), character.path(), playerImage);
+
+                if (character.hasWeapon()) drawPlayerWeapon(character);
                 continue;
+            }
+
+            // Only characters can have weapons
+            if (character.hasWeapon()) {
+                drawSprite(character.x() - character.width() / 2, character.y(), character.weaponPath());
             }
         } catch (std::bad_cast &e) {};
 
@@ -141,6 +144,24 @@ void View::drawFrame() {
     // Remove any "expired" temporary events
     temporaryEvents_.erase(std::remove_if(temporaryEvents_.begin(), temporaryEvents_.end(),
         [](std::pair<Notification, int> event) { return event.second <= 0; }), temporaryEvents_.end());
+}
+
+void View::drawPlayerWeapon(Character& c) {
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ) {
+        drawSprite(c.x() + c.width() / 2, c.y(), c.weaponPathR());
+        return;
+    }
+
+    drawSprite(c.x() - c.width() / 2, c.y(), c.weaponPath());
+}
+
+void View::drawActivePlayerWeapon(Character& c) {
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ) {
+        drawSprite(c.x() + c.width() / 2, c.y(), c.activeWeaponPathR());
+        return;
+    }
+
+    drawSprite(c.x() - c.width() / 2, c.y(), c.activeWeaponPath());
 }
 
 static int counter = 0;

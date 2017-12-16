@@ -23,7 +23,7 @@ characters:
   - active: false
     str: 10
     sp: 3
-    x: 592
+    x: 700
     y: 512
     sheet: false
     path: "resources/Textures/Enemy_1.png"
@@ -34,8 +34,21 @@ characters:
   - active: false
     str: 10
     sp: 3
-    x: 692
-    y: 312
+    x: 1400
+    y: 300
+    sheet: true
+    path: "resources/Textures/Character_set_5.png"
+    row: 4
+    col: 7
+    w: 80
+    h: 80
+
+  # Skeleton
+  - active: true
+    str: 5
+    sp: 3
+    x: 1000
+    y: 700
     sheet: true
     path: "resources/Textures/Character_set_5.png"
     row: 4
@@ -47,8 +60,8 @@ characters:
   - active: true
     str: 10
     sp: 3
-    x: 292
-    y: 212
+    x: 300
+    y: 350
     sheet: true
     path: "resources/Textures/Character_set_5.png"
     row: 4
@@ -61,7 +74,7 @@ characters:
   - active: true
     str: 10
     sp: 4
-    x: 950
+    x: 1550
     y: 850
     sheet: true
     path: "resources/Textures/Character_set_5.png"
@@ -71,23 +84,64 @@ characters:
     h: 80
     weapon: "default enemy sword"
 
+  # Zombie
+  - active: false
+    str: 5
+    sp: 4
+    x: 250
+    y: 950
+    sheet: true
+    path: "resources/Textures/Character_set_5.png"
+    row: 0
+    col: 11
+    w: 80
+    h: 80
+
 props:
-  - name: "heart"
-    x: 150
-    y: 800
+  - name: "default player sword"
+    x: 1000
+    y: 550
+  - name: "default player sword"
+    x: 1100
+    y: 550
+  - name: "default player sword"
+    x: 1200
+    y: 550
+
   - name: "heart"
     x: 200
-    y: 800
+    y: 200
   - name: "heart"
     x: 250
-    y: 800
+    y: 200
+  - name: "heart"
+    x: 300
+    y: 200
 
   - name: "coin"
-    x: 150
+    x: 1900
     y: 500
   - name: "coin"
-    x: 160
-    y: 300
+    x: 1900
+    y: 550
   - name: "coin"
-    x: 90
-    y: 630
+    x: 1900
+    y: 600
+  - name: "coin"
+    x: 1950
+    y: 500
+  - name: "coin"
+    x: 1950
+    y: 550
+  - name: "coin"
+    x: 1950
+    y: 600
+  - name: "coin"
+    x: 2000
+    y: 500
+  - name: "coin"
+    x: 2000
+    y: 550
+  - name: "coin"
+    x: 2000
+    y: 600

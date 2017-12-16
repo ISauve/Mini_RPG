@@ -15,7 +15,6 @@ cost: 0
 animations:
   attack:
     activePath: "resources/Textures/scratch.png"
-    timeout: 15
 
 acquirable: false
 strength: 2
