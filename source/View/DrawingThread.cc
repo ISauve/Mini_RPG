@@ -127,8 +127,8 @@ void View::drawFrame() {
 
         auto sprite = it.get();
         if (sprite.isOnSheet()) {
-            sf::IntRect playerImage = getCharImage(it);
-            drawSprite(sprite.x(), sprite.y(), sprite.path(), playerImage);
+            sf::IntRect selection = getSelection(it);
+            drawSprite(sprite.x(), sprite.y(), sprite.path(), selection);
         } else {
             drawSprite(sprite.x(), sprite.y(), sprite.path());
         }
@@ -144,66 +144,4 @@ void View::drawFrame() {
     // Remove any "expired" temporary events
     temporaryEvents_.erase(std::remove_if(temporaryEvents_.begin(), temporaryEvents_.end(),
         [](std::pair<Notification, int> event) { return event.second <= 0; }), temporaryEvents_.end());
-}
-
-void View::drawPlayerWeapon(Character& c) {
-    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ) {
-        drawSprite(c.x() + c.width() / 2, c.y(), c.weaponPathR());
-        return;
-    }
-
-    drawSprite(c.x() - c.width() / 2, c.y(), c.weaponPath());
-}
-
-void View::drawActivePlayerWeapon(Character& c) {
-    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ) {
-        drawSprite(c.x() + c.width() / 2, c.y(), c.activeWeaponPathR());
-        return;
-    }
-
-    drawSprite(c.x() - c.width() / 2, c.y(), c.activeWeaponPath());
-}
-
-static int counter = 0;
-sf::IntRect View::getPlayerImage(Sprite& s) {
-    int row = s.row();
-    int col = s.col();
-    int width = s.width();
-    int height = s.height();
-
-    // Select the rectangle for the "default" stance
-    sf::IntRect player_img = sf::IntRect(col*width, row*height, width, height);
-
-    // Animate player movement by changing the image if a key is pressed
-    bool animate = false;
-    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ) {
-        row = row+1; animate = true;
-    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ) {
-        row = row+2; animate = true;
-    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ) {
-        row = row+3; animate = true;
-    } else if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ) {
-        animate = true; }
-
-    if (animate) {
-        if (counter < 5)                            // 0-4
-            player_img = sf::IntRect( (col-1)*width, row*height, width, height );
-        else if (counter < 10 || counter >= 15)     // 5-9, 15-19
-            player_img = sf::IntRect( (col)*width, row*height, width, height );
-        else                                        // 10-14
-            player_img = sf::IntRect( (col+1)*width, row*height, width, height );
-
-        counter++; if (counter == 20) counter = 0;
-    }
-
-    return player_img;
-}
-
-sf::IntRect View::getCharImage(Sprite& s) {
-    int row = s.row();
-    int col = s.col();
-    int width = s.width();
-    int height = s.height();
-
-    return sf::IntRect(col*width, row*height, width, height);
 }

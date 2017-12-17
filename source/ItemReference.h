@@ -2,6 +2,7 @@
 #define MINI_RPG_ITEMREFERENCE_H
 
 #include <string>
+#include <iostream>
 
 // Item Reference class, holds all the stats relating to a particular type of item
 class ItemReference {
@@ -110,6 +111,34 @@ public:
     void setAbility(std::string a) { ability_ = a; };
     void setValue(int v) { value_ = v; };
     void setAcquirable(bool a) { acquirable_ = a; };
+
+    // for debugging
+    void print() {
+        using namespace std;
+
+        cout << "Printing item reference for " << name_ << endl;
+        cout << "\t Type: " << type_ << endl;
+        cout << "\t Drop chance: " << dropChance_ << endl;
+        cout << "\t Acquirable: " << acquirable_ << endl;
+        cout << "\t Image " << endl;
+        cout << "\t\t Path: " << path_ << endl;
+        cout << "\t\t Path (r): " << pathR_ << endl;
+        cout << "\t\t Sheet: " << sheet_ << endl;
+        cout << "\t\t Row: " << row_ << endl;
+        cout << "\t\t Col: " << col_ << endl;
+        cout << "\t\t Width: " << width_ << endl;
+        cout << "\t\t Height: " << height_ << endl;
+        cout << "\t Active path: " << activePath_ << endl;
+        cout << "\t Active path (r): " << activePathR_ << endl;
+        cout << "\t Strength: " << str_ << endl;
+        cout << "\t Strength: " << str_ << endl;
+        cout << "\t Defence: " << def_ << endl;
+        cout << "\t Weight: " << wght_ << endl;
+        cout << "\t Bonus health: " << bonusHealth_ << endl;
+        cout << "\t Healing: " << healing_ << endl;
+        cout << "\t Value: " << value_ << endl;
+        cout << "\t Ability: " << ability_ << endl;
+    }
 };
 
 

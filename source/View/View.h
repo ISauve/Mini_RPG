@@ -54,13 +54,14 @@ class View : public Observer {
     // (reads input from the keyboard)
     sf::IntRect getPlayerImage(Sprite&);
 
+    // Grabs the correct image to use off a character sheet based on a sprite's row/col
+    // Returns
+    sf::IntRect getSelection(Sprite& s);
+
     // Determines which side to draw the weapon on base on direction char is moving
     // (reads input from the keyboard)
     void drawPlayerWeapon(Character&);
     void drawActivePlayerWeapon(Character&);
-
-    // Grabs the correct image to use off a character sheet based on their set row/col
-    sf::IntRect getCharImage(Sprite& s);
 
     // Drawing functions
     void drawEvent(Notification);

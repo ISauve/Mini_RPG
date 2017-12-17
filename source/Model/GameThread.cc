@@ -36,9 +36,9 @@ void Model::startGameLoop() {
     }
 }
 
-#include <iostream>
 void Model::handleEvent(EventPackage e) {
     std::lock_guard<std::mutex> lock(charsLock_);       // most of these functions modify chars_
+    Notification effect;
     switch (e.type) {
         case EventPackage::MOVE_PLAYER:
             movePlayer(e.x, e.y);
@@ -64,7 +64,7 @@ void Model::handleEvent(EventPackage e) {
 
         case EventPackage::SELECT_PLAYER:
             // Set the new character
-            player_.setCharacter(e.row, e.col);
+            player_.setSheetPosition(e.row, e.col);
             // Notify the view that player selection is complete
             notify(Notification::EXIT_SPECIAL_SCREEN);
             specialScreen_ = false;
@@ -76,7 +76,8 @@ void Model::handleEvent(EventPackage e) {
             break;
 
         case EventPackage::QUICK_ACCESS:
-            player_.useQuickAccess(e.quickAccess);
+            effect = player_.useQuickAccess(e.quickAccess);
+            if (effect.type != Notification::NONE) notify(effect);
             break;
 
         default:
@@ -158,9 +159,6 @@ void Model::playerAttack() {
     // We only allow 1 attack per 500ms
     if (playerTimeout_ > 0) return;
 
-    // idea: only show sword swinging if weapon is wielded, otherwise show a hit  todo
-    // idea: show sword on L/R depending on which side enemy is standing          todo
-
     // Check if any enemies are in range - if so, attack them
     bool hit = false;
     for (int i = 0; i < int(chars_.size()); i++ ) {
@@ -180,7 +178,7 @@ void Model::playerAttack() {
 
             // If this is the first hit, activate the enemy
             if ( !chars_[i].hasWeapon() ) {
-                chars_[i].equipWeapon(Weapon::makeWeapon("default enemy sword"));
+                chars_[i].equipWeapon(Weapon::makeWeapon("Default enemy sword"));
             }
             if (!chars_[i].isActiveEnemy()) {
                 chars_[i].setActiveEnemy(true);

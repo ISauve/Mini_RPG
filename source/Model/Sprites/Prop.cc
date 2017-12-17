@@ -4,7 +4,9 @@
 #include "../../ItemReader.h"
 
 Prop::Prop(float x, float y, ItemReference* ref) :
-            Sprite(x, y, ref->sheet(), ref->path(), ref->width(), ref->healing()), ref_(ref) {};
+            Sprite(x, y, ref->sheet(), ref->path(), ref->width(), ref->height()), ref_(ref) {
+    if (ref->sheet()) setSheetPosition(ref->row(), ref->col());
+};
 
 Prop Prop::makeProp(std::string itemName, float x, float y) {
     return Prop(x, y, ItemReader::instance()->getReference(itemName));

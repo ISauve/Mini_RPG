@@ -68,7 +68,7 @@ characters:
     col: 1
     w: 80
     h: 80
-    weapon: "scratch"
+    weapon: "Scratch"
 
   # Zombie
   - active: true
@@ -82,7 +82,7 @@ characters:
     col: 11
     w: 80
     h: 80
-    weapon: "default enemy sword"
+    weapon: "Default enemy sword"
 
   # Zombie
   - active: false
@@ -98,50 +98,57 @@ characters:
     h: 80
 
 props:
-  - name: "default player sword"
-    x: 1000
-    y: 550
-  - name: "default player sword"
+  - name: "Default player sword"
     x: 1100
-    y: 550
-  - name: "default player sword"
-    x: 1200
-    y: 550
+    y: 350
 
-  - name: "heart"
+  - name: "Small health potion"
+    x: 700
+    y: 950
+  - name: "Medium health potion"
+    x: 750
+    y: 950
+  - name: "Large health potion"
+    x: 800
+    y: 950
+  - name: "X-Large health potion"
+    x: 850
+    y: 950
+
+  - name: "Heart"
     x: 200
     y: 200
-  - name: "heart"
+  - name: "Heart"
     x: 250
     y: 200
-  - name: "heart"
+  - name: "Heart"
     x: 300
     y: 200
 
-  - name: "coin"
-    x: 1900
+  - name: "Coin"
+    x: 1800
     y: 500
-  - name: "coin"
-    x: 1900
+  - name: "Coin"
+    x: 1800
     y: 550
-  - name: "coin"
-    x: 1900
+  - name: "Coin"
+    x: 1800
     y: 600
-  - name: "coin"
-    x: 1950
+  - name: "Coin"
+    x: 1850
     y: 500
-  - name: "coin"
-    x: 1950
+  - name: "Coin"
+    x: 1850
     y: 550
-  - name: "coin"
-    x: 1950
+  - name: "Coin"
+    x: 1850
     y: 600
-  - name: "coin"
-    x: 2000
+  - name: "Coin"
+    x: 1900
     y: 500
-  - name: "coin"
-    x: 2000
+  - name: "Coin"
+    x: 1900
     y: 550
-  - name: "coin"
-    x: 2000
+  - name: "Coin"
+    x: 1900
     y: 600

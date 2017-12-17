@@ -2,13 +2,13 @@
 #define MINI_RPG_CHARACTER_H
 
 #include "Sprite.h"
-#include "Prop.h"
 #include <vector>
 
 class Prop;
 class Tool;
 class Weapon;
 class Armor;
+struct Notification;
 class Character : public Sprite {
     bool activeEnemy_;
     bool isPlayer_;
@@ -60,16 +60,17 @@ public:
     std::string weaponPathR() const;
     std::string activeWeaponPath() const;
     std::string activeWeaponPathR() const;
+    std::string weaponName() const;
     int weaponStrength() const;
     int weaponWeight() const;
     void equipWeapon(Weapon*);
-    void removeWeapon();
+    void unequipWeapon();
 
     // Tool-related functions
     void addTool(Tool*);
     //void dropTool();
     std::vector<Prop> quickAccessContents();
-    void useQuickAccess(int);
+    Notification useQuickAccess(int);
     //std::vector<Prop*> bagContents();
 
     bool operator == (const Character& c) const {

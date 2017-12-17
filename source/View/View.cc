@@ -5,7 +5,8 @@
 
 View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false) {
     // Initialize the window (can be a local var because game ends when this returns)
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Izzy's OpenGL Adventure", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Izzy's OpenGL Adventure", sf::Style::Titlebar | sf::Style::Close);
+
 
     window.setActive(false);        // OpenGL context can only be active in 1 thread at a time
     window_ = &window;

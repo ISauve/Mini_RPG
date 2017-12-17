@@ -2,11 +2,12 @@
 #define MINI_RPG_REFERENCE_H
 
 #include "ItemReference.h"
-
 #include <yaml-cpp/yaml.h>
 #include <string>
 #include <map>
 #include <dirent.h>
+
+#include <iostream>
 
 // Reads configuration files for items & stores references for them
 // Singleton design pattern: one of these is created when the game starts, & that's it
@@ -56,8 +57,8 @@ public:
 
             // Add any extra data
             if (config["acquirable"]) ref.setAcquirable(config["acquirable"].as<bool>());
-            if (config["immediate_effect"]["healing"]) ref.setHealing(config["immediate_effect"]["healing"].as<int>());
-            if (config["immediate_effect"]["value"]) ref.setValue(config["immediate_effect"]["value"].as<int>());
+            if (config["effect"]["healing"]) ref.setHealing(config["effect"]["healing"].as<int>());
+            if (config["effect"]["value"]) ref.setValue(config["effect"]["value"].as<int>());
 
             // Animations should be dealt with in a better way  TODO
             if (config["animations"]["attack"]["activePath"]) {
@@ -77,6 +78,9 @@ public:
             //   ability
 
             references_[name] =  ref;
+
+            // For debugging
+            //ref.print();
         }
     };
 

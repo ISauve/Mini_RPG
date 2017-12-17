@@ -1,8 +1,9 @@
-name: "scratch"
+name: "Scratch"
 type: "weapon"
 
 image:
   path: "resources/Textures/null.png"
+  pathR: ""
   sheet: false
   row: 0
   col: 0
@@ -15,6 +16,7 @@ cost: 0
 animations:
   attack:
     activePath: "resources/Textures/scratch.png"
+    activePathR: ""
 
 acquirable: false
 strength: 2

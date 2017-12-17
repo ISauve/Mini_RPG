@@ -23,7 +23,7 @@ void ConfigReader::readConfig(std::string path) {
 
         // Add the optional data
         if (it["active"]) character.setActiveEnemy(it["active"].as<bool>());
-        if (it["row"] && it["col"]) character.setCharacter(it["row"].as<int>(), it["col"].as<int>());
+        if (it["row"] && it["col"]) character.setSheetPosition(it["row"].as<int>(), it["col"].as<int>());
         if (it["weapon"]) character.equipWeapon(Weapon::makeWeapon(it["weapon"].as<std::string>()));
 
         // Store the character

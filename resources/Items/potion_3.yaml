@@ -1,0 +1,18 @@
+name: "Large health potion"
+type: "item"
+
+image:
+  path: "resources/Textures/potion_sheet.png"
+  sheet: true
+  row: 0
+  col: 3
+  w: 58
+  h: 58
+
+drop_chance: 5
+cost: 10
+
+acquirable: true
+effect:
+  healing: 75
+

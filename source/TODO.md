@@ -32,7 +32,7 @@
 - [ ] Add more items
     - [ ] Swords
     - [ ] Armor
-    - [ ] Potions
+    - [x] Potions
 - [ ] Player item storage
     - [x] Bag for storing items
     - [ ] **Ability to view bag**

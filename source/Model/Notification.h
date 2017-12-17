@@ -4,10 +4,10 @@
 #include "Sprites/Character.h"
 
 struct Notification {
-    enum Code {PLAYER_ATTACK, ENEMY_ATTACK, ENEMY_DIED, PLAYER_DIED, PLAYER_COLLISION, CHANGE_PLAYER,
+    enum Code {NONE, PLAYER_ATTACK, ENEMY_ATTACK, ENEMY_DIED, PLAYER_DIED, PLAYER_COLLISION, CHANGE_PLAYER,
         EXIT_SPECIAL_SCREEN, HEALED, GOT_MONEY, QUIT, RESET, VIEW_STATS};
 
-    Notification(){};
+    Notification() : type(NONE) {};
     Notification(Code n) : type(n) {};
 
     // Code for which animation is required

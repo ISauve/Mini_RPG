@@ -28,8 +28,8 @@ animations:
 # Can this item be acquired (can it turn into a tool)
 acquirable: false
 
-# Optional: immediate effect of the item if it's not acquirable (ie a heart)
-# immediate_effect:
+# Optional: effect of the item
+# effect:
 #  healing: 50       # health points it regenerates
 #  value: 0          # how much money it gives you
 #  temp_strength:

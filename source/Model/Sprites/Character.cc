@@ -1,5 +1,8 @@
 #include "Character.h"
+#include "Prop.h"
 #include "../Tools/Weapon.h"
+#include "../Tools/Item.h"
+#include "../Notification.h"
 #include <random>
 
 Character::Character() : Sprite(0, 0, false, "", 0, 0),
@@ -40,6 +43,11 @@ int Character::weaponWeight() const {
     return weapon_->weight();
 };
 
+std::string Character::weaponName() const {
+    if (weapon_ == nullptr) return "error: no weapon set";
+    return weapon_->name();
+}
+
 int Character::attack(Character* c) const {
     std::random_device rd;
     std::mt19937 generate_rand(rd());;
@@ -58,11 +66,11 @@ void Character::hit(int n) {
 };
 
 void Character::equipWeapon(Weapon* w) {
-    if (weapon_ != nullptr) addTool(weapon_);   // unequip current weapon
+    unequipWeapon();
     weapon_ = w;
 };
 
-void Character::removeWeapon() {
+void Character::unequipWeapon() {
     if (weapon_ == nullptr) return;
     addTool(weapon_);
     weapon_ = nullptr;
@@ -96,19 +104,25 @@ std::vector<Prop> Character::quickAccessContents() {
     return props;
 }
 
-#include <iostream>
-void Character::useQuickAccess(int slot) {
-    Tool* item = quickAccess_[slot];
+Notification Character::useQuickAccess(int slot) {
+    Tool* tool = quickAccess_[slot];
+    Notification notification;
 
     // If it's a weapon, equip it
-    try {
-        Weapon* weapon = dynamic_cast< Weapon* >(item);
+    if (tool->type() == "weapon") {
+        Weapon* weapon = dynamic_cast< Weapon* >(tool);
         equipWeapon(weapon);
-        quickAccess_.erase(quickAccess_.begin() + slot);
-        return;
-    } catch (...) {};
+    } else if (tool->type() == "item") {
+        Item* item = dynamic_cast< Item* >(tool);
+        if (item->healing() > 0) {
+            addHealth(item->healing());
+            notification = Notification::HEALED;
+            notification.healed = item->healing();
+        }
+    }
 
-    // handle other items       todo
+    quickAccess_.erase(quickAccess_.begin() + slot);
+    return notification;
 }
 
 /*

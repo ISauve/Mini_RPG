@@ -33,8 +33,7 @@ public:
     int zIndex() const { return zIndex_; };
 
     // Mutators
-    void setCharacter(int, int);
-    void setImage(std::string p) { path_ = p; };
+    void setSheetPosition(int, int);
     void setZIndex(int z) { zIndex_ = z; };
 };
 
