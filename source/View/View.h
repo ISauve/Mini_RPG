@@ -17,7 +17,7 @@
 #include <dirent.h>
 
 // View: displays the game to the user
-//	-> observes the model
+//  -> observes the model
 //  -> can query the model for information (ie character positions)
 
 class Model;
@@ -35,6 +35,8 @@ class View : public Observer {
     // Images used (stored in memory for fast access)
     std::map<std::string, sf::Image> imageCache_;
     void loadImages();
+
+    bool animateSplashScreen();
 
     bool gameOver_;
     enum ViewState {PLAYING, SELECT_PLAYER, QUIT, DEAD, VIEW_STATS};
@@ -75,7 +77,7 @@ class View : public Observer {
     sf::RectangleShape drawRectangle(int, int, sf::Color, sf::Vector2f, int, sf::Color, bool = true);
     sf::Text generateText(int, sf::Color, std::string, bool);
     void drawText(int, sf::Color, std::string, bool, sf::Vector2f);
-    sf::FloatRect drawSprite(float, float, std::string, sf::IntRect = sf::IntRect(), bool = true);
+    sf::FloatRect drawSprite(float, float, std::string, sf::IntRect = sf::IntRect(), bool = true, float scale = 1);
 
 public:
     View(Model*, Controller*);

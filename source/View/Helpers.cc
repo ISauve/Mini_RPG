@@ -31,7 +31,7 @@ void View::drawText(int size, sf::Color color, std::string text, bool center_ori
     window_->draw(t);
 }
 
-sf::FloatRect View::drawSprite(float x, float y, std::string path, sf::IntRect selection, bool center_origin) {
+sf::FloatRect View::drawSprite(float x, float y, std::string path, sf::IntRect selection, bool center_origin, float scale) {
     sf::Texture texture;
     if (!texture.loadFromImage(imageCache_[path], selection)) {
         std::cerr << "Couldn't draw image for sprite. Image path: " << path << std::endl;
@@ -40,6 +40,7 @@ sf::FloatRect View::drawSprite(float x, float y, std::string path, sf::IntRect s
     sf::Sprite sprite;
     sprite.setTexture(texture);
     sprite.setPosition(sf::Vector2f(x, y));
+    sprite.setScale(scale, scale);
     if (center_origin) sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 
     window_->draw(sprite);

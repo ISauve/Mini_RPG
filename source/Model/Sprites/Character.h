@@ -71,7 +71,7 @@ public:
     //void dropTool();
     std::vector<Prop> quickAccessContents();
     Notification useQuickAccess(int);
-    //std::vector<Prop*> bagContents();
+    std::vector<Prop> items();
 
     bool operator == (const Character& c) const {
         return (this->x() == c.x() &&           // same location

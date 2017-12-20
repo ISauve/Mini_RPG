@@ -131,24 +131,36 @@ void Model::movePlayer(int x, int y) {
         float dist_y = std::abs(player_.y() - (*it).y());
 
         if ( dist_x < player_.width()/2 && dist_y < player_.height()/2) {
-            if ((*it).acquirable()) {
-                player_.addTool(Tool::makeTool((*it).name()));
-            } else {
-                if ((*it).healing() > 0) {
-                    player_.addHealth((*it).healing());
-                    Notification effect(Notification::HEALED);
-                    effect.healed = (*it).healing();
-                    notify(effect);
-                }
-                if ((*it).value() > 0) {
-                    playerMoney_ += (*it).value();
-                    Notification event(Notification::GOT_MONEY);
-                    event.value = (*it).value();
-                    notify(event);
-                }
-            }
+            handleItemCollision(*it);
             props_.erase(it);
         } else it++;
+    }
+}
+
+// Always called from within a function with a charsLock
+void Model::handleItemCollision(Prop item) {
+    if (item.acquirable()) {
+        auto tool = Tool::makeTool(item.name());
+
+        // If it's a weapon & the player doesn't currently have one, equip it
+        if (tool->type() == "weapon" && !player_.hasWeapon()) {
+            Weapon* weapon = dynamic_cast< Weapon* >(tool);
+            player_.equipWeapon(weapon);
+        }
+        else player_.addTool(tool);
+    } else {
+        if (item.healing() > 0) {
+            player_.addHealth(item.healing());
+            Notification effect(Notification::HEALED);
+            effect.healed = item.healing();
+            notify(effect);
+        }
+        if (item.value() > 0) {
+            playerMoney_ += item.value();
+            Notification event(Notification::GOT_MONEY);
+            event.value = item.value();
+            notify(event);
+        }
     }
 }
 

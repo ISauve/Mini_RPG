@@ -17,9 +17,10 @@
     - [ ] Maybe: Have animations be player fields which can be read & interpreted by the view
 - [ ] Add proper error handling (especially for input files)
 - [ ] Player's speed should also affect timeout before being able to attack again
+    - _Alternate: player speed affects the speed at which they walk_
 - [ ] Weapons should have a specific animation location based on character orientation
     - [x] Facing L/R -> attacking L/R
-    - [ ] **Facing down/up -> attacking in direction of enemy**
+    - [ ] Facing down/up -> attacking in direction of enemy
     - [ ] Same as above for enemies
 - [ ] Friendly characters
     - [ ] Need a new class for them with holds their state (ie if they've been spoken to, what they have for sale, etc)
@@ -35,16 +36,19 @@
     - [x] Potions
 - [ ] Player item storage
     - [x] Bag for storing items
-    - [ ] **Ability to view bag**
+    - [x] Ability to view bag
     - [x] Shortcuts to items: top of screen should have slots which you can designate as "active" items
     - [ ] Ability to move items from bag <-> quick access slots
+    - [ ] Items of the same time should stack (ie 10 potions takes 1 slot)
+    - [ ] Handle bag being full
 - [ ] Item drop ability
     - [x] Every item has a drop probability
     - [ ] Enemies own items
     - [ ] Killing -> generate a drop rate on items, those above a certain threshold get dropped
 - [ ] Decorations/background
-    - [ ] Things can be walked on
-    - [ ] Things that block your path
+    - [x] Splash screen on loading
+    - [ ] **Things can be walked on**
+    - [ ] **Things that block your path**
     - [ ] Bug fix: temporary events shouldn't always be drawn last (ie crossbones)
 - [ ] Screen boundaries 
 - [ ] Ability to cross between screens (in certain areas)

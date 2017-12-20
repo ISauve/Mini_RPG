@@ -6,9 +6,6 @@
 View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false) {
     // Initialize the window (can be a local var because game ends when this returns)
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Izzy's OpenGL Adventure", sf::Style::Titlebar | sf::Style::Close);
-
-
-    window.setActive(false);        // OpenGL context can only be active in 1 thread at a time
     window_ = &window;
     controller_->setWindow(window_);
 
@@ -23,9 +20,14 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
     music.play();
     viewState_ = PLAYING;
 
+    bool closedWindow = animateSplashScreen();
+    if (closedWindow) return;
+
     // Launch the 3 main game loops
+    window.setActive(false);    // OpenGL context can only be active in 1 thread at a time
     std::thread render_thread(&View::render, this);
     std::thread game_thread(&Model::startGameLoop, model_);
+
     // Note: "main" thread has to be the controller because SFML does not allow window
     // event processing in threads (only rendering)
     controller_->handleEvents();
@@ -56,3 +58,54 @@ void View::loadImages() {
         imageCache_[path] = image;
     }
 };
+
+bool View::animateSplashScreen() {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    sf::Texture bgTexture;
+    bgTexture.loadFromImage(imageCache_["resources/Textures/splash_screen.png"]);
+
+    sf::Texture titleTexture;
+    titleTexture.loadFromImage(imageCache_["resources/Textures/splash_screen_title.png"]);
+
+    int transparency = 0;
+    while (window_->isOpen()){
+        sf::Event event;
+        while (window_->pollEvent(event)){
+            if (event.type == sf::Event::EventType::Closed) {
+                window_->close();
+                return true;
+            }
+        }
+
+        auto now = std::chrono::high_resolution_clock::now();
+        auto timePassed = std::chrono::duration_cast<std::chrono::seconds>(now - start);
+
+        if (timePassed.count() > 2) return false;
+
+        window_->clear(sf::Color::Black);
+
+        // Draw the background
+        sf::Sprite sprite;
+        sprite.setTexture(bgTexture);
+        sprite.setPosition(sf::Vector2f(0, 0));
+        window_->draw(sprite);
+
+        // After 0.5s, fade in the title
+        if (timePassed.count() >= 0.5) {
+            sf::Sprite sprite;
+            sprite.setTexture(titleTexture);
+            sprite.setColor(sf::Color(255, 255, 255, transparency));
+            sprite.setPosition(sf::Vector2f(0, 0));
+            window_->draw(sprite);
+
+            if (transparency < 255) {
+                transparency += 3;
+                if (transparency > 255) transparency = 255;
+            }
+        }
+
+        window_->display();
+    }
+    return true;
+}

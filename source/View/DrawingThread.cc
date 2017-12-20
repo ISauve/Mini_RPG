@@ -30,7 +30,6 @@ void View::render() {
     }
 }
 
-
 void View::handleUpdate(Notification event) {
     switch (event.type) {
         case Notification::QUIT:

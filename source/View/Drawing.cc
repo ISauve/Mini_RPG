@@ -151,19 +151,20 @@ void View::drawBackground() {
     }
 
     // Change character
-    sf::RectangleShape change = drawRectangle(255, 50, sf::Color(52, 152, 219),
-                                              sf::Vector2f(slots.left + slots.width + 50, 50), 10,
+    sf::RectangleShape change = drawRectangle(160, 70, sf::Color(52, 152, 219),
+                                              // middle of slots = 81.5 from the top
+                                              sf::Vector2f(slots.left + slots.width + 50, 46.5), 10,
                                               sf::Color(41, 128, 185), false);
-    drawText(17, sf::Color::White, "Change character", false,
-             sf::Vector2f(slots.left + slots.width + 60, 65));
+    drawText(17, sf::Color::White, "   Change\ncharacter", false,
+             sf::Vector2f(slots.left + slots.width + 64, 58));
     controller_->addActiveButton(Controller::CHANGE_PLAYER, change.getGlobalBounds());
 
     // Reset
     sf::RectangleShape reset = drawRectangle(100, 50, sf::Color(52, 152, 219),
-                                             sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 50, 50), 10,
+                                             sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 50, 56.5), 10,
                                              sf::Color(41, 128, 185), false);
     drawText(17, sf::Color::White, "Reset", false,
-             sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 60, 65));
+             sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 64, 71.5));
     controller_->addActiveButton(Controller::RESET, reset.getGlobalBounds());
 }
 
@@ -219,54 +220,55 @@ void View::drawPlayerDied() {
 };
 
 void View::drawViewStats() {
-    // Draw the player's image
-    Sprite player = model_->player();
-    sf::IntRect playerImage = getSelection(player);
-    sf::Texture texture;
-    texture.loadFromImage(imageCache_[model_->player().path()], playerImage);
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 + 100, 200));
-    sprite.setScale(3, 3);
-    window_->draw(sprite);
-    sf::FloatRect bounds = sprite.getGlobalBounds();
+    // Draw the player's image @ 3x size
+    Character player = model_->player();
+    sf::IntRect selection = getSelection(player);
+    sf::FloatRect bounds = drawSprite(200, 200, player.path(), selection, false, 3);
 
     // Add stats
     drawText(25, sf::Color::White, "Player Stats", true,
-             sf::Vector2f(SCREEN_WIDTH/2 + 100 + bounds.width/2, bounds.top +  bounds.height + 100));
+             sf::Vector2f(bounds.left + bounds.width/2, bounds.top +  bounds.height + 100));
     drawText(25, sf::Color::White, "Strength: " + std::to_string(model_->player().strength()), true,
-             sf::Vector2f(SCREEN_WIDTH/2 + 100 + bounds.width/2, bounds.top +  bounds.height + 150));
+             sf::Vector2f(bounds.left + bounds.width/2, bounds.top +  bounds.height + 150));
     drawText(25, sf::Color::White, "Speed: " + std::to_string(model_->player().speed()), true,
-             sf::Vector2f(SCREEN_WIDTH/2 + 100 + bounds.width/2, bounds.top + bounds.height + 200));
+             sf::Vector2f(bounds.left + bounds.width/2, bounds.top + bounds.height + 200));
 
-    // Draw the player's weapon, blown up 3x
-    if (model_->player().hasWeapon()) {
-        sf::Texture texture;
-        texture.loadFromImage(imageCache_[model_->player().weaponPath()]);
-        sf::Sprite sprite;
-        sprite.setTexture(texture);
-        sprite.setScale(3, 3);
-        sprite.setPosition(sf::Vector2f(SCREEN_WIDTH/2 - 100 - sprite.getGlobalBounds().width, 200));
-        window_->draw(sprite);
-        sf::FloatRect bounds = sprite.getGlobalBounds();
+    // Draw the player's weapon @ 3x size
+    if (player.hasWeapon()) {
+        bounds = drawSprite(700, 200, player.weaponPath(), sf::IntRect(), false, 3);
 
         // Add stats
         drawText(25, sf::Color::White, model_->player().weaponName(), true,
-                 sf::Vector2f(SCREEN_WIDTH/2 - 100 - bounds.width/2, bounds.top +  bounds.height + 100));
+                 sf::Vector2f(bounds.left + bounds.width/2, bounds.top +  bounds.height + 100));
         drawText(25, sf::Color::White, "Strength: " + std::to_string(model_->player().weaponStrength()), true,
-                 sf::Vector2f(SCREEN_WIDTH/2 - 100 - bounds.width/2, bounds.top +  bounds.height + 150));
+                 sf::Vector2f(bounds.left + bounds.width/2, bounds.top +  bounds.height + 150));
         drawText(25, sf::Color::White, "Weight: " + std::to_string(model_->player().weaponWeight()), true,
-                 sf::Vector2f(SCREEN_WIDTH/2 - 100 - bounds.width/2, bounds.top + bounds.height + 200));
+                 sf::Vector2f(bounds.left + bounds.width/2, bounds.top + bounds.height + 200));
     } else {
-        drawText(25, sf::Color::White, "No weapon equipped", true, sf::Vector2f(SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2));
+        drawText(25, sf::Color::White, "No weapon equipped", true, sf::Vector2f(800, SCREEN_HEIGHT/2));
     }
 
-    // Items      TODO
-    // Draw the bag slots/quick access slots
-    // Add items
-    // Add button for each item:
-    //      - on hover, display item's name/stats
-    //      - can click & drag item to/from quick slots
+    // Item slots
+    sf::FloatRect big_slots = drawSprite(SCREEN_WIDTH - 900, 200,
+                                         "resources/Textures/big_slots.png", sf::IntRect(), false);
+    drawText(25, sf::Color::White, "Backpack", true, sf::Vector2f(big_slots.left + big_slots.width/2, big_slots.top - 50));
+    sf::FloatRect slots = drawSprite(SCREEN_WIDTH - 900, 700,
+                                     "resources/Textures/slots.png", sf::IntRect(), false);
+    drawText(25, sf::Color::White, "Belt", true, sf::Vector2f(slots.left + slots.width/2, slots.top - 50));
+
+    // Items
+    std::vector<Prop> items = model_->player().items();
+    for (int i=0; i < int(items.size()); i++) {
+        auto it = items[i];
+        if (it.isOnSheet()) {
+            sf::IntRect selection = getSelection(it);
+            sf::FloatRect item = drawSprite(it.x(), it.y(), it.path(), selection);
+        } else sf::FloatRect item =  drawSprite(it.x(), it.y(), it.path());
+
+        // Add button for each item:    TODO
+        //      - on hover, display item's name/stats
+        //      - can click & drag item to/from quick slots
+    }
 
     // Draw "return" button
     sf::FloatRect arrow = drawSprite(100, SCREEN_HEIGHT - 75, "resources/Textures/return.png");

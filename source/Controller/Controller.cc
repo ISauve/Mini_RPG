@@ -43,10 +43,10 @@ void Controller::handleEvents() {
 void Controller::checkPlayerMovement() {
     int x = 0;
     int y = 0;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) x -= 10;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) x += 10;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) y -= 10;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) y += 10;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) x -= 15;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) x += 15;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) y -= 15;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) y += 15;
 
     if (x != 0 || y != 0) modelChannel_.send( EventPackage(EventPackage::MOVE_PLAYER, x, y) );
 }

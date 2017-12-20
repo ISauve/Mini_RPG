@@ -43,6 +43,7 @@ class Model : public Subject {
     void movePlayer(int x, int y);
     void playerAttack();
     void resetState();
+    void handleItemCollision(Prop);
 
 public:
     Model();

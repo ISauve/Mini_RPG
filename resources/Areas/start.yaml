@@ -98,7 +98,7 @@ characters:
     h: 80
 
 props:
-  - name: "Default player sword"
+  - name: "Starter sword"
     x: 1100
     y: 350
 

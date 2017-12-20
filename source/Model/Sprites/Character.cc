@@ -90,15 +90,40 @@ int Character::timeOut() {
 }
 
 void Character::addTool(Tool* t) {
-    if (quickAccess_.size() < 7) quickAccess_.push_back(t);
+    if (quickAccess_.size() < 8) quickAccess_.push_back(t);
     else bag_.push_back(t);
 }
 
 std::vector<Prop> Character::quickAccessContents() {
+    // TODO: scale the items so that they're the correct size to fit in the slot
+
     std::vector<Prop> props;
-    // Quick access bar starts at 810/30 & each slot is 85 wide/90 tall
+    // Quick access bar starts at 810/30 & each slot is 100 wide/103 tall
     for (int i=0; i < int(quickAccess_.size()); i++) {
-        Prop prop = Prop::makeProp(quickAccess_[i]->name(), 810 + 43 + 85*i, 30 + 45);
+        Prop prop = Prop::makeProp(quickAccess_[i]->name(), 810 + 50 + 100*i, 30 + 52.5);
+        props.push_back(prop);
+    }
+    return props;
+}
+
+std::vector<Prop> Character::items() {
+    // TODO: scale the items so that they're the correct size to fit in the slot
+
+    std::vector<Prop> props;
+    // Backpack: starts at 1148/200, each slot is 100 wide/100 tall, 3 rows of 8
+    for (int i=0; i < int(bag_.size()); i++) {
+        int top = 50;
+        if (i >=8 && i < 16) top = 150;
+        else if (i >= 16) top = 250;
+
+        int left = 50 + 100 * (i % 8);
+
+        Prop prop = Prop::makeProp(bag_[i]->name(), 1148 + left, 200 + top);
+        props.push_back(prop);
+    }
+    // Belt: starts at 1148/700, each slot is 100 wide/103 tall, 1 row of 7
+    for (int i=0; i < int(quickAccess_.size()); i++) {
+        Prop prop = Prop::makeProp(quickAccess_[i]->name(), 1148 + 50 + 100*i, 700 + 52.5);
         props.push_back(prop);
     }
     return props;
@@ -124,12 +149,3 @@ Notification Character::useQuickAccess(int slot) {
     quickAccess_.erase(quickAccess_.begin() + slot);
     return notification;
 }
-
-/*
-std::vector<Tool> Character::bagContents() {
-    std::vector<Prop*> props;
-    for (auto tool : tools_) {
-        Prop* prop = Prop::makeProp(tool);
-    }
-}
- */
