@@ -80,6 +80,7 @@ void View::drawFrame() {
             break;
     }
 
+    drawTopBar();
     drawBackground();
 
     // Grab all the sprites we have to draw

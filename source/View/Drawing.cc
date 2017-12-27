@@ -78,7 +78,7 @@ void View::drawEvent(Notification event) {
             }
 
             if (event.hit) {   // Draw a hit above the enemy
-                drawText(25, sf::Color::Magenta, std::to_string(event.damage), false, sf::Vector2f(event.enemy.x(), event.enemy.y() - 100));
+                drawText(25, sf::Color::Black, std::to_string(event.damage), false, sf::Vector2f(event.enemy.x(), event.enemy.y() - 100));
             }
             else {      // Draw a miss above the player's sword
                 drawText(25, sf::Color::White, "Miss", false, sf::Vector2f(model_->player().x() + 50, model_->player().y() - 100));
@@ -115,7 +115,7 @@ void View::drawEvent(Notification event) {
     }
 }
 
-void View::drawBackground() {
+void View::drawTopBar() {
     controller_->clearActiveButtons();
 
     // Health
@@ -136,7 +136,7 @@ void View::drawBackground() {
     controller_->addActiveButton(Controller::VIEW_STATS, backpack);
 
     // Quick-access items
-    sf::FloatRect slots = drawSprite(backpack.left + backpack.width + 50, 30, "resources/Textures/slots.png", sf::IntRect(), false);
+    sf::FloatRect slots = drawSprite(backpack.left + backpack.width + 50, 25, "resources/Textures/slots.png", sf::IntRect(), false);
     std::vector<Prop> quickAccessItems = model_->player().quickAccessContents();
     for (int i=0; i < int(quickAccessItems.size()); i++) {
         auto it = quickAccessItems[i];
@@ -151,7 +151,7 @@ void View::drawBackground() {
     }
 
     // Change character
-    sf::RectangleShape change = drawRectangle(160, 70, sf::Color(52, 152, 219),
+    sf::RectangleShape change = drawRectangle(160, 65, sf::Color(52, 152, 219),
                                               // middle of slots = 81.5 from the top
                                               sf::Vector2f(slots.left + slots.width + 50, 46.5), 10,
                                               sf::Color(41, 128, 185), false);
@@ -160,12 +160,18 @@ void View::drawBackground() {
     controller_->addActiveButton(Controller::CHANGE_PLAYER, change.getGlobalBounds());
 
     // Reset
-    sf::RectangleShape reset = drawRectangle(100, 50, sf::Color(52, 152, 219),
+    sf::RectangleShape reset = drawRectangle(100, 45, sf::Color(52, 152, 219),
                                              sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 50, 56.5), 10,
                                              sf::Color(41, 128, 185), false);
     drawText(17, sf::Color::White, "Reset", false,
              sf::Vector2f(change.getGlobalBounds().left + change.getGlobalBounds().width + 64, 71.5));
     controller_->addActiveButton(Controller::RESET, reset.getGlobalBounds());
+}
+
+void View::drawBackground() {
+    std::string background = model_->getBackground();
+
+    drawSprite(0, TOP_BAR_HEIGHT, background, sf::IntRect(), false);
 }
 
 void View::drawPlayerSelection() {

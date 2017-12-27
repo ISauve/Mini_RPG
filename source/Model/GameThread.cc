@@ -106,6 +106,7 @@ void Model::resetState() {
 
     // Fetch other data from the config
     props_ = conf.getProps();
+    background_ = conf.getBackground();
 }
 
 // Always called from within a function with a charsLock_

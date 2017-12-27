@@ -20,8 +20,8 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
     music.play();
     viewState_ = PLAYING;
 
-    bool closedWindow = animateSplashScreen();
-    if (closedWindow) return;
+    //bool closedWindow = animateSplashScreen();
+    //if (closedWindow) return;
 
     // Launch the 3 main game loops
     window.setActive(false);    // OpenGL context can only be active in 1 thread at a time

@@ -20,9 +20,14 @@ std::vector< Character > Model::getChars() {
 };
 
 std::vector< Prop > Model::getProps() {
+    // todo add this lock in other places where props are used (or remove it)
     std::lock_guard<std::mutex> lock(propsLock_);
     return props_;
 };
+
+std::string Model::getBackground() {
+    return background_;
+}
 
 int Model::playerMoney() {
    return playerMoney_.load();

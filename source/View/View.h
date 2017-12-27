@@ -68,6 +68,7 @@ class View : public Observer {
     // Drawing functions
     void drawEvent(Notification);
     void drawBackground();
+    void drawTopBar();
     void drawPlayerSelection();
     void drawQuitScreen();
     void drawPlayerDied();

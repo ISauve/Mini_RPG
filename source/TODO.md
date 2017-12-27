@@ -47,7 +47,7 @@
     - [ ] Killing -> generate a drop rate on items, those above a certain threshold get dropped
 - [ ] Decorations/background
     - [x] Splash screen on loading
-    - [ ] **Things can be walked on**
+    - [x] Things can be walked on
     - [ ] **Things that block your path**
     - [ ] Bug fix: temporary events shouldn't always be drawn last (ie crossbones)
 - [ ] Screen boundaries 

@@ -46,5 +46,6 @@ void ConfigReader::readConfig(std::string path) {
         props_.push_back(Prop::makeProp(name, x, y));
     }
 
-    // TODO read the background
+    // read the background
+    background_ = config["background"].as<std::string>();
 }

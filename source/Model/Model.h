@@ -18,6 +18,7 @@ class Prop;
 class Model : public Subject {
     std::mutex propsLock_;
     std::vector< Prop > props_;
+    std::string background_;
 
     std::mutex charsLock_;
     std::vector< Character > chars_;
@@ -60,6 +61,7 @@ public:
     std::vector< Character > getChars();
     std::vector< Prop > getProps();
     int playerMoney();
+    std::string getBackground();
 };
 
 #endif //MINI_RPG_MODEL_H

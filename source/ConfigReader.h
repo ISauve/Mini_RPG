@@ -1,8 +1,9 @@
 #ifndef MINI_RPG_CONFIG_H
 #define MINI_RPG_CONFIG_H
 
-#define SCREEN_WIDTH 2048
-#define SCREEN_HEIGHT 1124
+#define TOP_BAR_HEIGHT 150
+#define SCREEN_WIDTH 2048   // 32 tiles
+#define SCREEN_HEIGHT 1174  // 16 tiles
 
 #include "Model/Sprites/Character.h"
 #include "Model/Sprites/Prop.h"
@@ -14,6 +15,7 @@ class ConfigReader {
     Character player_;
     std::vector< Character > chars_;
     std::vector< Prop > props_;
+    std::string background_;
 
 public:
     explicit ConfigReader() = default;
@@ -23,6 +25,7 @@ public:
     Character getPlayer() { return player_; };
     std::vector< Character > getChars() { return chars_; };
     std::vector< Prop > getProps() { return props_; };
+    std::string getBackground() { return background_; };
 };
 
 #endif //MINI_RPG_CONFIG_H
