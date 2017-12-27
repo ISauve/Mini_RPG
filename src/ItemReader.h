@@ -31,12 +31,12 @@ public:
     // Fills the references_ map
     void readItemConfigurations() {
         // Fetch the paths to all the Item configuration files
-        auto directory = opendir("resources/Items");
+        auto directory = opendir("assets/Items");
         std::vector<std::string> confPaths;
         while (auto file = readdir(directory)) {
             std::string name = file->d_name;
             if (name.substr(name.find_last_of(".") + 1) != "yaml") continue;
-            confPaths.push_back("resources/Items/" + name);
+            confPaths.push_back("assets/Items/" + name);
         }
 
         for (auto path : confPaths) {

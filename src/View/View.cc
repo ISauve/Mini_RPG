@@ -14,9 +14,9 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
 
     // Initialize the view data
     loadImages();
-    font_.loadFromFile("resources/Old_School_Adventures.ttf");
+    font_.loadFromFile("assets/Old_School_Adventures.ttf");
     sf::Music music;
-    music.openFromFile("resources/AMemoryAway.ogg");
+    music.openFromFile("assets/AMemoryAway.ogg");
     music.play();
     viewState_ = PLAYING;
 
@@ -44,12 +44,12 @@ void View::update(Notification n) {
 };
 
 void View::loadImages() {
-    auto directory = opendir("resources/Textures");
+    auto directory = opendir("assets/Textures");
     std::vector<std::string> paths;
     while (auto file = readdir(directory)) {
         std::string name = file->d_name;
         if (name.substr(name.find_last_of(".") + 1) != "png") continue;
-        paths.push_back("resources/Textures/" + name);
+        paths.push_back("assets/Textures/" + name);
     }
 
     for (auto path : paths) {
@@ -63,10 +63,10 @@ bool View::animateSplashScreen() {
     auto start = std::chrono::high_resolution_clock::now();
 
     sf::Texture bgTexture;
-    bgTexture.loadFromImage(imageCache_["resources/Textures/splash_screen.png"]);
+    bgTexture.loadFromImage(imageCache_["assets/Textures/splash_screen.png"]);
 
     sf::Texture titleTexture;
-    titleTexture.loadFromImage(imageCache_["resources/Textures/splash_screen_title.png"]);
+    titleTexture.loadFromImage(imageCache_["assets/Textures/splash_screen_title.png"]);
 
     int transparency = 0;
     while (window_->isOpen()){

@@ -97,7 +97,7 @@ void View::drawEvent(Notification event) {
 
         case Notification::ENEMY_DIED:
             // Draw a crossbones where the enemy was
-            drawSprite(event.enemy.x(), event.enemy.y(), "resources/Textures/Skull_crossbones.png");
+            drawSprite(event.enemy.x(), event.enemy.y(), "assets/Textures/Skull_crossbones.png");
             break;
 
         case Notification::HEALED:
@@ -119,24 +119,24 @@ void View::drawTopBar() {
     controller_->clearActiveButtons();
 
     // Health
-    auto emptyBar = drawSprite(50, 50, "resources/Textures/empty_bar.png", sf::IntRect(), false);
+    auto emptyBar = drawSprite(50, 50, "assets/Textures/empty_bar.png", sf::IntRect(), false);
     int width = 425;
     int height = 57;
     auto croppedImage = sf::IntRect(0, 0, model_->player().health() * width / 100, height);
-    drawSprite(50, 50, "resources/Textures/green_bar.png", croppedImage, false);
+    drawSprite(50, 50, "assets/Textures/green_bar.png", croppedImage, false);
 
     // Money
-    drawSprite(50 + emptyBar.width + 50, 30, "resources/Textures/coin_pile.png", sf::IntRect(), false);
+    drawSprite(50 + emptyBar.width + 50, 30, "assets/Textures/coin_pile.png", sf::IntRect(), false);
     sf::Text money = generateText(25, sf::Color::White, std::to_string(model_->playerMoney()), false);
     money.setPosition(sf::Vector2f(50 + emptyBar.width + 125, 60));
     window_->draw(money);
 
     // Backpack button
-    sf::FloatRect backpack = drawSprite(50 + emptyBar.width + 240, 75, "resources/Textures/pack.png");
+    sf::FloatRect backpack = drawSprite(50 + emptyBar.width + 240, 75, "assets/Textures/pack.png");
     controller_->addActiveButton(Controller::VIEW_STATS, backpack);
 
     // Quick-access items
-    sf::FloatRect slots = drawSprite(backpack.left + backpack.width + 50, 25, "resources/Textures/slots.png", sf::IntRect(), false);
+    sf::FloatRect slots = drawSprite(backpack.left + backpack.width + 50, 25, "assets/Textures/slots.png", sf::IntRect(), false);
     std::vector<Prop> quickAccessItems = model_->player().quickAccessContents();
     for (int i=0; i < int(quickAccessItems.size()); i++) {
         auto it = quickAccessItems[i];
@@ -175,7 +175,7 @@ void View::drawBackground() {
 }
 
 void View::drawPlayerSelection() {
-    std::string sheet_path = "resources/Textures/Character_set_2.png";
+    std::string sheet_path = "assets/Textures/Character_set_2.png";
     drawText(30, sf::Color::White, "Select your character", false, sf::Vector2f(50, 50));
 
     sf::IntRect selection = sf::IntRect(1*80, 0*80, 80, 80);
@@ -256,10 +256,10 @@ void View::drawViewStats() {
 
     // Item slots
     sf::FloatRect big_slots = drawSprite(SCREEN_WIDTH - 900, 200,
-                                         "resources/Textures/big_slots.png", sf::IntRect(), false);
+                                         "assets/Textures/big_slots.png", sf::IntRect(), false);
     drawText(25, sf::Color::White, "Backpack", true, sf::Vector2f(big_slots.left + big_slots.width/2, big_slots.top - 50));
     sf::FloatRect slots = drawSprite(SCREEN_WIDTH - 900, 700,
-                                     "resources/Textures/slots.png", sf::IntRect(), false);
+                                     "assets/Textures/slots.png", sf::IntRect(), false);
     drawText(25, sf::Color::White, "Belt", true, sf::Vector2f(slots.left + slots.width/2, slots.top - 50));
 
     // Items
@@ -277,7 +277,7 @@ void View::drawViewStats() {
     }
 
     // Draw "return" button
-    sf::FloatRect arrow = drawSprite(100, SCREEN_HEIGHT - 75, "resources/Textures/return.png");
+    sf::FloatRect arrow = drawSprite(100, SCREEN_HEIGHT - 75, "assets/Textures/return.png");
     controller_->clearActiveButtons();
     controller_->addActiveButton(Controller::EXIT_SPECIAL_SCREEN, arrow);
 }

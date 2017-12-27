@@ -96,7 +96,7 @@ void Model::resetState() {
 
     // Read in default configuration
     ConfigReader conf;
-    conf.readConfig("resources/Areas/start.yaml");
+    conf.readConfig("assets/Areas/start.yaml");
 
     // Fetch the characters from the config
     chars_ = conf.getChars();

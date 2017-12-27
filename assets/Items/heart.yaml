@@ -2,7 +2,7 @@ name: "Heart"
 type: "item"
 
 image:
-  path: "resources/Textures/heart.png"
+  path: "assets/Textures/heart.png"
   sheet: false
   row: 0
   col: 0

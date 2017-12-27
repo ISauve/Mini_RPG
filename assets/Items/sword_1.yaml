@@ -1,0 +1,26 @@
+name: "Starter sword"
+type: "weapon"
+
+image:
+  path: "assets/Textures/Sword_1.png"
+  pathR: "assets/Textures/Sword_1_R.png"
+  sheet: false
+  row: 0
+  col: 0
+  w: 70
+  h: 83
+
+drop_chance: 0
+cost: 0
+
+animations:
+  attack:
+    activePath: "assets/Textures/Sword_1_Active.png"
+    activePathR: "assets/Textures/Sword_1_Active_R.png"
+
+acquirable: true
+strength: 1
+weight: 1
+bonus_health: 0
+
+

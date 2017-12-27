@@ -2,7 +2,7 @@ name: "Coin"
 type: "item"
 
 image:
-  path: "resources/Textures/coin.png"
+  path: "assets/Textures/coin.png"
   sheet: false
   row: 0
   col: 0

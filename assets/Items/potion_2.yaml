@@ -1,11 +1,11 @@
-name: "X-Large health potion"
+name: "Medium health potion"
 type: "item"
 
 image:
-  path: "resources/Textures/potion_sheet.png"
+  path: "assets/Textures/potion_sheet.png"
   sheet: true
   row: 0
-  col: 4
+  col: 2
   w: 58
   h: 58
 
@@ -14,5 +14,5 @@ cost: 10
 
 acquirable: true
 effect:
-  healing: 100
+  healing: 50
 
