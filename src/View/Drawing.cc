@@ -102,7 +102,7 @@ void View::drawEvent(Notification event) {
 
         case Notification::HEALED:
             // Draw the amount healed above the player's head
-            drawText(25, sf::Color::Green, "+" + std::to_string(event.healed), false, sf::Vector2f(model_->player().x()-50, model_->player().y()-80));
+            drawText(25, sf::Color(2,131,12), "+" + std::to_string(event.healed), false, sf::Vector2f(model_->player().x()-50, model_->player().y()-80));
             break;
 
         case Notification::GOT_MONEY:

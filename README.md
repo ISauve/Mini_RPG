@@ -1,7 +1,7 @@
 # Mini RPG
 [![CircleCI](https://circleci.com/gh/ISauve/Mini_RPG.png?style=shield&circle-token=774174d09b31158629a5abf5e26d5f8bd70f62e8)](https://circleci.com/gh/ISauve/Mini_RPG)
 
-## _(To do: Add gif here)_
+![Preview](preview.gif?raw=true)
 
 ### Installation
 1. Clone this repository

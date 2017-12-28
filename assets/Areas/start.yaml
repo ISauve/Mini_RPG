@@ -55,6 +55,7 @@ characters:
     col: 7
     w: 80
     h: 80
+    weapon: "Default enemy sword"
 
   # Wolf
   - active: true
@@ -126,29 +127,29 @@ props:
     y: 200
 
   - name: "Coin"
-    x: 1800
-    y: 500
-  - name: "Coin"
-    x: 1800
-    y: 550
-  - name: "Coin"
-    x: 1800
-    y: 600
-  - name: "Coin"
-    x: 1850
-    y: 500
-  - name: "Coin"
     x: 1850
     y: 550
   - name: "Coin"
     x: 1850
     y: 600
   - name: "Coin"
-    x: 1900
-    y: 500
+    x: 1850
+    y: 650
   - name: "Coin"
     x: 1900
     y: 550
   - name: "Coin"
     x: 1900
     y: 600
+  - name: "Coin"
+    x: 1900
+    y: 650
+  - name: "Coin"
+    x: 1950
+    y: 550
+  - name: "Coin"
+    x: 1950
+    y: 600
+  - name: "Coin"
+    x: 1950
+    y: 650
