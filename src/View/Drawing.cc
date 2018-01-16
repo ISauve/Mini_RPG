@@ -185,8 +185,8 @@ void View::drawPlayerSelection() {
 
     selection = sf::IntRect(4*80, 0*80, 80, 80);
     sf::FloatRect rectangle_2 = drawSprite(100, 400, sheet_path, selection);
-    drawText(25, sf::Color::White, "Beeb (generic): Very cuddly & loves back massages.",
-             false, sf::Vector2f(175, 400));
+    drawText(25, sf::Color::White, "Badass Becky: Lost in the forest as a young child, this tough lady was raised by wolves. \n Or a family of gophers. No one is certain.",
+             false, sf::Vector2f(175, 375));
 
     selection = sf::IntRect(1*80, 4*80, 80, 80);
     sf::FloatRect rectangle_3 = drawSprite(100, 600, sheet_path, selection);
@@ -195,7 +195,7 @@ void View::drawPlayerSelection() {
 
     selection = sf::IntRect(4*80, 4*80, 80, 80);
     sf::FloatRect rectangle_4 = drawSprite(100, 800, sheet_path, selection);
-    drawText(25, sf::Color::White, "Jean-Pierre-Marie-Cloud: Has never been seen without his beret, and scoffs at anyone \nwho says 'Chocolatine'. It's Pain au Chocolate... putain.",
+    drawText(25, sf::Color::White, "Julio: A very artsy fella. He paints like an angel and speaks exclusively in iambic pentameter.",
              false, sf::Vector2f(175, 775));
 
     selection = sf::IntRect(7*80, 4*80, 80, 80);

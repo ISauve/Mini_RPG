@@ -19,7 +19,7 @@ sf::Text View::generateText(int size, sf::Color color, std::string text, bool ce
     t.setFont(font_);
     t.setCharacterSize(size);
     t.setFillColor(color);
-    t.setStyle(sf::Text::Bold);
+    //t.setStyle(sf::Text::Bold);
     t.setString(text);
     if (centerOrigin) t.setOrigin(t.getLocalBounds().width/2, t.getLocalBounds().height/2);
     return t;

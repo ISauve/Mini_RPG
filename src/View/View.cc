@@ -20,8 +20,10 @@ View::View(Model* m, Controller* c) : model_(m), controller_(c), gameOver_(false
     music.play();
     viewState_ = PLAYING;
 
-    //bool closedWindow = animateSplashScreen();
-    //if (closedWindow) return;
+    /*  splash screen removed until the game has a title
+    bool closedWindow = animateSplashScreen();
+    if (closedWindow) return;
+    */
 
     // Launch the 3 main game loops
     window.setActive(false);    // OpenGL context can only be active in 1 thread at a time
@@ -69,7 +71,7 @@ bool View::animateSplashScreen() {
     titleTexture.loadFromImage(imageCache_["assets/Textures/splash_screen_title.png"]);
 
     int transparency = 0;
-    while (window_->isOpen()){
+    while (window_->isOpen()) {
         sf::Event event;
         while (window_->pollEvent(event)){
             if (event.type == sf::Event::EventType::Closed) {
@@ -107,5 +109,6 @@ bool View::animateSplashScreen() {
 
         window_->display();
     }
+
     return true;
 }
